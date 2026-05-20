@@ -7,7 +7,7 @@ service cloud.firestore {
     }
     match /student_registry/{regNum} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow write: if true; // Open for initial registry setup only
     }
     match /swipes/{swipeId} {
       allow create: if request.auth != null && request.resource.data.fromUser == request.auth.uid;

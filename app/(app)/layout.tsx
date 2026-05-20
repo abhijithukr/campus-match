@@ -28,9 +28,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!user) return
-    return subscribeToNotifications(user.uid, (notifs) => {
-      setUnreadNotifications(notifs.filter(n => !n.read).length)
-    })
+    try {
+      return subscribeToNotifications(user.uid, (notifs) => {
+        try {
+          setUnreadNotifications(notifs.filter(n => n && !n.read).length)
+        } catch {}
+      })
+    } catch {}
   }, [user])
 
   if (loading) {

@@ -98,39 +98,52 @@ export async function getAnalytics() {
       getDocs(query(collection(db, 'confessions'), where('approved', '==', true))),
     ])
     return {
-      totalUsers: usersSnap.size,
-      activeMatches: matchesSnap.size,
-      totalSwipes: swipesSnap.size,
-      totalConfessions: confSnap.size,
+      totalUsers: usersSnap.size || 0,
+      activeMatches: matchesSnap.size || 0,
+      totalSwipes: swipesSnap.size || 0,
+      totalConfessions: confSnap.size || 0,
     }
-  } catch {
+  } catch (err) {
+    console.warn('Analytics error:', err)
     return { totalUsers: 0, activeMatches: 0, totalSwipes: 0, totalConfessions: 0 }
   }
 }
 
 // Get all users for admin management
 export async function getAllUsers() {
-  const snap = await getDocs(query(collection(db, 'users'), orderBy('createdAt', 'desc')))
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }))
+  try {
+    const snap = await getDocs(query(collection(db, 'users'), orderBy('createdAt', 'desc')))
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }))
+  } catch (err) {
+    console.warn('Get all users error:', err)
+    return []
+  }
 }
 
 // Ban a user
 export async function banUser(userId: string, reason: string) {
-  await updateDoc(doc(db, 'users', userId), { banned: true, banReason: reason })
-  await addDoc(collection(db, 'admin_logs'), {
-    action: 'ban_user',
-    targetUserId: userId,
-    reason,
-    createdAt: serverTimestamp(),
-  })
+  try {
+    await updateDoc(doc(db, 'users', userId), { banned: true, banReason: reason })
+    await addDoc(collection(db, 'admin_logs'), {
+      action: 'ban_user',
+      targetUserId: userId,
+      reason,
+      createdAt: serverTimestamp(),
+    })
+  } catch (err) {
+    console.warn('Ban user error:', err)
+  }
 }
 
 // Set featured profile
 export async function setFeaturedProfile(userId: string) {
-  // Clear previous featured
-  const prev = await getDocs(query(collection(db, 'users'), where('featuredToday', '==', true)))
-  const batch = writeBatch(db)
-  prev.docs.forEach(d => batch.update(d.ref, { featuredToday: false }))
-  batch.update(doc(db, 'users', userId), { featuredToday: true })
-  await batch.commit()
+  try {
+    const prev = await getDocs(query(collection(db, 'users'), where('featuredToday', '==', true)))
+    const batch = writeBatch(db)
+    prev.docs.forEach(d => batch.update(d.ref, { featuredToday: false }))
+    batch.update(doc(db, 'users', userId), { featuredToday: true })
+    await batch.commit()
+  } catch (err) {
+    console.warn('Set featured error:', err)
+  }
 }
