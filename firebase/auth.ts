@@ -36,6 +36,10 @@ export async function registerStudent(
   if (!valid) throw new Error(reason === 'already_activated' ? 'This register number is already in use.' : 'Invalid register number.')
   const d = data!
 
+  // Check if this is the first user (make them admin)
+  const usersSnap = await getDocs(collection(db, 'users'))
+  const isFirstUser = usersSnap.size === 0
+
   const credential = await createUserWithEmailAndPassword(auth, email, password)
   await updateProfile(credential.user, { displayName })
 
@@ -66,6 +70,7 @@ export async function registerStudent(
     likesRemaining: 10,
     lastLikeReset: serverTimestamp(),
     createdAt: serverTimestamp(),
+    isAdmin: isFirstUser,
   })
 
   // Mark registry as activated

@@ -5,6 +5,7 @@ import {
 } from 'firebase/firestore'
 import { db } from './config'
 import Papa from 'papaparse'
+import * as XLSX from 'xlsx'
 
 // Upload CSV student registry
 export async function uploadStudentRegistry(csvFile: File): Promise<{ success: number; errors: string[] }> {
@@ -37,6 +38,53 @@ export async function uploadStudentRegistry(csvFile: File): Promise<{ success: n
         resolve({ success, errors })
       }
     })
+  })
+}
+
+// Upload XLSX student registry
+export async function uploadStudentRegistryXlsx(xlsxFile: File): Promise<{ success: number; errors: string[] }> {
+  return new Promise((resolve) => {
+    const reader = new FileReader()
+    reader.onload = async (e) => {
+      try {
+        const data = new Uint8Array(e.target?.result as ArrayBuffer)
+        const workbook = XLSX.read(data, { type: 'array', cellDates: true })
+        const sheet = workbook.Sheets[workbook.SheetNames[0]]
+        const jsonData = XLSX.utils.sheet_to_json<Record<string, any>>(sheet, { defval: '' })
+
+        const batch = writeBatch(db)
+        const errors: string[] = []
+        let success = 0
+
+        for (const row of jsonData) {
+          const regNum = row['register_number'] || row['registerNumber'] || row['reg_no'] || row['KTU ID'] || row['KTU_ID'] || row['Reg No'] || row['Reg No.'] || ''
+          if (!regNum) { errors.push(`Missing register number: ${JSON.stringify(row).slice(0, 100)}`); continue }
+
+          const name = row['name'] || row['Name'] || row['NAME'] || row['Full Name'] || row['full_name'] || ''
+          const department = row['department'] || row['Department'] || row['DEPARTMENT'] || row['dept'] || row['Branch'] || row['course'] || ''
+          const gender = row['gender'] || row['Gender'] || row['GENDER'] || ''
+          const year = parseInt(String(row['year'] || row['Year'] || row['YEAR'] || row['Semester'] || '1').replace(/[^0-9]/g, '')) || 1
+
+          const ref = doc(db, 'student_registry', String(regNum).trim().toUpperCase())
+          batch.set(ref, {
+            name: String(name).trim(),
+            department: String(department).trim(),
+            gender: String(gender).trim().toLowerCase(),
+            year,
+            activated: false,
+            uploadedAt: serverTimestamp(),
+          }, { merge: true })
+          success++
+        }
+
+        await batch.commit()
+        resolve({ success, errors })
+      } catch (err) {
+        resolve({ success: 0, errors: [String(err)] })
+      }
+    }
+    reader.onerror = () => resolve({ success: 0, errors: ['Failed to read file'] })
+    reader.readAsArrayBuffer(xlsxFile)
   })
 }
 

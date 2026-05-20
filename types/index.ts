@@ -29,6 +29,7 @@ export interface UserProfile {
   lastLikeReset: Timestamp
   createdAt: Timestamp
   banned?: boolean
+  isAdmin?: boolean
   banReason?: string
   privacySettings?: {
     showProfile: boolean

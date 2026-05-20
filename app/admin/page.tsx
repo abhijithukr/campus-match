@@ -1,13 +1,27 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import { getAnalytics, getAllUsers, banUser, uploadStudentRegistry, setFeaturedProfile } from '@/firebase/admin'
+import { getAnalytics, getAllUsers, banUser, setFeaturedProfile } from '@/firebase/admin'
 import { getPendingConfessions, approveConfession, rejectConfession } from '@/firebase/confessions'
+import { useAuthStore } from '@/store/useAuthStore'
 import { UploadCloud, Users, Heart, MessageSquare, Shield, CheckCircle, XCircle, BarChart2, FileText } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 type Tab = 'analytics' | 'users' | 'confessions' | 'registry'
 
 export default function AdminDashboard() {
+  const { profile } = useAuthStore()
+
+  if (!profile?.isAdmin) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100%', alignItems: 'center', justifyContent: 'center', padding: 40, textAlign: 'center' }}>
+        <div style={{ width: 64, height: 64, borderRadius: 16, background: 'rgba(255,107,107,0.1)', border: '1px solid rgba(255,107,107,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
+          <Shield size={28} color="#ff6b6b" />
+        </div>
+        <h1 style={{ fontFamily: "'Syne', sans-serif", fontSize: 24, fontWeight: 800, marginBottom: 12 }}>Access Denied</h1>
+        <p style={{ color: 'var(--muted)', fontSize: 14, maxWidth: 300, lineHeight: 1.7 }}>You don't have admin access. The first user to register becomes the admin automatically.</p>
+      </div>
+    )
+  }
   const [tab, setTab] = useState<Tab>('analytics')
   const [stats, setStats] = useState({ totalUsers: 0, activeMatches: 0, totalSwipes: 0, totalConfessions: 0 })
   const [users, setUsers] = useState<any[]>([])
@@ -26,10 +40,14 @@ export default function AdminDashboard() {
     if (!file) return
     setUploading(true)
     try {
-      const result = await uploadStudentRegistry(file)
+      const fd = new FormData()
+      fd.append('file', file)
+      const res = await fetch('/api/upload-students', { method: 'POST', body: fd })
+      const result = await res.json()
+      if (result.error) throw new Error(result.error)
       toast.success(`Uploaded ${result.success} students successfully!`)
-      if (result.errors.length) toast.error(`${result.errors.length} rows had errors.`)
-    } catch { toast.error('Upload failed.') }
+      if (result.errors?.length) toast.error(`${result.errors.length} rows had errors.`)
+    } catch (err: any) { toast.error(err.message || 'Upload failed.') }
     finally { setUploading(false) }
   }
 
@@ -211,7 +229,7 @@ export default function AdminDashboard() {
           <div style={{ maxWidth: 560 }}>
             <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700, marginBottom: 8 }}>Upload Student Registry</h2>
             <p style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 24, lineHeight: 1.7 }}>
-              Upload a CSV file with the official student list. Students can only register after their register number is in this database.
+              Upload a CSV or Excel file with student KTU IDs. Students can only register after their KTU ID/register number is in this database.
             </p>
 
             <div style={{ background: 'var(--surface)', border: '2px dashed var(--border)', borderRadius: 20, padding: '48px 32px', textAlign: 'center', marginBottom: 20, cursor: 'pointer', transition: 'border-color 0.2s' }}
@@ -219,9 +237,9 @@ export default function AdminDashboard() {
               onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--purple)')}
               onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--border)')}>
               <UploadCloud size={40} color="var(--purple)" style={{ margin: '0 auto 12px' }} />
-              <h3 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, marginBottom: 8 }}>{uploading ? 'Uploading...' : 'Drop CSV here or click to upload'}</h3>
-              <p style={{ fontSize: 13, color: 'var(--muted)' }}>Supports .csv files up to 10MB</p>
-              <input ref={fileRef} type="file" accept=".csv" style={{ display: 'none' }} onChange={handleCSVUpload} />
+              <h3 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, marginBottom: 8 }}>{uploading ? 'Uploading...' : 'Drop CSV or XLSX here or click to upload'}</h3>
+              <p style={{ fontSize: 13, color: 'var(--muted)' }}>Supports .csv, .xlsx, .xls files up to 10MB</p>
+              <input ref={fileRef} type="file" accept=".csv,.xlsx,.xls" style={{ display: 'none' }} onChange={handleCSVUpload} />
             </div>
 
             <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: 20 }}>
