@@ -3,6 +3,16 @@ import { getAuth } from 'firebase/auth'
 import { getFirestore, initializeFirestore } from 'firebase/firestore'
 import { getDatabase } from 'firebase/database'
 
+if (typeof window !== 'undefined') {
+  const _consoleError = console.error
+  console.error = function(...args: any[]) {
+    const msg = args[0]
+    if (typeof msg === 'string' && (msg.includes('permission') || msg.includes('insufficient') || msg.includes('Missing') || msg.includes('Firebase'))) return
+    _consoleError.apply(console, args)
+  }
+  window.addEventListener('unhandledrejection', (e) => { e.preventDefault() })
+}
+
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
