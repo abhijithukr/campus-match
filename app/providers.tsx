@@ -1,11 +1,10 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { onAuthStateChanged, signOut } from 'firebase/auth'
+import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '@/firebase/config'
 import { useAuthStore } from '@/store/useAuthStore'
 import { getUserProfile } from '@/firebase/auth'
-import toast from 'react-hot-toast'
 
 const queryClient = new QueryClient()
 
@@ -25,18 +24,15 @@ function AuthListener() {
     const unsub = onAuthStateChanged(auth, async (user) => {
       setUser(user)
       if (user) {
-        try {
-          const profile = await getUserProfile(user.uid)
-          setProfile(profile)
-        } catch (err: any) {
-          if (err?.code === 'permission-denied' || err?.message?.includes('Missing') || err?.code === 'invalid-argument') {
-            await signOut(auth).catch(() => {})
-            setUser(null)
-            setProfile(null)
-            return
-          }
-          setProfile(null)
+        let retries = 0
+        let profile = null
+        while (retries < 3 && !profile) {
+          profile = await getUserProfile(user.uid)
+          if (profile) break
+          await new Promise(r => setTimeout(r, 500))
+          retries++
         }
+        setProfile(profile)
       } else {
         setProfile(null)
       }

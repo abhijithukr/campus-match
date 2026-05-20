@@ -23,6 +23,12 @@ export default function ChatPage() {
 
   useEffect(() => {
     if (!user) return
+    const interval = setInterval(() => {
+      if (useAuthStore.getState().profile) {
+        clearInterval(interval)
+      }
+    }, 200)
+    const timeout = setTimeout(() => clearInterval(interval), 5000)
     getUserMatches(user.uid).then(async (m) => {
       setMatches(m)
       const profiles: Record<string, UserProfile> = {}

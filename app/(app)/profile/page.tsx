@@ -61,6 +61,7 @@ function Toggle({ label, description, checked, onChange }: { label: string; desc
 
 export default function ProfilePage() {
   const { profile, setProfile } = useAuthStore()
+  const [loading, setLoadingState] = useState(true)
   const [editing, setEditing] = useState(false)
   const [modal, setModal] = useState<'privacy' | 'notifications' | null>(null)
   const [form, setForm] = useState({
@@ -69,6 +70,18 @@ export default function ProfilePage() {
   })
   const [saving, setSaving] = useState(false)
   const router = useRouter()
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const p = useAuthStore.getState().profile
+      if (p || !useAuthStore.getState().loading) {
+        setLoadingState(false)
+        clearInterval(interval)
+      }
+    }, 200)
+    const check = setTimeout(() => { setLoadingState(false); clearInterval(interval) }, 5000)
+    return () => { clearInterval(interval); clearTimeout(check) }
+  }, [])
 
   const [privacySettings, setPrivacySettings] = useState({
     showProfile: true,

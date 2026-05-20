@@ -92,11 +92,15 @@ export function onAuthChange(callback: (user: User | null) => void) {
 }
 
 export async function getUserProfile(uid: string): Promise<UserProfile | null> {
+  if (!uid) return null
   try {
     const snap = await getDoc(doc(db, 'users', uid))
     return snap.exists() ? (snap.data() as UserProfile) : null
   } catch (err: any) {
-    console.warn('getUserProfile failed:', err.code)
+    if (err?.code === 'permission-denied' || err?.code === 'unavailable' || err?.code === 'cancelled') {
+      return null
+    }
+    console.warn('getUserProfile failed:', err?.code || err?.message)
     return null
   }
 }
