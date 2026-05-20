@@ -1,15 +1,9 @@
 import { initializeApp, getApps } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
+import { getAuth, setPersistence, browserLocalPersistence, browserSessionPersistence } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 import { getDatabase } from 'firebase/database'
 
 if (typeof window !== 'undefined') {
-  const _consoleError = console.error
-  console.error = function(...args: any[]) {
-    const msg = args[0]
-    if (typeof msg === 'string' && (msg.includes('permission') || msg.includes('insufficient') || msg.includes('Missing') || msg.includes('Firebase'))) return
-    _consoleError.apply(console, args)
-  }
   window.addEventListener('unhandledrejection', (e) => { e.preventDefault() })
 }
 
@@ -18,17 +12,22 @@ const firebaseConfig = {
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
 }
 
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0]
-
 const db = getFirestore(app)
+const auth = getAuth(app)
+
+if (typeof window !== 'undefined') {
+  setPersistence(auth, browserLocalPersistence).catch(() => {
+    setPersistence(auth, browserSessionPersistence).catch(() => {})
+  })
+}
 
 export { db }
 
-export const auth = getAuth(app)
+export { auth }
 export const rtdb = getDatabase(app)
 export default app
