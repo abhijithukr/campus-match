@@ -1,6 +1,6 @@
 import { initializeApp, getApps } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
-import { getFirestore, initializeFirestore } from 'firebase/firestore'
+import { getFirestore } from 'firebase/firestore'
 import { getDatabase } from 'firebase/database'
 
 if (typeof window !== 'undefined') {
@@ -25,7 +25,7 @@ const firebaseConfig = {
 
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0]
 
-let db = getFirestore(app)
+const db = getFirestore(app)
 
 export { db }
 
