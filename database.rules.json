@@ -1,0 +1,27 @@
+{
+  "rules": {
+    "chats": {
+      "$matchId": {
+        "messages": {
+          ".read": "auth != null",
+          ".write": "auth != null",
+          "$messageId": {
+            ".validate": "newData.hasChildren(['senderId', 'text', 'createdAt'])"
+          }
+        },
+        "typing": {
+          "$userId": {
+            ".read": "auth != null",
+            ".write": "auth != null && auth.uid == $userId"
+          }
+        }
+      }
+    },
+    "presence": {
+      "$userId": {
+        ".read": "auth != null",
+        ".write": "auth != null && auth.uid == $userId"
+      }
+    }
+  }
+}
