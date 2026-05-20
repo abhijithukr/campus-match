@@ -13,6 +13,17 @@ if (typeof window !== 'undefined') {
   window.addEventListener('unhandledrejection', function(e) { e.preventDefault() })
 }
 
+async function fetchProfileWithRetry(uid: string, retries = 3): Promise<import('@/types').UserProfile | null> {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const profile = await getUserProfile(uid)
+      if (profile) return profile
+      if (i < retries - 1) await new Promise(r => setTimeout(r, 800 * (i + 1)))
+    } catch {}
+  }
+  return null
+}
+
 function AuthListener() {
   const { setUser, setProfile, setLoading } = useAuthStore()
   const initRef = useRef(false)
@@ -24,15 +35,39 @@ function AuthListener() {
     const unsub = onAuthStateChanged(auth, async (user) => {
       setUser(user)
       if (user) {
-        let retries = 0
-        let profile = null
-        while (retries < 3 && !profile) {
-          profile = await getUserProfile(user.uid)
-          if (profile) break
-          await new Promise(r => setTimeout(r, 500))
-          retries++
+        const profile = await fetchProfileWithRetry(user.uid)
+        if (profile) {
+          setProfile(profile)
+        } else {
+          const fallback = {
+            uid: user.uid,
+            fullName: user.displayName || user.email?.split('@')[0] || 'User',
+            email: user.email || '',
+            registerNumber: '',
+            gender: 'other' as const,
+            department: '',
+            year: 1,
+            bio: '',
+            profilePhoto: '',
+            coverPhoto: '',
+            hobbies: [],
+            interests: [],
+            musicTaste: [],
+            favoriteMovie: '',
+            instagram: '',
+            relationshipGoal: 'not_sure' as const,
+            personalityTags: [],
+            whatsappNumber: '',
+            online: true,
+            lastSeen: null as any,
+            featuredToday: false,
+            profileCompletion: 0,
+            likesRemaining: 10,
+            lastLikeReset: null as any,
+            createdAt: null as any,
+          }
+          setProfile(fallback)
         }
-        setProfile(profile)
       } else {
         setProfile(null)
       }
