@@ -20,7 +20,7 @@ function CardContent({ current, swipeDir }: { current: UserProfile; swipeDir: st
           <img src={current.profilePhoto} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" />
         ) : (
           <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 80, fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>
-            {current.fullName[0]}
+            {(current.fullName || '?')[0]}
           </div>
         )}
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.8))' }} />
@@ -37,8 +37,8 @@ function CardContent({ current, swipeDir }: { current: UserProfile; swipeDir: st
         {swipeDir === 'like' && <div style={{ position: 'absolute', inset: 0, boxShadow: 'inset 0 0 60px rgba(34,197,94,0.4)' }} />}
         {swipeDir === 'skip' && <div style={{ position: 'absolute', inset: 0, boxShadow: 'inset 0 0 60px rgba(255,107,107,0.4)' }} />}
         <div style={{ position: 'absolute', bottom: 16, left: 20 }}>
-          <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 28, color: '#fff' }}>{current.fullName.split(' ')[0]}</div>
-          <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.75)' }}>{current.department} · {current.year}{current.year === 1 ? 'st' : current.year === 2 ? 'nd' : current.year === 3 ? 'rd' : 'th'} Year</div>
+          <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 28, color: '#fff' }}>{(current.fullName || 'User').split(' ')[0]}</div>
+          <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.75)' }}>{current.department || 'Campus'} · {current.year}{current.year === 1 ? 'st' : current.year === 2 ? 'nd' : current.year === 3 ? 'rd' : 'th'} Year</div>
         </div>
         <div style={{ position: 'absolute', top: 16, right: 16, background: 'rgba(138,43,226,0.85)', backdropFilter: 'blur(12px)', padding: '5px 12px', borderRadius: 100, fontSize: 13, color: '#fff', fontWeight: 700, border: '1px solid rgba(255,255,255,0.2)' }}>
           {compatScore}% match
@@ -69,8 +69,8 @@ function FeaturedSpotlight({ featured }: { featured: UserProfile | null }) {
       <div style={{ width: 40, height: 40, borderRadius: 12, background: 'linear-gradient(135deg, #ffd200, #ff9500)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0 }}>⭐</div>
       <div style={{ flex: 1 }}>
         <div style={{ fontSize: 11, color: '#ffd200', fontWeight: 600, marginBottom: 2 }}>FEATURED TODAY</div>
-        <div style={{ fontSize: 13, fontWeight: 600 }}>{featured.fullName}</div>
-        <div style={{ fontSize: 11, color: 'var(--muted)' }}>{featured.department} · {featured.year}{featured.year === 1 ? 'st' : 'th'} Year</div>
+        <div style={{ fontSize: 13, fontWeight: 600 }}>{featured.fullName || 'User'}</div>
+        <div style={{ fontSize: 11, color: 'var(--muted)' }}>{(featured.department || 'Campus')} · {(featured.year || 1)}{(featured.year === 1 ? 'st' : 'th')} Year</div>
       </div>
       <div style={{ fontSize: 20 }}>→</div>
     </div>
@@ -210,6 +210,7 @@ export default function DiscoverPage() {
   )
 
   const hoursLeft = Math.max(0, Math.ceil((resetTime.getTime() - Date.now()) / (1000 * 60 * 60)))
+  const compatPct = current?.compatibilityScore || 73
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
@@ -303,14 +304,14 @@ export default function DiscoverPage() {
         {current && (
           <div style={{ width: 240, borderLeft: '1px solid var(--border)', background: 'var(--surface)', padding: 20, overflowY: 'auto', flexShrink: 0 }}>
             <div style={{ textAlign: 'center', marginBottom: 20 }}>
-              <div style={{ width: 84, height: 84, borderRadius: '50%', margin: '0 auto 12px', background: `conic-gradient(var(--purple) 0% ${current.compatibilityScore || 73}%, var(--surface2) ${current.compatibilityScore || 73}%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 4 }}>
+              <div style={{ width: 84, height: 84, borderRadius: '50%', margin: '0 auto 12px', background: `conic-gradient(var(--purple) 0% ${compatPct}%, var(--surface2) ${compatPct}%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 4 }}>
                 <div style={{ width: 68, height: 68, borderRadius: '50%', background: 'var(--surface)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                  <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: 'var(--purple-light)' }}>{current.compatibilityScore || 73}%</div>
+                  <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: 'var(--purple-light)' }}>{compatPct}%</div>
                   <div style={{ fontSize: 9, color: 'var(--muted)' }}>compatibility</div>
                 </div>
               </div>
             </div>
-            {[{ label: 'Department', val: current.department }, { label: 'Year', val: `${current.year}${current.year === 1 ? 'st' : 'th'} Year` }, { label: 'Music', val: (current.musicTaste || []).slice(0, 2).join(', ') || '—' }, { label: 'Fav Movie', val: current.favoriteMovie || '—' }, { label: 'Goal', val: current.relationshipGoal?.replace('_', ' ') || '—' }].map(({ label, val }) => (
+            {[{ label: 'Department', val: (current.department || 'Campus') }, { label: 'Year', val: `${current.year || 1}${current.year === 1 ? 'st' : 'th'} Year` }, { label: 'Music', val: (current.musicTaste || []).slice(0, 2).join(', ') || '—' }, { label: 'Fav Movie', val: current.favoriteMovie || '—' }, { label: 'Goal', val: (current.relationshipGoal || 'not_sure').replace('_', ' ') }].map(({ label, val }) => (
               <div key={label} style={{ padding: '10px 0', borderBottom: '1px solid var(--border)' }}>
                 <span style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700 }}>{label}</span>
                 <span style={{ fontSize: 13, fontWeight: 500, display: 'block', marginTop: 2, textTransform: 'capitalize' }}>{val}</span>
@@ -319,7 +320,7 @@ export default function DiscoverPage() {
             <div style={{ marginTop: 16 }}>
               <span style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, display: 'block', marginBottom: 10 }}>Interests</span>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
-                {(current.interests || ['Music', 'Movies', 'Coffee']).map((t: string) => (
+                {(current.interests && current.interests.length > 0 ? current.interests : ['Music', 'Movies', 'Coffee']).map((t: string) => (
                   <span key={t} style={{ padding: '4px 10px', borderRadius: 100, background: 'rgba(138,43,226,0.1)', border: '1px solid rgba(138,43,226,0.2)', fontSize: 11, color: 'var(--purple-light)' }}>{t}</span>
                 ))}
               </div>
