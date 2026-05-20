@@ -42,14 +42,19 @@ function SignupForm() {
     try {
       let photoUrl = ''
       if (profilePhoto) {
-        photoUrl = await uploadImage(profilePhoto, 'campus-match/profiles')
+        try {
+          photoUrl = await uploadImage(profilePhoto, 'campus-match/profiles')
+        } catch {}
       }
-      await registerStudent(regNum, form.email, form.password, form.fullName, photoUrl)
-      toast.success('Account created! Welcome to Campus Match 🎉')
-      router.push('/discover')
-    } catch (err: any) {
-      toast.error(err.message || 'Registration failed.')
-    } finally { setLoading(false) }
+      try {
+        await registerStudent(regNum, form.email, form.password, form.fullName, photoUrl)
+        toast.success('Account created! Welcome to Campus Match 🎉')
+        router.push('/discover')
+      } catch (err: any) {
+        toast.error(err.message || 'Registration failed.')
+      }
+    } catch { }
+    setLoading(false)
   }
 
   const Field = ({ label, icon: Icon, children }: any) => (

@@ -13,7 +13,6 @@ import {
 import { auth, db } from './config'
 import { UserProfile } from '@/types'
 
-// Verify student register number in admin-uploaded registry
 export async function verifyRegisterNumber(regNum: string) {
   try {
     const ref = doc(db, 'student_registry', regNum)
@@ -23,60 +22,61 @@ export async function verifyRegisterNumber(regNum: string) {
     if (data.activated) return { valid: false, data: null, reason: 'already_activated' }
     return { valid: true, data }
   } catch (err: any) {
-    console.error('Firestore error:', err.code, err.message)
+    console.error('verifyRegisterNumber error:', err.code, err.message)
     throw err
   }
 }
 
-// Register new student
 export async function registerStudent(
   regNum: string, email: string, password: string, displayName: string, photoUrl: string = ''
 ) {
-  const { valid, data, reason } = await verifyRegisterNumber(regNum)
-  if (!valid) throw new Error(reason === 'already_activated' ? 'This register number is already in use.' : 'Invalid register number.')
-  const d = data!
+  try {
+    const { valid, data, reason } = await verifyRegisterNumber(regNum)
+    if (!valid) throw new Error(reason === 'already_activated' ? 'This register number is already in use.' : 'Invalid register number.')
+    const d = data!
 
-  // Check if this is the first user (make them admin)
-  const usersSnap = await getDocs(collection(db, 'users'))
-  const isFirstUser = usersSnap.size === 0
+    const usersSnap = await getDocs(collection(db, 'users'))
+    const isFirstUser = usersSnap.size === 0
 
-  const credential = await createUserWithEmailAndPassword(auth, email, password)
-  await updateProfile(credential.user, { displayName })
+    const credential = await createUserWithEmailAndPassword(auth, email, password)
+    await updateProfile(credential.user, { displayName })
 
-  // Create user profile
-  await setDoc(doc(db, 'users', credential.user.uid), {
-    uid: credential.user.uid,
-    fullName: displayName,
-    registerNumber: regNum,
-    email,
-    gender: (d.gender as 'male' | 'female' | 'other') || 'other',
-    department: d.department || '',
-    year: parseInt(d.year || '1'),
-    bio: '',
-    profilePhoto: photoUrl,
-    coverPhoto: '',
-    hobbies: [],
-    interests: [],
-    musicTaste: [],
-    favoriteMovie: '',
-    instagram: '',
-    relationshipGoal: 'not_sure' as const,
-    personalityTags: [],
-    whatsappNumber: '',
-    online: true,
-    lastSeen: serverTimestamp(),
-    featuredToday: false,
-    profileCompletion: 20,
-    likesRemaining: 10,
-    lastLikeReset: serverTimestamp(),
-    createdAt: serverTimestamp(),
-    isAdmin: isFirstUser,
-  })
+    await setDoc(doc(db, 'users', credential.user.uid), {
+      uid: credential.user.uid,
+      fullName: displayName,
+      registerNumber: regNum,
+      email,
+      gender: (d.gender as 'male' | 'female' | 'other') || 'other',
+      department: d.department || '',
+      year: parseInt(d.year || '1'),
+      bio: '',
+      profilePhoto: photoUrl,
+      coverPhoto: '',
+      hobbies: [],
+      interests: [],
+      musicTaste: [],
+      favoriteMovie: '',
+      instagram: '',
+      relationshipGoal: 'not_sure' as const,
+      personalityTags: [],
+      whatsappNumber: '',
+      online: true,
+      lastSeen: serverTimestamp(),
+      featuredToday: false,
+      profileCompletion: 20,
+      likesRemaining: 10,
+      lastLikeReset: serverTimestamp(),
+      createdAt: serverTimestamp(),
+      isAdmin: isFirstUser,
+    })
 
-  // Mark registry as activated
-  await updateDoc(doc(db, 'student_registry', regNum), { activated: true, userId: credential.user.uid })
+    await updateDoc(doc(db, 'student_registry', regNum), { activated: true, userId: credential.user.uid })
 
-  return credential.user
+    return credential.user
+  } catch (err: any) {
+    console.error('registerStudent error:', err.code, err.message)
+    throw err
+  }
 }
 
 export async function loginUser(email: string, password: string) {
@@ -96,11 +96,15 @@ export async function getUserProfile(uid: string): Promise<UserProfile | null> {
     const snap = await getDoc(doc(db, 'users', uid))
     return snap.exists() ? (snap.data() as UserProfile) : null
   } catch (err: any) {
-    console.warn('getUserProfile error:', err.code || err.message)
+    console.warn('getUserProfile failed:', err.code)
     return null
   }
 }
 
 export async function updateUserProfile(uid: string, data: Partial<UserProfile>) {
-  await updateDoc(doc(db, 'users', uid), { ...data })
+  try {
+    await updateDoc(doc(db, 'users', uid), { ...data })
+  } catch (err: any) {
+    console.warn('updateUserProfile failed:', err.code)
+  }
 }
