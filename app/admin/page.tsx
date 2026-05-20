@@ -30,9 +30,9 @@ export default function AdminDashboard() {
   const fileRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    getAnalytics().then(setStats).catch(() => {})
-    if (tab === 'users') getAllUsers().then(setUsers).catch(() => {})
-    if (tab === 'confessions') getPendingConfessions().then(setConfessions).catch(() => {})
+    getAnalytics().then(s => setStats(s)).catch(() => {})
+    if (tab === 'users') getAllUsers().then(u => setUsers(u)).catch(() => {})
+    if (tab === 'confessions') getPendingConfessions().then(c => setConfessions(c)).catch(() => {})
   }, [tab])
 
   const handleCSVUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {

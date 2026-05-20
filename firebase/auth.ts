@@ -92,8 +92,13 @@ export function onAuthChange(callback: (user: User | null) => void) {
 }
 
 export async function getUserProfile(uid: string): Promise<UserProfile | null> {
-  const snap = await getDoc(doc(db, 'users', uid))
-  return snap.exists() ? (snap.data() as UserProfile) : null
+  try {
+    const snap = await getDoc(doc(db, 'users', uid))
+    return snap.exists() ? (snap.data() as UserProfile) : null
+  } catch (err: any) {
+    console.warn('getUserProfile error:', err.code || err.message)
+    return null
+  }
 }
 
 export async function updateUserProfile(uid: string, data: Partial<UserProfile>) {
