@@ -8,18 +8,20 @@ export default class ErrorBoundary extends Component<Props, State> {
   state: State = { hasError: false }
 
   static getDerivedStateFromError(error: Error): State {
+    console.error('[ErrorBoundary caught]', error.message, error.stack)
     return { hasError: true, error }
   }
 
   componentDidCatch(error: Error, info: React.ErrorInfo) {
-    console.warn('[ErrorBoundary]', error.message)
+    console.error('[ErrorBoundary]', error.message, info.componentStack)
   }
 
   render() {
     if (this.state.hasError) {
       return this.props.fallback || (
         <div style={{ padding: '2rem', textAlign: 'center', color: '#888' }}>
-          Something went wrong. Please refresh the page.
+          <p style={{ color: '#ff6b6b', fontWeight: 600 }}>Error: {this.state.error?.message}</p>
+          <p style={{ marginTop: 8 }}>Something went wrong. Please check browser console (F12) for details.</p>
         </div>
       )
     }
