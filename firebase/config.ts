@@ -3,10 +3,6 @@ import { getAuth, setPersistence, browserLocalPersistence, browserSessionPersist
 import { getFirestore } from 'firebase/firestore'
 import { getDatabase } from 'firebase/database'
 
-if (typeof window !== 'undefined') {
-  window.addEventListener('unhandledrejection', (e) => { e.preventDefault() })
-}
-
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
