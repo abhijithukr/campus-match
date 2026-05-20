@@ -90,17 +90,21 @@ export async function uploadStudentRegistryXlsx(xlsxFile: File): Promise<{ succe
 
 // Get platform analytics
 export async function getAnalytics() {
-  const [usersSnap, matchesSnap, swipesSnap, confSnap] = await Promise.all([
-    getCountFromServer(collection(db, 'users')),
-    getCountFromServer(query(collection(db, 'matches'), where('active', '==', true))),
-    getCountFromServer(collection(db, 'swipes')),
-    getCountFromServer(query(collection(db, 'confessions'), where('approved', '==', true))),
-  ])
-  return {
-    totalUsers: usersSnap.data().count,
-    activeMatches: matchesSnap.data().count,
-    totalSwipes: swipesSnap.data().count,
-    totalConfessions: confSnap.data().count,
+  try {
+    const [usersSnap, matchesSnap, swipesSnap, confSnap] = await Promise.all([
+      getDocs(query(collection(db, 'users'))),
+      getDocs(query(collection(db, 'matches'), where('active', '==', true))),
+      getDocs(collection(db, 'swipes')),
+      getDocs(query(collection(db, 'confessions'), where('approved', '==', true))),
+    ])
+    return {
+      totalUsers: usersSnap.size,
+      activeMatches: matchesSnap.size,
+      totalSwipes: swipesSnap.size,
+      totalConfessions: confSnap.size,
+    }
+  } catch {
+    return { totalUsers: 0, activeMatches: 0, totalSwipes: 0, totalConfessions: 0 }
   }
 }
 
