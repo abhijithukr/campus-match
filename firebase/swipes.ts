@@ -46,18 +46,6 @@ export async function handleSwipe(fromUser: string, toUser: string, type: 'like'
       return { matched: true, matchId }
     }
 
-    const toUserSnap = await getDoc(doc(db, 'users', toUser))
-    const fromUserData = await getDoc(doc(db, 'users', fromUser))
-    if (toUserSnap.exists() && fromUserData.exists()) {
-      const dept = fromUserData.data().department || 'campus'
-      await addDoc(collection(db, 'notifications'), {
-        userId: toUser, type: 'anonymous_like',
-        title: `Someone from ${dept} liked you 👀`,
-        body: 'Match back to find out who!', read: false,
-        createdAt: serverTimestamp(),
-      })
-    }
-
     return { matched: false }
   } catch { return { matched: false } }
 }
