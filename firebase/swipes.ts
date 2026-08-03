@@ -34,16 +34,27 @@ export async function handleSwipe(fromUser: string, toUser: string, type: 'like'
         active: true,
       } as MatchDoc)
 
-      await addDoc(collection(db, 'notifications'), {
-        userId: fromUser, type: 'match', title: "It's a Match! 💜",
-        body: 'You have a new mutual match!', matchId, read: false,
-        createdAt: serverTimestamp(),
-      })
-      await addDoc(collection(db, 'notifications'), {
-        userId: toUser, type: 'match', title: "It's a Match! 💜",
-        body: 'You have a new mutual match!', matchId, read: false,
-        createdAt: serverTimestamp(),
-      })
+      const [fromSnap, toSnap] = await Promise.all([
+        getDoc(doc(db, 'users', fromUser)),
+        getDoc(doc(db, 'users', toUser)),
+      ])
+      const fromPrefs = fromSnap.exists() ? fromSnap.data().notifSettings : undefined
+      const toPrefs = toSnap.exists() ? toSnap.data().notifSettings : undefined
+
+      if (fromPrefs?.matches !== false) {
+        await addDoc(collection(db, 'notifications'), {
+          userId: fromUser, type: 'match', title: "It's a Match! 💜",
+          body: 'You have a new mutual match!', matchId, read: false,
+          createdAt: serverTimestamp(),
+        })
+      }
+      if (toPrefs?.matches !== false) {
+        await addDoc(collection(db, 'notifications'), {
+          userId: toUser, type: 'match', title: "It's a Match! 💜",
+          body: 'You have a new mutual match!', matchId, read: false,
+          createdAt: serverTimestamp(),
+        })
+      }
 
       return { matched: true, matchId }
     }
@@ -80,9 +91,16 @@ export async function decrementLike(userId: string) {
 
 export async function getDiscoverFeed(userId: string, _userGender?: string) {
   try {
+    const now = new Date()
     const swipedQ = query(collection(db, 'swipes'), where('fromUser', '==', userId))
     const swipedSnap = await getDocs(swipedQ)
-    const swipedIds = new Set(swipedSnap.docs.map(d => d.data().toUser))
+    const swipedIds = new Set<string>()
+    swipedSnap.docs.forEach(d => {
+      const data = d.data()
+      const exp = data.expiresAt
+      const stillActive = !exp || (typeof exp.toDate === 'function' && exp.toDate() > now)
+      if (stillActive) swipedIds.add(data.toUser)
+    })
     swipedIds.add(userId)
 
     const usersSnap = await getDocs(query(collection(db, 'users'), limit(500)))
@@ -95,10 +113,17 @@ export async function getDiscoverFeed(userId: string, _userGender?: string) {
     users.forEach((u: any) => { if (u.registerNumber) userByReg[u.registerNumber] = u })
 
     const feed = regDocs
-      .filter((r: any) => !swipedIds.has(r.userId || r.id) && r.id !== userId)
+      .filter((r: any) => r.userId !== userId && r.id !== userId)
       .map((r: any) => {
         const user = userByReg[r.id]
-        if (user) return { ...user, online: true }
+        if (user) {
+          if (user.privacySettings?.showProfile === false) return null
+          return {
+            ...user,
+            department: user.privacySettings?.departmentVisible === false ? '' : user.department,
+            online: user.privacySettings?.onlineStatus === false ? false : true,
+          }
+        }
         return {
           uid: r.id,
           fullName: r.name || 'Student',
@@ -127,14 +152,13 @@ export async function getDiscoverFeed(userId: string, _userGender?: string) {
           createdAt: null,
         }
       })
+      .filter((u: any) => u !== null && u.uid !== userId && !swipedIds.has(u.uid))
 
-    const selfFiltered = feed.filter((u: any) => u.uid !== userId)
-
-    for (let i = selfFiltered.length - 1; i > 0; i--) {
+    for (let i = feed.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
-      ;[selfFiltered[i], selfFiltered[j]] = [selfFiltered[j], selfFiltered[i]]
+      ;[feed[i], feed[j]] = [feed[j], feed[i]]
     }
-    return selfFiltered
+    return feed
   } catch { return [] }
 }
 
