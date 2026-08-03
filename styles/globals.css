@@ -637,3 +637,47 @@ html, body {
 .bb8:hover .bb8__antenna:nth-child(2) { left: 50% !important; }
 .bb8:hover .bb8__antenna:nth-child(1) { right: 0.938em !important; }
 .bb8:hover .bb8__head::after { background-position: 0 0 !important; }
+
+/* ===== Theme Switch (Uiverse.io by Madflows) ===== */
+.theme-switch {
+  position: relative;
+  width: 52px;
+  height: 28px;
+  --light: #f6eef2;
+  --dark: #33272a;
+  flex-shrink: 0;
+}
+.theme-switch .switch-label {
+  position: absolute;
+  inset: 0;
+  background-color: var(--dark);
+  border-radius: 100px;
+  cursor: pointer;
+  border: 2px solid var(--dark);
+  transition: 0.3s;
+}
+.theme-switch .checkbox { position: absolute; display: none; }
+.theme-switch .slider {
+  position: absolute;
+  inset: 0;
+  border-radius: 100px;
+  transition: 0.3s;
+  background: var(--light);
+}
+.theme-switch .checkbox:checked ~ .slider { background-color: var(--dark); }
+.theme-switch .slider::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: var(--light);
+  transition: 0.3s;
+}
+.theme-switch .checkbox:checked ~ .slider::before {
+  transform: translateX(24px);
+  background-color: var(--dark);
+  box-shadow: inset 7px -2.4px 0 0 var(--light);
+}

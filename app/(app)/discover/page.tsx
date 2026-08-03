@@ -255,7 +255,7 @@ export default function DiscoverPage() {
           <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{filteredFeed.length - currentIdx} people left</p>
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <Bb8ThemeToggle size={6} />
+          <Bb8ThemeToggle size={16} />
           <button onClick={() => setShowFilters(s => !s)} style={{ padding: '6px 12px', borderRadius: 10, border: '1px solid var(--border)', background: hasActiveFilters ? 'rgba(254,1,154,0.15)' : 'var(--surface2)', color: hasActiveFilters ? 'var(--purple-light)' : 'var(--muted)', cursor: 'pointer', fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}>
             <SlidersHorizontal size={12} /> Filter {hasActiveFilters && '•'}
           </button>
