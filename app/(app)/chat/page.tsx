@@ -99,13 +99,13 @@ export default function ChatPage() {
               <div key={match.id} onClick={() => setSelectedMatch(match)} style={{
                 display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px',
                 borderRadius: 12, cursor: 'pointer', transition: 'background 0.15s',
-                background: isSelected ? 'rgba(138,43,226,0.1)' : 'transparent',
+                background: isSelected ? 'rgba(254,1,154,0.16)' : 'transparent',
               }}>
                 <div style={{ position: 'relative', flexShrink: 0 }}>
                   <div style={{
                     width: 40, height: 40, borderRadius: '50%',
-                    background: 'var(--grad)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: 16, overflow: 'hidden'
+                    background: 'var(--purple)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 16, overflow: 'hidden', color: '#33272a'
                   }}>
                     {p?.profilePhoto ? <img src={p.profilePhoto} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" /> : p?.fullName?.[0] || '?'}
                   </div>
@@ -131,8 +131,8 @@ export default function ChatPage() {
           {/* Header */}
           <div style={{ padding: '12px 20px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 12, background: 'var(--surface)', flexShrink: 0 }}>
             <div style={{
-              width: 40, height: 40, borderRadius: '50%', background: 'var(--grad)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0
+              width: 40, height: 40, borderRadius: '50%', background: 'var(--purple)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0, color: '#33272a'
             }}>
               {currentProfile.fullName[0]}
             </div>
@@ -165,14 +165,14 @@ export default function ChatPage() {
               const isMine = msg.senderId === user?.uid
               return (
                 <div key={msg.id} style={{ display: 'flex', gap: 8, maxWidth: '70%', alignSelf: isMine ? 'flex-end' : 'flex-start', flexDirection: isMine ? 'row-reverse' : 'row' }}>
-                  <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'var(--grad)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 600 }}>
+                  <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'var(--purple)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 600, color: '#33272a' }}>
                     {isMine ? (useAuthStore.getState().profile?.fullName?.[0] || 'Y') : currentProfile.fullName[0]}
                   </div>
                   <div>
                     <div style={{
                       padding: '10px 14px', borderRadius: isMine ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
-                      background: isMine ? 'var(--grad)' : 'var(--surface2)',
-                      color: '#fff', fontSize: 13, lineHeight: 1.5
+                      background: isMine ? 'var(--purple)' : 'var(--surface2)',
+                      color: isMine ? '#33272a' : 'var(--text)', fontSize: 13, lineHeight: 1.5
                     }}>{msg.text}</div>
                     <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4, textAlign: isMine ? 'right' : 'left' }}>
                       {msg.createdAt ? formatDistanceToNow(new Date(msg.createdAt), { addSuffix: true }) : 'just now'}
@@ -184,7 +184,7 @@ export default function ChatPage() {
             })}
             {isTypingOther && (
               <div style={{ display: 'flex', gap: 8, maxWidth: '70%' }}>
-                <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'var(--grad)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11 }}>
+                <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'var(--purple)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, color: '#33272a' }}>
                   {currentProfile.fullName[0]}
                 </div>
                 <div style={{ display: 'flex', gap: 4, alignItems: 'center', background: 'var(--surface2)', padding: '10px 14px', borderRadius: '18px 18px 18px 4px' }}>
@@ -209,9 +209,9 @@ export default function ChatPage() {
             />
             <button style={{ color: 'var(--muted)', background: 'none', border: 'none', cursor: 'pointer' }}><ImageIcon size={18} /></button>
             <button onClick={handleSend} disabled={!input.trim()} style={{
-              width: 38, height: 38, borderRadius: '50%', background: input.trim() ? 'var(--grad)' : 'var(--surface2)',
+              width: 38, height: 38, borderRadius: '50%', background: input.trim() ? 'var(--purple)' : 'var(--surface2)',
               border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: '#fff', transition: 'all 0.2s'
+              color: '#33272a', transition: 'all 0.2s'
             }}>
               <Send size={14} />
             </button>

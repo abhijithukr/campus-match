@@ -20,7 +20,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
-  themeColor: '#8A2BE2',
+  themeColor: '#fe019a',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -39,9 +39,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               position="top-right"
               toastOptions={{
                 style: {
-                  background: '#1A1A22',
-                  color: '#F0EEF8',
-                  border: '1px solid rgba(255,255,255,0.07)',
+                  background: '#fffffe',
+                  color: '#33272a',
+                  border: '1px solid rgba(51,39,42,0.1)',
                   borderRadius: '12px',
                   fontFamily: "'DM Sans', sans-serif",
                 }

@@ -62,10 +62,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       }}>
         {/* Logo */}
         <Link href="/discover" style={{
-          width: 40, height: 40, borderRadius: 12, background: 'var(--grad)',
+          width: 40, height: 40, borderRadius: 12, background: 'var(--purple)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           marginBottom: 16, textDecoration: 'none',
-          fontFamily: "'Syne', sans-serif", fontWeight: 800, color: '#fff', fontSize: 14
+          fontFamily: "'Syne', sans-serif", fontWeight: 800, color: '#33272a', fontSize: 14
         }}>CM</Link>
 
         {navItems.map(({ href, icon: Icon, label }) => {
@@ -76,7 +76,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               width: 44, height: 44, borderRadius: 12,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               textDecoration: 'none', transition: 'all 0.2s',
-              background: isActive ? 'rgba(138,43,226,0.18)' : 'transparent',
+              background: isActive ? 'rgba(254,1,154,0.22)' : 'transparent',
               color: isActive ? 'var(--purple-light)' : 'var(--muted)',
               position: 'relative',
             }}>
@@ -98,15 +98,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             width: 44, height: 44, borderRadius: 12,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             textDecoration: 'none', color: 'var(--muted)',
-            background: pathname.startsWith('/profile') ? 'rgba(138,43,226,0.18)' : 'transparent',
+            background: pathname.startsWith('/profile') ? 'rgba(254,1,154,0.22)' : 'transparent',
           }}>
             <Settings size={18} />
           </Link>
           <Link href="/profile" style={{
             width: 36, height: 36, borderRadius: '50%',
-            background: 'var(--grad)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, color: '#fff',
-            textDecoration: 'none', outline: '2px solid rgba(138,43,226,0.4)', outlineOffset: 2
+            background: 'var(--purple)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, color: '#33272a',
+            textDecoration: 'none', outline: '2px solid rgba(254,1,154,0.4)', outlineOffset: 2
           }}>
             {profile?.profilePhoto ? <img src={profile.profilePhoto} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} alt="" /> : (profile?.fullName?.[0] || 'U')}
           </Link>

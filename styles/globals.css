@@ -5,19 +5,21 @@
 @tailwind utilities;
 
 :root {
-  --bg: #0B0B0F;
-  --surface: #131318;
-  --surface2: #1A1A22;
-  --surface3: #22222E;
-  --border: rgba(255, 255, 255, 0.07);
-  --border2: rgba(255, 255, 255, 0.12);
-  --purple: #8A2BE2;
-  --purple-light: #b78fff;
-  --pink: #FF4FD8;
-  --pink-light: #ff9ef0;
-  --text: #F0EEF8;
-  --muted: #7A7890;
-  --grad: linear-gradient(135deg, #8A2BE2, #FF4FD8);
+  --bg: #faeee7;
+  --surface: #fffffe;
+  --surface2: #fdf1eb;
+  --surface3: #f8e3db;
+  --border: rgba(51, 39, 42, 0.08);
+  --border2: rgba(51, 39, 42, 0.16);
+  --purple: #fe019a;
+  --purple-light: #e0557e;
+  --pink: #fe019a;
+  --pink-light: #ffc6c7;
+  --text: #33272a;
+  --muted: #594a4e;
+  --green: #c3f0ca;
+  --green-strong: #2f9e44;
+  --grad: linear-gradient(135deg, #fe019a, #ffc6c7);
 }
 
 * {
@@ -43,7 +45,7 @@ html, body {
 ::-webkit-scrollbar-thumb:hover { background: var(--purple); }
 
 /* Selection */
-::selection { background: rgba(138, 43, 226, 0.3); color: white; }
+::selection { background: rgba(255, 139, 167, 0.35); color: var(--text); }
 
 /* Utilities */
 .font-display { font-family: 'Syne', sans-serif; }
@@ -56,27 +58,27 @@ html, body {
 }
 
 .glass {
-  background: rgba(19, 19, 24, 0.8);
+  background: rgba(255, 255, 254, 0.8);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--border);
 }
 
-.glow-purple { box-shadow: 0 0 30px rgba(138, 43, 226, 0.4); }
-.glow-pink { box-shadow: 0 0 30px rgba(255, 79, 216, 0.4); }
+.glow-purple { box-shadow: 0 0 30px rgba(255, 139, 167, 0.3); }
+.glow-pink { box-shadow: 0 0 30px rgba(255, 139, 167, 0.3); }
 
 .card-hover {
   transition: transform 0.2s, box-shadow 0.2s;
 }
 .card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(138, 43, 226, 0.2);
+  box-shadow: 0 8px 32px rgba(255, 139, 167, 0.2);
 }
 
 /* Input base */
 .input-base {
-  background: var(--surface2);
-  border: 1px solid var(--border);
+  background: var(--surface);
+  border: 1px solid var(--border2);
   border-radius: 12px;
   color: var(--text);
   font-family: 'DM Sans', sans-serif;
@@ -88,20 +90,20 @@ html, body {
 }
 .input-base:focus {
   border-color: var(--purple);
-  box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.1);
+  box-shadow: 0 0 0 3px rgba(255, 139, 167, 0.15);
 }
 .input-base::placeholder { color: var(--muted); }
 
 /* Button base */
 .btn-primary {
-  background: var(--grad);
+  background: var(--purple);
   border: none;
   border-radius: 12px;
-  color: white;
+  color: #33272a;
   cursor: pointer;
   font-family: 'DM Sans', sans-serif;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   padding: 12px 24px;
   transition: opacity 0.2s, transform 0.2s;
   display: flex;
@@ -115,8 +117,8 @@ html, body {
 .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
 .btn-ghost {
-  background: var(--surface2);
-  border: 1px solid var(--border);
+  background: var(--surface);
+  border: 1px solid var(--border2);
   border-radius: 12px;
   color: var(--text);
   cursor: pointer;
@@ -134,8 +136,8 @@ html, body {
 
 /* Tag pill */
 .tag-pill {
-  background: rgba(138, 43, 226, 0.12);
-  border: 1px solid rgba(138, 43, 226, 0.25);
+  background: rgba(255, 139, 167, 0.15);
+  border: 1px solid rgba(255, 139, 167, 0.3);
   border-radius: 100px;
   color: var(--purple-light);
   font-size: 11px;

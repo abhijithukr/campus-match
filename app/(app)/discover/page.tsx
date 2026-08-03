@@ -15,15 +15,15 @@ function CardContent({ current, swipeDir }: { current: UserProfile; swipeDir: st
   const compatScore = current.compatibilityScore || 70 + Math.floor(Math.random() * 25)
   return (
     <>
-      <div style={{ height: '60%', position: 'relative', overflow: 'hidden', background: 'linear-gradient(135deg, #3d0066, #6600cc, #cc00aa)' }}>
+      <div style={{ height: '60%', position: 'relative', overflow: 'hidden', background: 'linear-gradient(135deg, #ffc6c7, #fe019a)' }}>
         {current.profilePhoto ? (
           <img src={current.profilePhoto} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" />
         ) : (
-          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 80, fontFamily: "'Syne', sans-serif", fontWeight: 800 }}>
+          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 80, fontFamily: "'Syne', sans-serif", fontWeight: 800, color: '#33272a' }}>
             {(current.fullName || '?')[0]}
           </div>
         )}
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.8))' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 40%, rgba(51,39,42,0.6))' }} />
         {swipeDir === 'like' && (
           <div style={{ position: 'absolute', top: 24, left: 24, padding: '10px 20px', borderRadius: 12, border: '3px solid #22c55e', color: '#22c55e', fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 28, transform: 'rotate(-15deg)', background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(4px)' }}>
             LIKE
@@ -40,7 +40,7 @@ function CardContent({ current, swipeDir }: { current: UserProfile; swipeDir: st
           <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 28, color: '#fff' }}>{(current.fullName || 'User').split(' ')[0]}</div>
           <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.75)' }}>{current.department || 'Campus'} · {current.year}{current.year === 1 ? 'st' : current.year === 2 ? 'nd' : current.year === 3 ? 'rd' : 'th'} Year</div>
         </div>
-        <div style={{ position: 'absolute', top: 16, right: 16, background: 'rgba(138,43,226,0.85)', backdropFilter: 'blur(12px)', padding: '5px 12px', borderRadius: 100, fontSize: 13, color: '#fff', fontWeight: 700, border: '1px solid rgba(255,255,255,0.2)' }}>
+        <div style={{ position: 'absolute', top: 16, right: 16, background: 'var(--purple)', backdropFilter: 'blur(12px)', padding: '5px 12px', borderRadius: 100, fontSize: 13, color: '#33272a', fontWeight: 700, border: '1px solid rgba(255,255,255,0.3)' }}>
           {compatScore}% match
         </div>
       </div>
@@ -48,10 +48,10 @@ function CardContent({ current, swipeDir }: { current: UserProfile; swipeDir: st
         <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 14, minHeight: 44 }}>{current.bio || 'No bio yet. Get to know them! 🌙'}</p>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
           {(current.interests || []).slice(0, 5).map((tag: string) => (
-            <span key={tag} style={{ padding: '4px 12px', borderRadius: 100, background: 'rgba(138,43,226,0.12)', border: '1px solid rgba(138,43,226,0.25)', fontSize: 12, color: 'var(--purple-light)' }}>{tag}</span>
+            <span key={tag} style={{ padding: '4px 12px', borderRadius: 100, background: 'rgba(254,1,154,0.15)', border: '1px solid rgba(254,1,154,0.3)', fontSize: 12, color: 'var(--purple-light)' }}>{tag}</span>
           ))}
           {(!current.interests || current.interests.length === 0) && (
-            <span style={{ padding: '4px 12px', borderRadius: 100, background: 'rgba(138,43,226,0.08)', border: '1px solid rgba(138,43,226,0.15)', fontSize: 12, color: 'var(--muted)' }}>Exploring</span>
+            <span style={{ padding: '4px 12px', borderRadius: 100, background: 'rgba(254,1,154,0.08)', border: '1px solid rgba(254,1,154,0.15)', fontSize: 12, color: 'var(--muted)' }}>Exploring</span>
           )}
         </div>
       </div>
@@ -62,9 +62,9 @@ function CardContent({ current, swipeDir }: { current: UserProfile; swipeDir: st
 function FeaturedSpotlight({ featured }: { featured: UserProfile | null }) {
   if (!featured) return null
   return (
-    <div style={{ width: '100%', maxWidth: 360, background: 'linear-gradient(135deg, rgba(138,43,226,0.12), rgba(255,79,216,0.08))', border: '1px solid rgba(255,210,0,0.3)', borderRadius: 16, padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, cursor: 'pointer', transition: 'all 0.2s', animation: 'featuredPulse 2s infinite' }}
-      onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(255,210,0,0.6)')}
-      onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,210,0,0.3)')}>
+    <div style={{ width: '100%', maxWidth: 360, background: 'linear-gradient(135deg, rgba(254,1,154,0.2), rgba(255,198,199,0.3))', border: '1px solid rgba(255,210,0,0.4)', borderRadius: 16, padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16, cursor: 'pointer', transition: 'all 0.2s', animation: 'featuredPulse 2s infinite' }}
+      onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(255,210,0,0.7)')}
+      onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,210,0,0.4)')}>
       <style>{`@keyframes featuredPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,210,0,0); } 50% { box-shadow: 0 0 20px 2px rgba(255,210,0,0.15); } }`}</style>
       <div style={{ width: 40, height: 40, borderRadius: 12, background: 'linear-gradient(135deg, #ffd200, #ff9500)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0 }}>⭐</div>
       <div style={{ flex: 1 }}>
@@ -223,7 +223,7 @@ export default function DiscoverPage() {
           <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{feed.length - currentIdx} people left</p>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
-          <button onClick={() => setSoundEnabled(s => !s)} style={{ width: 34, height: 34, borderRadius: 10, border: '1px solid var(--border)', background: soundEnabled ? 'rgba(138,43,226,0.1)' : 'var(--surface2)', color: soundEnabled ? 'var(--purple-light)' : 'var(--muted)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <button onClick={() => setSoundEnabled(s => !s)} style={{ width: 34, height: 34, borderRadius: 10, border: '1px solid var(--border)', background: soundEnabled ? 'rgba(254,1,154,0.15)' : 'var(--surface2)', color: soundEnabled ? 'var(--purple-light)' : 'var(--muted)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {soundEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
           </button>
           <button style={{ padding: '6px 12px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surface2)', color: 'var(--muted)', cursor: 'pointer', fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}>
@@ -244,7 +244,7 @@ export default function DiscoverPage() {
             )}
             {next && (
               <div style={{ position: 'absolute', inset: 0, background: 'var(--surface)', borderRadius: 28, transform: 'scale(0.93) translateY(9px)', opacity: 0.7, border: '1px solid var(--border)', zIndex: 2, overflow: 'hidden' }}>
-                <div style={{ height: '60%', background: 'linear-gradient(135deg, #2a0050, #4a0099)', borderRadius: '28px 28px 0 0' }} />
+                <div style={{ height: '60%', background: 'linear-gradient(135deg, #ffc6c7, #fe019a)', borderRadius: '28px 28px 0 0' }} />
               </div>
             )}
 
@@ -284,8 +284,8 @@ export default function DiscoverPage() {
               <Star size={20} fill="#ffd200" strokeWidth={0} />
             </button>
             <button onClick={() => processSwipe('like')} disabled={!current || likesLeft <= 0}
-              style={{ width: 64, height: 64, borderRadius: '50%', border: 'none', background: likesLeft > 0 && current ? 'var(--grad)' : 'var(--surface2)', cursor: likesLeft > 0 && current ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, boxShadow: likesLeft > 0 ? '0 4px 24px rgba(255,79,216,0.45)' : 'none', transition: 'all 0.2s', color: '#fff' }}>
-              <Heart size={28} fill="white" strokeWidth={0} />
+              style={{ width: 64, height: 64, borderRadius: '50%', border: 'none', background: likesLeft > 0 && current ? 'var(--purple)' : 'var(--surface2)', cursor: likesLeft > 0 && current ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, boxShadow: likesLeft > 0 ? '0 4px 24px rgba(254,1,154,0.45)' : 'none', transition: 'all 0.2s', color: '#33272a' }}>
+              <Heart size={28} fill="#33272a" strokeWidth={0} />
             </button>
           </div>
 
@@ -295,7 +295,7 @@ export default function DiscoverPage() {
               <span style={{ fontSize: 13, fontWeight: 700, color: likesLeft <= 2 ? '#ff6b6b' : 'var(--purple-light)' }}>{likesLeft} / 10</span>
             </div>
             <div style={{ height: 4, background: 'var(--surface2)', borderRadius: 4, overflow: 'hidden' }}>
-              <div style={{ height: '100%', background: likesLeft <= 2 ? '#ff6b6b' : 'var(--grad)', width: `${(likesLeft / 10) * 100}%`, transition: 'width 0.4s', borderRadius: 4 }} />
+              <div style={{ height: '100%', background: likesLeft <= 2 ? '#ff6b6b' : 'var(--purple)', width: `${(likesLeft / 10) * 100}%`, transition: 'width 0.4s', borderRadius: 4 }} />
             </div>
             {likesLeft <= 2 && <p style={{ fontSize: 11, color: '#ff6b6b', marginTop: 6, textAlign: 'center' }}>⚠️ Resets in {hoursLeft}h</p>}
           </div>
@@ -321,11 +321,11 @@ export default function DiscoverPage() {
               <span style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, display: 'block', marginBottom: 10 }}>Interests</span>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
                 {(current.interests && current.interests.length > 0 ? current.interests : ['Music', 'Movies', 'Coffee']).map((t: string) => (
-                  <span key={t} style={{ padding: '4px 10px', borderRadius: 100, background: 'rgba(138,43,226,0.1)', border: '1px solid rgba(138,43,226,0.2)', fontSize: 11, color: 'var(--purple-light)' }}>{t}</span>
+                  <span key={t} style={{ padding: '4px 10px', borderRadius: 100, background: 'rgba(254,1,154,0.12)', border: '1px solid rgba(254,1,154,0.22)', fontSize: 11, color: 'var(--purple-light)' }}>{t}</span>
                 ))}
               </div>
             </div>
-            <div style={{ marginTop: 20, padding: '14px', background: 'rgba(138,43,226,0.06)', border: '1px solid rgba(138,43,226,0.2)', borderRadius: 14 }}>
+            <div style={{ marginTop: 20, padding: '14px', background: 'rgba(254,1,154,0.1)', border: '1px solid rgba(254,1,154,0.25)', borderRadius: 14 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
                 <RotateCcw size={13} color="var(--purple)" />
                 <span style={{ fontSize: 11, color: 'var(--muted)' }}>Fresh Cycle</span>

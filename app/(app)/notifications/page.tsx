@@ -16,11 +16,11 @@ const ICONS: Record<string, string> = {
 }
 
 const BG: Record<string, string> = {
-  match: 'rgba(138,43,226,0.12)',
-  anonymous_like: 'rgba(255,79,216,0.12)',
-  message: 'rgba(34,197,94,0.12)',
-  cycle_reset: 'rgba(96,165,250,0.12)',
-  featured: 'rgba(255,210,0,0.12)',
+  match: 'rgba(254,1,154,0.16)',
+  anonymous_like: 'rgba(254,1,154,0.16)',
+  message: 'rgba(47,158,68,0.14)',
+  cycle_reset: 'rgba(96,165,250,0.16)',
+  featured: 'rgba(255,210,0,0.18)',
 }
 
 export default function NotificationsPage() {
@@ -99,11 +99,11 @@ export default function NotificationsPage() {
             style={{
               display: 'flex', gap: 14, padding: '14px 16px', borderRadius: 16,
               marginBottom: 8, cursor: 'pointer', transition: 'background 0.15s',
-              background: n.read ? 'var(--surface)' : 'rgba(138,43,226,0.06)',
-              border: `1px solid ${n.read ? 'var(--border)' : 'rgba(138,43,226,0.25)'}`,
+              background: n.read ? 'var(--surface)' : 'rgba(254,1,154,0.1)',
+              border: `1px solid ${n.read ? 'var(--border)' : 'rgba(254,1,154,0.3)'}`,
             }}
             onMouseEnter={e => (e.currentTarget.style.background = 'var(--surface2)')}
-            onMouseLeave={e => (e.currentTarget.style.background = n.read ? 'var(--surface)' : 'rgba(138,43,226,0.06)')}>
+            onMouseLeave={e => (e.currentTarget.style.background = n.read ? 'var(--surface)' : 'rgba(254,1,154,0.1)')}>
             <div style={{
               width: 44, height: 44, borderRadius: 14, flexShrink: 0,
               background: BG[n.type] || 'var(--surface2)',

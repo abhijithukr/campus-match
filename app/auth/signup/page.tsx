@@ -72,13 +72,13 @@ function SignupForm() {
       <div style={{ textAlign: 'center', marginBottom: 32 }}>
         <div style={{
           display: 'inline-flex', width: 56, height: 56, borderRadius: 16,
-          background: 'var(--grad)', alignItems: 'center', justifyContent: 'center', marginBottom: 16
+          background: 'var(--purple)', alignItems: 'center', justifyContent: 'center', marginBottom: 16
         }}>
-          <Heart size={24} color="white" fill="white" />
+          <Heart size={24} color="#33272a" fill="#33272a" />
         </div>
         <h1 style={{ fontFamily: "'Syne', sans-serif", fontSize: 26, fontWeight: 800 }}>Create your profile</h1>
         <div style={{ color: 'var(--muted)', marginTop: 6, fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-          <span style={{ background: 'rgba(34,197,94,0.1)', color: '#22c55e', border: '1px solid rgba(34,197,94,0.3)', borderRadius: 100, padding: '2px 10px', fontSize: 11 }}>
+          <span style={{ background: 'rgba(47,158,68,0.12)', color: 'var(--green-strong)', border: '1px solid rgba(47,158,68,0.3)', borderRadius: 100, padding: '2px 10px', fontSize: 11 }}>
             ✓ {regNum} Verified
           </span>
         </div>
@@ -95,7 +95,7 @@ function SignupForm() {
         ))}
       </div>
 
-      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 24, padding: 32 }}>
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border2)', borderRadius: 24, padding: 32 }}>
         <form onSubmit={step === 1 ? (e) => { e.preventDefault(); setStep(2) } : handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           {step === 1 && (<>
             <Field label="Full Name" icon={User}>
@@ -140,7 +140,7 @@ function SignupForm() {
                   <button key={y} type="button" onClick={() => update('year', y)} style={{
                     padding: '10px', borderRadius: 10, border: '1px solid',
                     borderColor: form.year === y ? 'var(--purple)' : 'var(--border)',
-                    background: form.year === y ? 'rgba(138,43,226,0.15)' : 'var(--surface2)',
+                    background: form.year === y ? 'rgba(254,1,154,0.18)' : 'var(--surface2)',
                     color: form.year === y ? 'var(--purple-light)' : 'var(--muted)',
                     cursor: 'pointer', fontSize: 14, fontWeight: 600, transition: 'all 0.2s'
                   }}>{y}</button>
@@ -154,7 +154,7 @@ function SignupForm() {
                   <button key={g} type="button" onClick={() => update('gender', g.toLowerCase())} style={{
                     padding: '10px', borderRadius: 10, border: '1px solid',
                     borderColor: form.gender === g.toLowerCase() ? 'var(--purple)' : 'var(--border)',
-                    background: form.gender === g.toLowerCase() ? 'rgba(138,43,226,0.15)' : 'var(--surface2)',
+                    background: form.gender === g.toLowerCase() ? 'rgba(254,1,154,0.18)' : 'var(--surface2)',
                     color: form.gender === g.toLowerCase() ? 'var(--purple-light)' : 'var(--muted)',
                     cursor: 'pointer', fontSize: 13, transition: 'all 0.2s'
                   }}>{g}</button>
@@ -168,7 +168,7 @@ function SignupForm() {
                   <button key={g.value} type="button" onClick={() => update('relationshipGoal', g.value)} style={{
                     padding: '12px 16px', borderRadius: 12, border: '1px solid', textAlign: 'left',
                     borderColor: form.relationshipGoal === g.value ? 'var(--purple)' : 'var(--border)',
-                    background: form.relationshipGoal === g.value ? 'rgba(138,43,226,0.1)' : 'var(--surface2)',
+                    background: form.relationshipGoal === g.value ? 'rgba(254,1,154,0.12)' : 'var(--surface2)',
                     color: form.relationshipGoal === g.value ? 'var(--text)' : 'var(--muted)',
                     cursor: 'pointer', fontSize: 14, transition: 'all 0.2s'
                   }}>{g.label}</button>

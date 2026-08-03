@@ -14,7 +14,7 @@ function Modal({ title, children, onClose }: { title: string; children: React.Re
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 200,
-      background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)',
+      background: 'rgba(51,39,42,0.5)', backdropFilter: 'blur(8px)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       animation: 'fadeIn 0.2s'
     }} onClick={e => e.target === e.currentTarget && onClose()}>
@@ -48,7 +48,7 @@ function Toggle({ label, description, checked, onChange }: { label: string; desc
         onClick={() => onChange(!checked)}
         style={{
           width: 44, height: 24, borderRadius: 12, border: 'none', cursor: 'pointer',
-          background: checked ? 'var(--grad)' : 'var(--surface3)',
+          background: checked ? 'var(--purple)' : 'var(--surface3)',
           display: 'flex', alignItems: 'center', justifyContent: checked ? 'flex-end' : 'flex-start',
           padding: 2, transition: 'all 0.2s'
         }}
@@ -173,9 +173,9 @@ export default function ProfilePage() {
         <h1 style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 700 }}>My Profile</h1>
         <button onClick={editing ? save : () => setEditing(true)} disabled={saving} style={{
           padding: '8px 20px', borderRadius: 10,
-          background: editing ? 'var(--grad)' : 'var(--surface2)',
-          border: editing ? 'none' : '1px solid var(--border)',
-          color: editing ? '#fff' : 'var(--text)', fontSize: 13, fontWeight: 500, cursor: 'pointer',
+          background: editing ? 'var(--purple)' : 'var(--surface)',
+          border: editing ? 'none' : '1px solid var(--border2)',
+          color: editing ? '#33272a' : 'var(--text)', fontSize: 13, fontWeight: 600, cursor: 'pointer',
           display: 'flex', alignItems: 'center', gap: 6
         }}>
           <Edit2 size={13} /> {saving ? 'Saving...' : editing ? 'Save Changes' : 'Edit Profile'}
@@ -185,7 +185,7 @@ export default function ProfilePage() {
       <div style={{ flex: 1, overflowY: 'auto' }}>
         {/* Cover */}
         <div style={{ height: 160, background: profile.coverPhoto ? `url(${profile.coverPhoto}) center/cover no-repeat` : 'var(--grad)', position: 'relative' }}>
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.4))' }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent, rgba(51,39,42,0.3))' }} />
           {editing && (
             <button onClick={openCoverUpload} style={{ position: 'absolute', top: 12, right: 12, background: 'rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 8, padding: '6px 12px', color: '#fff', cursor: 'pointer', fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}>
               <Camera size={12} /> Change Cover
@@ -245,7 +245,7 @@ export default function ProfilePage() {
           {editing ? (
             <textarea className="input-base" rows={3} value={form.bio} onChange={e => setForm(f => ({ ...f, bio: e.target.value }))} placeholder="Write something about yourself..." style={{ resize: 'none' }} maxLength={160} />
           ) : (
-            <p style={{ fontSize: 14, color: '#bbb', lineHeight: 1.7 }}>{profile.bio || <span style={{ color: 'var(--muted)', fontStyle: 'italic' }}>No bio yet. Add one!</span>}</p>
+            <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{profile.bio || <span style={{ color: 'var(--muted)', fontStyle: 'italic' }}>No bio yet. Add one!</span>}</p>
           )}
         </div>
 
@@ -278,8 +278,8 @@ export default function ProfilePage() {
               return (
                 <button key={i} onClick={editing ? () => toggleInterest(i) : undefined} style={{
                   padding: '5px 14px', borderRadius: 100,
-                  background: selected ? 'rgba(138,43,226,0.2)' : 'rgba(138,43,226,0.08)',
-                  border: `1px solid ${selected ? 'var(--purple)' : 'rgba(138,43,226,0.2)'}`,
+                  background: selected ? 'rgba(254,1,154,0.25)' : 'rgba(254,1,154,0.1)',
+                  border: `1px solid ${selected ? 'var(--purple)' : 'rgba(254,1,154,0.25)'}`,
                   color: selected ? 'var(--purple-light)' : 'var(--muted)',
                   fontSize: 12, cursor: editing ? 'pointer' : 'default',
                   transition: 'all 0.2s'
@@ -287,7 +287,7 @@ export default function ProfilePage() {
               )
             })}
             {!editing && !profile.interests?.length && (
-              <button onClick={() => setEditing(true)} style={{ padding: '5px 14px', borderRadius: 100, background: 'rgba(138,43,226,0.08)', border: '1px solid rgba(138,43,226,0.2)', color: 'var(--muted)', fontSize: 12, cursor: 'pointer' }}>Add interests →</button>
+              <button onClick={() => setEditing(true)} style={{ padding: '5px 14px', borderRadius: 100, background: 'rgba(254,1,154,0.1)', border: '1px solid rgba(254,1,154,0.25)', color: 'var(--muted)', fontSize: 12, cursor: 'pointer' }}>Add interests →</button>
             )}
           </div>
         </div>
@@ -306,15 +306,15 @@ export default function ProfilePage() {
               return (
                 <button key={t} onClick={editing ? () => toggleTag(t) : undefined} style={{
                   padding: '5px 14px', borderRadius: 100,
-                  background: selected ? 'rgba(255,79,216,0.15)' : 'rgba(255,79,216,0.06)',
-                  border: `1px solid ${selected ? 'var(--pink)' : 'rgba(255,79,216,0.2)'}`,
-                  color: selected ? 'var(--pink-light)' : 'var(--muted)',
+                  background: selected ? 'rgba(255,198,199,0.5)' : 'rgba(255,198,199,0.25)',
+                  border: `1px solid ${selected ? 'var(--pink)' : 'rgba(254,1,154,0.25)'}`,
+                  color: selected ? 'var(--purple-light)' : 'var(--muted)',
                   fontSize: 12, cursor: editing ? 'pointer' : 'default', transition: 'all 0.2s'
                 }}>{t}</button>
               )
             })}
             {!editing && !profile.personalityTags?.length && (
-              <button onClick={() => setEditing(true)} style={{ padding: '5px 14px', borderRadius: 100, background: 'rgba(255,79,216,0.06)', border: '1px solid rgba(255,79,216,0.2)', color: 'var(--muted)', fontSize: 12, cursor: 'pointer' }}>Add tags →</button>
+              <button onClick={() => setEditing(true)} style={{ padding: '5px 14px', borderRadius: 100, background: 'rgba(255,198,199,0.25)', border: '1px solid rgba(254,1,154,0.25)', color: 'var(--muted)', fontSize: 12, cursor: 'pointer' }}>Add tags →</button>
             )}
           </div>
         </div>
@@ -335,12 +335,12 @@ export default function ProfilePage() {
           <button onClick={() => setModal('privacy')} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px', borderRadius: 12, background: 'var(--surface)', border: '1px solid var(--border)', cursor: 'pointer', color: 'var(--text)', fontSize: 14, transition: 'background 0.15s', textAlign: 'left' }}
             onMouseEnter={e => (e.currentTarget.style.background = 'var(--surface2)')}
             onMouseLeave={e => (e.currentTarget.style.background = 'var(--surface)')}>
-            <Shield size={15} color="var(--purple-light)" /> Privacy Settings
+            <Shield size={15} color="var(--purple)" /> Privacy Settings
           </button>
           <button onClick={() => setModal('notifications')} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px', borderRadius: 12, background: 'var(--surface)', border: '1px solid var(--border)', cursor: 'pointer', color: 'var(--text)', fontSize: 14, transition: 'background 0.15s', textAlign: 'left' }}
             onMouseEnter={e => (e.currentTarget.style.background = 'var(--surface2)')}
             onMouseLeave={e => (e.currentTarget.style.background = 'var(--surface)')}>
-            <Bell size={15} color="var(--purple-light)" /> Notification Preferences
+            <Bell size={15} color="var(--purple)" /> Notification Preferences
           </button>
           <button onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px', borderRadius: 12, background: 'rgba(255,107,107,0.06)', border: '1px solid rgba(255,107,107,0.2)', cursor: 'pointer', color: '#ff6b6b', fontSize: 14, transition: 'all 0.15s', textAlign: 'left' }}
             onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,107,107,0.12)')}

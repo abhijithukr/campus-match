@@ -57,7 +57,7 @@ export default function MatchesPage() {
           <h1 style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 700 }}>Your Matches</h1>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{matches.length} mutual match{matches.length !== 1 ? 'es' : ''} this cycle</p>
         </div>
-        <div style={{ padding: '8px 14px', borderRadius: 12, background: 'rgba(138,43,226,0.08)', border: '1px solid rgba(138,43,226,0.2)', display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ padding: '8px 14px', borderRadius: 12, background: 'rgba(254,1,154,0.12)', border: '1px solid rgba(254,1,154,0.25)', display: 'flex', alignItems: 'center', gap: 8 }}>
           <RefreshCw size={13} color="var(--purple)" />
           <span style={{ fontSize: 12, color: 'var(--muted)' }}>Resets in <strong style={{ color: 'var(--purple-light)' }}>{formatDistanceToNow(cycleEnd)}</strong></span>
         </div>
@@ -69,7 +69,7 @@ export default function MatchesPage() {
             <div style={{ fontSize: 56, marginBottom: 16 }}>💔</div>
             <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 22, fontWeight: 700, marginBottom: 8, color: 'var(--text)' }}>No matches yet</h2>
             <p style={{ fontSize: 14, lineHeight: 1.6, maxWidth: 300, margin: '0 auto 24px' }}>Keep swiping! Someone out there is waiting for a mutual match with you.</p>
-            <button onClick={() => router.push('/discover')} style={{ padding: '12px 28px', borderRadius: 12, background: 'var(--grad)', border: 'none', color: '#fff', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
+            <button onClick={() => router.push('/discover')} style={{ padding: '12px 28px', borderRadius: 12, background: 'var(--purple)', border: 'none', color: '#33272a', fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
               Discover People →
             </button>
           </div>
@@ -86,9 +86,9 @@ export default function MatchesPage() {
                     onMouseLeave={e => (e.currentTarget.style.transform = 'none')}>
                     <div style={{ position: 'relative' }}>
                       <div style={{
-                        width: 70, height: 70, borderRadius: '50%', background: 'var(--grad)',
+                        width: 70, height: 70, borderRadius: '50%', background: 'var(--purple)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        fontSize: 24, border: '2.5px solid var(--purple)', overflow: 'hidden'
+                        fontSize: 24, border: '2.5px solid var(--purple-light)', overflow: 'hidden'
                       }}>
                         {p?.profilePhoto ? <img src={p.profilePhoto} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" /> : p?.fullName?.[0] || '?'}
                       </div>

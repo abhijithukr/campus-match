@@ -19,17 +19,17 @@ export default function LandingPage() {
       <nav style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '16px 40px', borderBottom: '1px solid var(--border)',
-        background: 'rgba(11,11,15,0.9)', backdropFilter: 'blur(20px)',
+        background: 'rgba(250,238,231,0.9)', backdropFilter: 'blur(20px)',
         position: 'sticky', top: 0, zIndex: 100
       }}>
         <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 20, background: 'var(--grad)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
           Campus Match
         </div>
         <div style={{ display: 'flex', gap: 12 }}>
-          <Link href="/auth/login" style={{ padding: '8px 20px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text)', textDecoration: 'none', fontSize: 14, transition: 'border-color 0.2s' }}>
+          <Link href="/auth/login" style={{ padding: '8px 20px', borderRadius: 10, border: '1px solid var(--border2)', background: 'var(--surface)', color: 'var(--text)', textDecoration: 'none', fontSize: 14, transition: 'border-color 0.2s' }}>
             Sign In
           </Link>
-          <Link href="/auth/verify" style={{ padding: '8px 20px', borderRadius: 10, background: 'var(--grad)', color: '#fff', textDecoration: 'none', fontSize: 14, fontWeight: 500 }}>
+          <Link href="/auth/verify" style={{ padding: '8px 20px', borderRadius: 10, background: 'var(--purple)', color: '#33272a', textDecoration: 'none', fontSize: 14, fontWeight: 600 }}>
             Join Now
           </Link>
         </div>
@@ -41,13 +41,13 @@ export default function LandingPage() {
         <div style={{
           position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
           width: 600, height: 600, borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(138,43,226,0.12) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(254,1,154,0.18) 0%, transparent 70%)',
           pointerEvents: 'none'
         }} />
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 8,
-            background: 'rgba(138,43,226,0.1)', border: '1px solid rgba(138,43,226,0.3)',
+            background: 'rgba(254,1,154,0.15)', border: '1px solid rgba(254,1,154,0.4)',
             borderRadius: 100, padding: '6px 16px', fontSize: 12, marginBottom: 24, color: 'var(--purple-light)'
           }}>
             ✨ Now live at your campus
@@ -68,15 +68,15 @@ export default function LandingPage() {
           </p>
           <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link href="/auth/verify" style={{
-              padding: '14px 36px', borderRadius: 14, background: 'var(--grad)',
-              color: '#fff', textDecoration: 'none', fontSize: 16, fontWeight: 600,
-              boxShadow: '0 8px 32px rgba(138,43,226,0.4)'
+              padding: '14px 36px', borderRadius: 14, background: 'var(--purple)',
+              color: '#33272a', textDecoration: 'none', fontSize: 16, fontWeight: 600,
+              boxShadow: '0 8px 32px rgba(254,1,154,0.4)'
             }}>
               Get Started Free →
             </Link>
             <Link href="/auth/login" style={{
               padding: '14px 36px', borderRadius: 14,
-              background: 'var(--surface)', border: '1px solid var(--border)',
+              background: 'var(--surface)', border: '1px solid var(--border2)',
               color: 'var(--text)', textDecoration: 'none', fontSize: 16
             }}>
               Already a student? Sign in
@@ -107,10 +107,10 @@ export default function LandingPage() {
             >
               <div style={{
                 width: 44, height: 44, borderRadius: 12,
-                background: 'rgba(138,43,226,0.15)', border: '1px solid rgba(138,43,226,0.25)',
+                background: 'rgba(254,1,154,0.15)', border: '1px solid rgba(254,1,154,0.3)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16
               }}>
-                <f.icon size={20} color="var(--purple-light)" />
+                <f.icon size={20} color="var(--purple)" />
               </div>
               <h3 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 17, marginBottom: 8 }}>
                 {f.title}
@@ -124,8 +124,8 @@ export default function LandingPage() {
       {/* CTA */}
       <section style={{ textAlign: 'center', padding: '80px 20px' }}>
         <div style={{
-          background: 'linear-gradient(135deg, rgba(138,43,226,0.12), rgba(255,79,216,0.12))',
-          border: '1px solid rgba(138,43,226,0.25)', borderRadius: 28,
+          background: 'linear-gradient(135deg, rgba(254,1,154,0.18), rgba(255,198,199,0.25))',
+          border: '1px solid rgba(254,1,154,0.35)', borderRadius: 28,
           padding: '60px 40px', maxWidth: 600, margin: '0 auto'
         }}>
           <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 36, fontWeight: 800, marginBottom: 16 }}>
@@ -136,8 +136,8 @@ export default function LandingPage() {
           </p>
 <Link href="/auth/verify" style={{
               display: 'inline-block', padding: '14px 48px', borderRadius: 14,
-              background: 'var(--grad)', color: '#fff', textDecoration: 'none',
-              fontSize: 16, fontWeight: 600, boxShadow: '0 8px 32px rgba(138,43,226,0.4)'
+              background: 'var(--purple)', color: '#33272a', textDecoration: 'none',
+              fontSize: 16, fontWeight: 600, boxShadow: '0 8px 32px rgba(254,1,154,0.4)'
             }}>
             Join Campus Match
           </Link>

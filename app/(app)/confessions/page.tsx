@@ -65,7 +65,7 @@ export default function ConfessionsPage() {
             placeholder="Share a confession, crush note, or random thought... 🤫"
             maxLength={300}
             style={{
-              width: '100%', background: 'var(--surface2)', border: '1px solid var(--border)',
+              width: '100%', background: 'var(--surface)', border: '1px solid var(--border2)',
               borderRadius: 14, padding: '12px 16px', color: 'var(--text)',
               fontFamily: "'DM Sans', sans-serif", fontSize: 14, resize: 'none',
               outline: 'none', minHeight: 80, lineHeight: 1.6,
@@ -83,8 +83,8 @@ export default function ConfessionsPage() {
               disabled={!text.trim() || submitting}
               style={{
                 padding: '8px 20px', borderRadius: 10, border: 'none',
-                background: text.trim() ? 'var(--grad)' : 'var(--surface2)',
-                color: text.trim() ? '#fff' : 'var(--muted)',
+                background: text.trim() ? 'var(--purple)' : 'var(--surface2)',
+                color: text.trim() ? '#33272a' : 'var(--muted)',
                 fontSize: 13, fontWeight: 500, cursor: text.trim() ? 'pointer' : 'not-allowed',
                 transition: 'all 0.2s'
               }}>
@@ -107,10 +107,10 @@ export default function ConfessionsPage() {
               borderRadius: 20, padding: 20, marginBottom: 14,
               transition: 'border-color 0.2s'
             }}
-            onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(138,43,226,0.3)')}
+            onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(254,1,154,0.4)')}
             onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--border)')}>
             <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 12 }}>
-              <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--grad)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>👤</div>
+              <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--purple)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}>👤</div>
               <div>
                 <div style={{ fontSize: 13, fontWeight: 500 }}>Anonymous · {conf.department}</div>
                 <div style={{ fontSize: 11, color: 'var(--muted)' }}>
@@ -118,7 +118,7 @@ export default function ConfessionsPage() {
                 </div>
               </div>
             </div>
-            <p style={{ fontSize: 14, lineHeight: 1.7, color: '#ccc', marginBottom: 14 }}>{conf.text}</p>
+            <p style={{ fontSize: 14, lineHeight: 1.7, color: 'var(--text)', marginBottom: 14 }}>{conf.text}</p>
             <div style={{ display: 'flex', gap: 16 }}>
               <button onClick={() => handleLike(conf.id!)}
                 style={{

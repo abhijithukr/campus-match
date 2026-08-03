@@ -35,10 +35,10 @@ export default function VerifyPage() {
       <div style={{ textAlign: 'center', marginBottom: 40 }}>
         <div style={{
           display: 'inline-flex', width: 56, height: 56, borderRadius: 16,
-          background: 'rgba(138,43,226,0.15)', border: '1px solid rgba(138,43,226,0.3)',
+          background: 'rgba(254,1,154,0.18)', border: '1px solid rgba(254,1,154,0.4)',
           alignItems: 'center', justifyContent: 'center', marginBottom: 16
         }}>
-          <Shield size={24} color="var(--purple-light)" />
+          <Shield size={24} color="var(--purple)" />
         </div>
         <h1 style={{ fontFamily: "'Syne', sans-serif", fontSize: 28, fontWeight: 800 }}>Verify your identity</h1>
         <p style={{ color: 'var(--muted)', marginTop: 6, fontSize: 14, lineHeight: 1.6 }}>
@@ -46,7 +46,7 @@ export default function VerifyPage() {
         </p>
       </div>
 
-      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 24, padding: 32 }}>
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border2)', borderRadius: 24, padding: 32 }}>
         <form onSubmit={handleVerify} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div>
             <label style={{ display: 'block', fontSize: 13, fontWeight: 500, marginBottom: 8 }}>
@@ -70,7 +70,7 @@ export default function VerifyPage() {
 
         <div style={{ textAlign: 'center', marginTop: 20, fontSize: 13, color: 'var(--muted)' }}>
           Already have an account?{' '}
-          <Link href="/auth/login" style={{ color: 'var(--purple-light)', textDecoration: 'none', fontWeight: 500 }}>
+          <Link href="/auth/login" style={{ color: 'var(--purple-light)', textDecoration: 'none', fontWeight: 600 }}>
             Sign in
           </Link>
         </div>
@@ -78,7 +78,7 @@ export default function VerifyPage() {
 
       <div style={{
         marginTop: 16, padding: '12px 16px', borderRadius: 12,
-        background: 'rgba(138,43,226,0.06)', border: '1px solid rgba(138,43,226,0.2)',
+        background: 'rgba(254,1,154,0.1)', border: '1px solid rgba(254,1,154,0.3)',
         fontSize: 12, color: 'var(--muted)', display: 'flex', gap: 8
       }}>
         <span>🔒</span>

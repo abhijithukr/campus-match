@@ -31,18 +31,18 @@ export default function LoginPage() {
       <div style={{ textAlign: 'center', marginBottom: 40 }}>
         <div style={{
           display: 'inline-flex', width: 56, height: 56, borderRadius: 16,
-          background: 'var(--grad)', alignItems: 'center', justifyContent: 'center', marginBottom: 16
+          background: 'var(--purple)', alignItems: 'center', justifyContent: 'center', marginBottom: 16
         }}>
-          <Heart size={24} color="white" fill="white" />
+          <Heart size={24} color="#33272a" fill="#33272a" />
         </div>
         <h1 style={{ fontFamily: "'Syne', sans-serif", fontSize: 28, fontWeight: 800 }}>Welcome back</h1>
         <p style={{ color: 'var(--muted)', marginTop: 6, fontSize: 14 }}>Sign in to your Campus Match account</p>
       </div>
 
-      <div style={{
-        background: 'var(--surface)', border: '1px solid var(--border)',
-        borderRadius: 24, padding: 32
-      }}>
+        <div style={{
+          background: 'var(--surface)', border: '1px solid var(--border2)',
+          borderRadius: 24, padding: 32
+        }}>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div>
             <label style={{ display: 'block', fontSize: 13, fontWeight: 500, marginBottom: 8 }}>Email</label>
@@ -81,7 +81,7 @@ export default function LoginPage() {
 
         <div style={{ textAlign: 'center', marginTop: 20, fontSize: 13, color: 'var(--muted)' }}>
           Don't have an account?{' '}
-          <Link href="/auth/verify" style={{ color: 'var(--purple-light)', textDecoration: 'none', fontWeight: 500 }}>
+          <Link href="/auth/verify" style={{ color: 'var(--purple-light)', textDecoration: 'none', fontWeight: 600 }}>
             Register with your college ID
           </Link>
         </div>

@@ -10,7 +10,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       <div style={{
         position: 'fixed', top: '20%', left: '50%', transform: 'translateX(-50%)',
         width: 500, height: 500, borderRadius: '50%', pointerEvents: 'none',
-        background: 'radial-gradient(circle, rgba(138,43,226,0.08) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(254,1,154,0.14) 0%, transparent 70%)',
       }} />
       <div style={{ width: '100%', maxWidth: 440, position: 'relative', zIndex: 1, paddingBottom: 40 }}>
         {children}

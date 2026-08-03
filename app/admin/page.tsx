@@ -93,8 +93,8 @@ export default function AdminDashboard() {
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', background: 'var(--bg)' }}>
       {/* Header */}
       <div style={{ padding: '14px 24px', borderBottom: '1px solid var(--border)', flexShrink: 0, display: 'flex', alignItems: 'center', gap: 12 }}>
-        <div style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--grad)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Shield size={16} color="#fff" />
+        <div style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--purple)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Shield size={16} color="#33272a" />
         </div>
         <div>
           <h1 style={{ fontFamily: "'Syne', sans-serif", fontSize: 17, fontWeight: 700 }}>Admin Dashboard</h1>
@@ -108,7 +108,7 @@ export default function AdminDashboard() {
           <button key={id} onClick={() => setTab(id)} style={{
             display: 'flex', alignItems: 'center', gap: 7, padding: '8px 16px', borderRadius: 10,
             border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 500,
-            background: tab === id ? 'rgba(138,43,226,0.15)' : 'transparent',
+            background: tab === id ? 'rgba(254,1,154,0.2)' : 'transparent',
             color: tab === id ? 'var(--purple-light)' : 'var(--muted)',
             transition: 'all 0.2s'
           }}>
@@ -181,7 +181,7 @@ export default function AdminDashboard() {
               </div>
               {users.slice(0, 20).map((u: any) => (
                 <div key={u.uid} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 20px', borderBottom: '1px solid var(--border)' }}>
-                  <div style={{ width: 38, height: 38, borderRadius: '50%', background: 'var(--grad)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, flexShrink: 0 }}>
+                  <div style={{ width: 38, height: 38, borderRadius: '50%', background: 'var(--purple)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, flexShrink: 0, color: '#33272a' }}>
                     {u.fullName?.[0] || '?'}
                   </div>
                   <div style={{ flex: 1 }}>
