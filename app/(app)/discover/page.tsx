@@ -1,12 +1,12 @@
 'use client'
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { SlidersHorizontal, RotateCcw, Volume2, VolumeX, Flame, Star, X, Heart } from 'lucide-react'
+import { SlidersHorizontal, Volume2, VolumeX, Flame } from 'lucide-react'
 import { useAuthStore } from '@/store/useAuthStore'
 import { useAppStore } from '@/store/useAppStore'
 import { getDiscoverFeed, handleSwipe, getLikesRemaining, decrementLike } from '@/firebase/swipes'
 import { UserProfile } from '@/types'
 import toast from 'react-hot-toast'
-import { formatDistanceToNow, addDays, startOfTomorrow } from 'date-fns'
+import { startOfTomorrow } from 'date-fns'
 
 const SWIPE_THRESHOLD = 80
 const VELOCITY_THRESHOLD = 0.5
@@ -115,7 +115,6 @@ export default function DiscoverPage() {
   const current = feed[currentIdx]
   const next = feed[currentIdx + 1]
   const next2 = feed[currentIdx + 2]
-  const cycleEnd = addDays(new Date(), 14)
 
   const playSound = useCallback((type: 'like' | 'skip' | 'match') => {
     if (!soundEnabled) return
@@ -209,7 +208,6 @@ export default function DiscoverPage() {
   )
 
   const hoursLeft = Math.max(0, Math.ceil((resetTime.getTime() - Date.now()) / (1000 * 60 * 60)))
-  const compatPct = current?.compatibilityScore || 73
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
@@ -238,12 +236,12 @@ export default function DiscoverPage() {
           <div ref={cardContainerRef} style={{ position: 'relative', width: '100%', maxWidth: 340, height: 460 }}>
             {next2 && (
               <div style={{ position: 'absolute', inset: 0, background: 'var(--surface)', borderRadius: 28, transform: 'scale(0.85) translateY(18px)', opacity: 0.35, border: '1px solid var(--border)', zIndex: 1, overflow: 'hidden' }}>
-                <div style={{ height: '60%', background: 'var(--surface2)', borderRadius: '28px 28px 0 0' }} />
+                <CardContent current={next2} swipeDir={null} />
               </div>
             )}
             {next && (
               <div style={{ position: 'absolute', inset: 0, background: 'var(--surface)', borderRadius: 28, transform: 'scale(0.93) translateY(9px)', opacity: 0.7, border: '1px solid var(--border)', zIndex: 2, overflow: 'hidden' }}>
-                <div style={{ height: '60%', background: 'linear-gradient(135deg, #ffc6c7, #fe019a)', borderRadius: '28px 28px 0 0' }} />
+                <CardContent current={next} swipeDir={null} />
               </div>
             )}
 
@@ -269,25 +267,6 @@ export default function DiscoverPage() {
             )}
           </div>
 
-          <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
-            <button onClick={() => processSwipe('skip')} disabled={!current}
-              style={{ width: 60, height: 60, borderRadius: '50%', border: '2px solid rgba(255,107,107,0.3)', background: 'rgba(255,107,107,0.08)', cursor: current ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', color: '#ff6b6b' }}
-              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,107,107,0.15)')}
-              onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,107,107,0.08)')}>
-              <X size={26} strokeWidth={2.5} />
-            </button>
-            <button onClick={() => processSwipe('like')} disabled={!current || likesLeft <= 0}
-              style={{ width: 48, height: 48, borderRadius: '50%', background: 'rgba(255,210,0,0.08)', border: '2px solid rgba(255,210,0,0.3)', cursor: current && likesLeft > 0 ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s', color: '#ffd200', fontSize: 20 }}
-              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,210,0,0.15)')}
-              onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,210,0,0.08)')}>
-              <Star size={20} fill="#ffd200" strokeWidth={0} />
-            </button>
-            <button onClick={() => processSwipe('like')} disabled={!current || likesLeft <= 0}
-              style={{ width: 64, height: 64, borderRadius: '50%', border: 'none', background: likesLeft > 0 && current ? 'var(--purple)' : 'var(--surface2)', cursor: likesLeft > 0 && current ? 'pointer' : 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, boxShadow: likesLeft > 0 ? '0 4px 24px rgba(254,1,154,0.45)' : 'none', transition: 'all 0.2s', color: '#33272a' }}>
-              <Heart size={28} fill="#33272a" strokeWidth={0} />
-            </button>
-          </div>
-
           <div style={{ width: '100%', maxWidth: 320 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
               <span style={{ fontSize: 12, color: 'var(--muted)' }}>Daily Likes</span>
@@ -299,41 +278,6 @@ export default function DiscoverPage() {
             {likesLeft <= 2 && <p style={{ fontSize: 11, color: '#ff6b6b', marginTop: 6, textAlign: 'center' }}>⚠️ Resets in {hoursLeft}h</p>}
           </div>
         </div>
-
-        {current && (
-          <div style={{ width: 240, borderLeft: '1px solid var(--border)', background: 'var(--surface)', padding: 20, overflowY: 'auto', flexShrink: 0 }}>
-            <div style={{ textAlign: 'center', marginBottom: 20 }}>
-              <div style={{ width: 84, height: 84, borderRadius: '50%', margin: '0 auto 12px', background: `conic-gradient(var(--purple) 0% ${compatPct}%, var(--surface2) ${compatPct}%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 4 }}>
-                <div style={{ width: 68, height: 68, borderRadius: '50%', background: 'var(--surface)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                  <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: 'var(--purple-light)' }}>{compatPct}%</div>
-                  <div style={{ fontSize: 9, color: 'var(--muted)' }}>compatibility</div>
-                </div>
-              </div>
-            </div>
-            {[{ label: 'Department', val: (current.department || 'Campus') }, { label: 'Year', val: `${current.year || 1}${current.year === 1 ? 'st' : 'th'} Year` }, { label: 'Music', val: (current.musicTaste || []).slice(0, 2).join(', ') || '—' }, { label: 'Fav Movie', val: current.favoriteMovie || '—' }, { label: 'Goal', val: (current.relationshipGoal || 'not_sure').replace('_', ' ') }].map(({ label, val }) => (
-              <div key={label} style={{ padding: '10px 0', borderBottom: '1px solid var(--border)' }}>
-                <span style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700 }}>{label}</span>
-                <span style={{ fontSize: 13, fontWeight: 500, display: 'block', marginTop: 2, textTransform: 'capitalize' }}>{val}</span>
-              </div>
-            ))}
-            <div style={{ marginTop: 16 }}>
-              <span style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 700, display: 'block', marginBottom: 10 }}>Interests</span>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
-                {(current.interests && current.interests.length > 0 ? current.interests : ['Music', 'Movies', 'Coffee']).map((t: string) => (
-                  <span key={t} style={{ padding: '4px 10px', borderRadius: 100, background: 'rgba(254,1,154,0.12)', border: '1px solid rgba(254,1,154,0.22)', fontSize: 11, color: 'var(--purple-light)' }}>{t}</span>
-                ))}
-              </div>
-            </div>
-            <div style={{ marginTop: 20, padding: '14px', background: 'rgba(254,1,154,0.1)', border: '1px solid rgba(254,1,154,0.25)', borderRadius: 14 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-                <RotateCcw size={13} color="var(--purple)" />
-                <span style={{ fontSize: 11, color: 'var(--muted)' }}>Fresh Cycle</span>
-              </div>
-              <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 800, color: 'var(--purple-light)' }}>{formatDistanceToNow(cycleEnd)}</div>
-              <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2 }}>until all users reset</div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   )
