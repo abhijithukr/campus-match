@@ -145,7 +145,7 @@ export default function DiscoverPage() {
   const current = filteredFeed[currentIdx]
   const next = filteredFeed[currentIdx + 1]
 
-  const DEPTS = ['Computer Science', 'Electronics', 'Electrical', 'Industrial Engineering']
+  const DEPTS = ['Computer Science', 'Electronics', 'Electrical', 'Mechanical', 'Industrial Engineering']
   const YEARS = [1, 2, 3, 4]
   const hasActiveFilters = genderFilter !== 'all' || deptFilter !== 'all' || yearFilter !== 'all' || onlineOnly
 
