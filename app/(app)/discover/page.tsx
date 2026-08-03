@@ -37,7 +37,7 @@ function CardContent({ current, swipeDir }: { current: UserProfile; swipeDir: st
         {swipeDir === 'like' && <div style={{ position: 'absolute', inset: 0, boxShadow: 'inset 0 0 60px rgba(34,197,94,0.4)' }} />}
         {swipeDir === 'skip' && <div style={{ position: 'absolute', inset: 0, boxShadow: 'inset 0 0 60px rgba(255,107,107,0.4)' }} />}
         <div style={{ position: 'absolute', bottom: 16, left: 20, right: 20 }}>
-          <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 24, color: '#fff', lineHeight: 1.2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={current.fullName || 'User'}>{current.fullName || 'User'}</div>
+          <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, color: '#fff', lineHeight: 1.15, overflow: 'hidden', display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, fontSize: (current.fullName?.length || 0) > 22 ? 17 : (current.fullName?.length || 0) > 15 ? 20 : 24 }} title={current.fullName || 'User'}>{current.fullName || 'User'}</div>
           <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.75)' }}>{current.department || 'Campus'} · {current.year}{current.year === 1 ? 'st' : current.year === 2 ? 'nd' : current.year === 3 ? 'rd' : 'th'} Year</div>
         </div>
         <div style={{ position: 'absolute', top: 16, right: 16, display: 'flex', alignItems: 'center', gap: 6, background: current.online ? 'rgba(47,158,68,0.9)' : 'rgba(51,39,42,0.55)', backdropFilter: 'blur(12px)', padding: '5px 12px', borderRadius: 100, fontSize: 12, color: '#fff', fontWeight: 700, border: '1px solid rgba(255,255,255,0.3)' }}>
