@@ -1,12 +1,13 @@
 'use client'
-import { useState, useEffect, useRef, useCallback } from 'react'
-import { SlidersHorizontal, Volume2, VolumeX, Flame } from 'lucide-react'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import { SlidersHorizontal, Flame, X } from 'lucide-react'
 import { useAuthStore } from '@/store/useAuthStore'
 import { useAppStore } from '@/store/useAppStore'
 import { getDiscoverFeed, handleSwipe, getLikesRemaining, decrementLike } from '@/firebase/swipes'
 import { UserProfile } from '@/types'
 import toast from 'react-hot-toast'
 import { startOfTomorrow } from 'date-fns'
+import Bb8ThemeToggle from '@/components/Bb8ThemeToggle'
 
 const SWIPE_THRESHOLD = 80
 const VELOCITY_THRESHOLD = 0.5
@@ -77,6 +78,18 @@ function FeaturedSpotlight({ featured }: { featured: UserProfile | null }) {
   )
 }
 
+function FilterChip({ active, label, onClick }: { active: boolean; label: string; onClick: () => void }) {
+  return (
+    <button onClick={onClick} style={{
+      padding: '5px 12px', borderRadius: 100, cursor: 'pointer', fontSize: 12, fontWeight: 600,
+      background: active ? 'rgba(254,1,154,0.18)' : 'var(--surface2)',
+      border: active ? '1px solid var(--purple)' : '1px solid var(--border2)',
+      color: active ? 'var(--purple-light)' : 'var(--muted)',
+      transition: 'all 0.15s',
+    }}>{label}</button>
+  )
+}
+
 export default function DiscoverPage() {
   const { profile, user } = useAuthStore()
   const { triggerMatchPopup } = useAppStore()
@@ -86,7 +99,12 @@ export default function DiscoverPage() {
   const [likesLeft, setLikesLeft] = useState(10)
   const [resetTime, setResetTime] = useState<Date>(new Date())
   const [loading, setLoading] = useState(true)
-  const [soundEnabled, setSoundEnabled] = useState(false)
+  const soundEnabled = useState(false)[0]
+  const [showFilters, setShowFilters] = useState(false)
+  const [genderFilter, setGenderFilter] = useState<'all' | 'male' | 'female' | 'other'>('all')
+  const [deptFilter, setDeptFilter] = useState('all')
+  const [yearFilter, setYearFilter] = useState<number | 'all'>('all')
+  const [onlineOnly, setOnlineOnly] = useState(false)
   const [dragX, setDragX] = useState(0)
   const [dragY, setDragY] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
@@ -112,8 +130,24 @@ export default function DiscoverPage() {
     load()
   }, [user, profile])
 
-  const current = feed[currentIdx]
-  const next = feed[currentIdx + 1]
+  const filteredFeed = useMemo(() => {
+    return feed.filter((u: UserProfile) => {
+      if (genderFilter !== 'all' && (u.gender || 'other') !== genderFilter) return false
+      if (deptFilter !== 'all' && (u.department || '') !== deptFilter) return false
+      if (yearFilter !== 'all' && (u.year || 1) !== yearFilter) return false
+      if (onlineOnly && !u.online) return false
+      return true
+    })
+  }, [feed, genderFilter, deptFilter, yearFilter, onlineOnly])
+
+  useEffect(() => { setCurrentIdx(0); setDragX(0); setDragY(0) }, [genderFilter, deptFilter, yearFilter, onlineOnly])
+
+  const current = filteredFeed[currentIdx]
+  const next = filteredFeed[currentIdx + 1]
+
+  const DEPTS = ['Computer Science', 'Electronics', 'Electrical', 'Industrial Engineering']
+  const YEARS = [1, 2, 3, 4]
+  const hasActiveFilters = genderFilter !== 'all' || deptFilter !== 'all' || yearFilter !== 'all' || onlineOnly
 
   const playSound = useCallback((type: 'like' | 'skip' | 'match') => {
     if (!soundEnabled) return
@@ -218,17 +252,57 @@ export default function DiscoverPage() {
             <Flame size={18} color="var(--pink)" />
             <h1 style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800 }}>Discover</h1>
           </div>
-          <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{feed.length - currentIdx} people left</p>
+          <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{filteredFeed.length - currentIdx} people left</p>
         </div>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <button onClick={() => setSoundEnabled(s => !s)} style={{ width: 34, height: 34, borderRadius: 10, border: '1px solid var(--border)', background: soundEnabled ? 'rgba(254,1,154,0.15)' : 'var(--surface2)', color: soundEnabled ? 'var(--purple-light)' : 'var(--muted)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {soundEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
-          </button>
-          <button style={{ padding: '6px 12px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surface2)', color: 'var(--muted)', cursor: 'pointer', fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}>
-            <SlidersHorizontal size={12} /> Filter
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <Bb8ThemeToggle size={13} />
+          <button onClick={() => setShowFilters(s => !s)} style={{ padding: '6px 12px', borderRadius: 10, border: '1px solid var(--border)', background: hasActiveFilters ? 'rgba(254,1,154,0.15)' : 'var(--surface2)', color: hasActiveFilters ? 'var(--purple-light)' : 'var(--muted)', cursor: 'pointer', fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}>
+            <SlidersHorizontal size={12} /> Filter {hasActiveFilters && '•'}
           </button>
         </div>
       </div>
+
+      {showFilters && (
+        <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)', background: 'var(--surface)', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 14, fontSize: 13 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 15 }}>Filters</span>
+            <button onClick={() => { setGenderFilter('all'); setDeptFilter('all'); setYearFilter('all'); setOnlineOnly(false) }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--purple-light)', fontSize: 12, fontWeight: 600 }}>Reset all</button>
+          </div>
+
+          <div>
+            <span style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600, display: 'block', marginBottom: 6 }}>Gender</span>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+              {[['all','Everyone'],['male','Male'],['female','Female'],['other','Other']].map(([val, label]) => (
+                <FilterChip key={val} active={genderFilter === val} label={label} onClick={() => setGenderFilter(val as any)} />
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <span style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600, display: 'block', marginBottom: 6 }}>Department</span>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+              <FilterChip active={deptFilter === 'all'} label="All" onClick={() => setDeptFilter('all')} />
+              {DEPTS.map(d => <FilterChip key={d} active={deptFilter === d} label={d.split(' ')[0]} onClick={() => setDeptFilter(d)} />)}
+            </div>
+          </div>
+
+          <div>
+            <span style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600, display: 'block', marginBottom: 6 }}>Batch / Year</span>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+              <FilterChip active={yearFilter === 'all'} label="All" onClick={() => setYearFilter('all')} />
+              {YEARS.map(y => <FilterChip key={y} active={yearFilter === y} label={`${y}${y===1?'st':y===2?'nd':y===3?'rd':'th'} Year`} onClick={() => setYearFilter(y)} />)}
+            </div>
+          </div>
+
+          <button onClick={() => setOnlineOnly(o => !o)} style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'var(--surface2)', border: '1px solid var(--border2)', borderRadius: 10, padding: '10px 12px', cursor: 'pointer' }}>
+            <div style={{ width: 36, height: 20, borderRadius: 100, background: onlineOnly ? 'var(--purple)' : 'var(--surface3)', position: 'relative', transition: 'background 0.2s', flexShrink: 0 }}>
+              <div style={{ position: 'absolute', top: 2, left: onlineOnly ? 18 : 2, width: 16, height: 16, borderRadius: '50%', background: '#fff', transition: 'left 0.2s' }} />
+            </div>
+            <span style={{ fontWeight: 600 }}>Registered / Online only</span>
+          </button>
+        </div>
+      )}
+      {showFilters && <div style={{ position: 'fixed', inset: 0, zIndex: 5 }} onClick={() => setShowFilters(false)} />}
 
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '16px 24px', gap: 16, position: 'relative' }}>
