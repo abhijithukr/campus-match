@@ -300,9 +300,12 @@ export default function DiscoverPage() {
             </div>
             <span style={{ fontWeight: 600 }}>Registered / Online only</span>
           </button>
+
+          <button onClick={() => setShowFilters(false)} style={{ marginTop: 4, width: '100%', padding: '11px 0', borderRadius: 12, background: 'var(--purple)', color: '#33272a', border: 'none', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 700, boxShadow: '0 8px 24px rgba(254,1,154,0.35)' }}>
+            Apply Filters
+          </button>
         </div>
       )}
-      {showFilters && <div style={{ position: 'fixed', inset: 0, zIndex: 5 }} onClick={() => setShowFilters(false)} />}
 
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '16px 24px', gap: 16, position: 'relative' }}>
