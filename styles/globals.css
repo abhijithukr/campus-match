@@ -157,3 +157,35 @@ html, body {
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }
+
+/* App shell */
+.app-shell { display: flex; height: 100vh; height: 100dvh; overflow: hidden; }
+.app-main { flex: 1; overflow-y: auto; }
+.desktop-nav { display: flex; }
+.mobile-bottom-nav { display: none; }
+
+/* Bottom nav: shown on mobile only */
+@media (max-width: 700px) {
+  .desktop-nav { display: none; }
+  .mobile-bottom-nav {
+    display: flex;
+    position: fixed;
+    left: 50%;
+    bottom: 16px;
+    transform: translateX(-50%);
+    width: calc(100% - 32px);
+    max-width: 460px;
+    z-index: 50;
+    background: rgba(255, 255, 254, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 8px 8px;
+    align-items: center;
+    justify-content: space-around;
+    box-shadow: 0 12px 40px rgba(51, 39, 42, 0.18);
+  }
+  .app-main { padding-bottom: 96px; }
+  .app-shell { height: 100dvh; }
+}

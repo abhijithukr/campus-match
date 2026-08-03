@@ -58,11 +58,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   if (!user) return null
 
   return (
-    <div style={{ display: 'flex', height: '100vh', background: 'var(--bg)', fontFamily: "'DM Sans', sans-serif", color: 'var(--text)', overflow: 'hidden' }}>
-      {/* Sidebar */}
-      <nav style={{
+    <div className="app-shell" style={{ background: 'var(--bg)', fontFamily: "'DM Sans', sans-serif", color: 'var(--text)' }}>
+      {/* Sidebar (desktop) */}
+      <nav className="desktop-nav" style={{
         width: 68, background: 'var(--surface)', borderRight: '1px solid var(--border)',
-        display: 'flex', flexDirection: 'column', alignItems: 'center',
+        flexDirection: 'column', alignItems: 'center',
         padding: '16px 0', gap: 4, flexShrink: 0, zIndex: 10, height: '100vh', overflowY: 'auto'
       }}>
         {/* Logo */}
@@ -119,9 +119,45 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       </nav>
 
       {/* Content */}
-      <main style={{ flex: 1, overflowY: 'auto' }}>
+      <main className="app-main">
         {children}
       </main>
+
+      {/* Bottom nav (mobile) */}
+      <nav className="mobile-bottom-nav">
+        {navItems.map(({ href, icon: Icon, label }) => {
+          const isActive = pathname.startsWith(href)
+          const unread = label === 'Notifications' ? useAppStore.getState().unreadNotifications : 0
+          return (
+            <Link key={href} href={href} title={label} style={{
+              width: 52, height: 46, borderRadius: 14,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              textDecoration: 'none', transition: 'all 0.2s',
+              background: isActive ? 'rgba(254,1,154,0.22)' : 'transparent',
+              color: isActive ? 'var(--purple-light)' : 'var(--muted)',
+              position: 'relative',
+            }}>
+              {unread > 0 ? (
+                <div style={{ position: 'relative' }}>
+                  <Icon size={20} />
+                  <div style={{ position: 'absolute', top: -4, right: -4, width: 16, height: 16, borderRadius: '50%', background: '#ff6b6b', color: '#fff', fontSize: 9, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid var(--surface)' }}>
+                    {unread > 9 ? '9+' : unread}
+                  </div>
+                </div>
+              ) : <Icon size={20} />}
+            </Link>
+          )
+        })}
+        <Link href="/profile" title="Profile" style={{
+          width: 44, height: 44, borderRadius: '50%',
+          background: 'var(--purple)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, color: '#33272a',
+          textDecoration: 'none', outline: pathname.startsWith('/profile') ? '3px solid rgba(254,1,154,0.4)' : '2px solid rgba(254,1,154,0.4)', outlineOffset: 2,
+          flexShrink: 0,
+        }}>
+          {profile?.profilePhoto ? <img src={profile.profilePhoto} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} alt="" /> : (profile?.fullName?.[0] || 'U')}
+        </Link>
+      </nav>
 
       {/* Match Popup */}
       {showMatchPopup && matchedUser && currentMatchId && (
