@@ -157,15 +157,6 @@ export default function ChatPage() {
               <div style={{ fontSize: 11, color: onlineStatus[currentProfile.uid] ? '#22c55e' : 'var(--muted)' }}>● {onlineStatus[currentProfile.uid] ? 'Online' : 'Offline'}</div>
             </div>
             <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
-              {currentProfile.whatsappNumber && (
-                <a href={`https://wa.me/${currentProfile.whatsappNumber.replace(/\D/g, '')}`} target="_blank" rel="noreferrer" style={{
-                  padding: '6px 14px', borderRadius: 10, border: '1px solid rgba(34,197,94,0.3)',
-                  background: 'rgba(34,197,94,0.1)', color: '#22c55e', fontSize: 12, textDecoration: 'none',
-                  display: 'flex', alignItems: 'center', gap: 5
-                }}>
-                  📱 WhatsApp
-                </a>
-              )}
             </div>
           </div>
 

@@ -4,7 +4,7 @@ import { doc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore'
 
 export async function POST(req: NextRequest) {
   try {
-    const { registerNumber, name } = await req.json()
+    const { registerNumber, name, gender, department, year } = await req.json()
 
     if (!registerNumber) {
       return NextResponse.json({ error: 'Register number required' }, { status: 400 })
@@ -15,9 +15,9 @@ export async function POST(req: NextRequest) {
 
     await setDoc(ref, {
       name: name || 'Admin User',
-      department: 'Computer Science',
-      gender: 'other',
-      year: 1,
+      department: department || 'Computer Science',
+      gender: gender || 'other',
+      year: year || 1,
       activated: false,
       userId: null,
       uploadedAt: serverTimestamp(),

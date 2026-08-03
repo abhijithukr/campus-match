@@ -28,12 +28,13 @@ export async function verifyRegisterNumber(regNum: string) {
 }
 
 export async function registerStudent(
-  regNum: string, email: string, password: string, displayName: string, photoUrl: string = ''
+  regNum: string, email: string, password: string, displayName: string, photoUrl: string = '', selectedGender?: string
 ) {
   try {
     const { valid, data, reason } = await verifyRegisterNumber(regNum)
     if (!valid) throw new Error(reason === 'already_activated' ? 'This register number is already in use.' : 'Invalid register number.')
     const d = data!
+    const gender = (selectedGender || d.gender || 'other') as 'male' | 'female' | 'other'
 
     const usersSnap = await getDocs(collection(db, 'users'))
     const isFirstUser = usersSnap.size === 0
@@ -46,7 +47,7 @@ export async function registerStudent(
       fullName: displayName,
       registerNumber: regNum,
       email,
-      gender: (d.gender as 'male' | 'female' | 'other') || 'other',
+      gender,
       department: d.department || '',
       year: parseInt(d.year || '1'),
       bio: '',

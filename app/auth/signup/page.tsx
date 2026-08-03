@@ -7,7 +7,7 @@ import { registerStudent } from '@/firebase/auth'
 import { uploadImage } from '@/firebase/storage'
 import toast from 'react-hot-toast'
 
-const DEPARTMENTS = ['Computer Science', 'Electronics', 'Mechanical', 'Civil', 'MBA', 'Commerce', 'Arts', 'Science', 'Law', 'Medicine']
+const DEPARTMENTS = ['Computer Science', 'Electrical', 'Computer', 'Mechanical', 'Civil', 'MBA', 'Commerce', 'Arts', 'Science', 'Law', 'Medicine', 'Industrial']
 const RELATIONSHIP_GOALS = [
   { value: 'friendship', label: '🤝 Friendship' },
   { value: 'relationship', label: '💕 Relationship' },
@@ -59,7 +59,7 @@ function SignupForm() {
         } catch {}
       }
       try {
-        const user = await registerStudent(regNum, form.email, form.password, form.fullName, photoUrl)
+        const user = await registerStudent(regNum, form.email, form.password, form.fullName, photoUrl, form.gender)
         await fetch('/api/send-verification', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

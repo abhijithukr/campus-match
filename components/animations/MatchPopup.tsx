@@ -44,12 +44,6 @@ export function MatchPopup({ matchedUser, matchId, onClose }: MatchPopupProps) {
     router.push(`/chat?match=${matchId}`)
   }
 
-  const handleWhatsApp = () => {
-    if (matchedUser.whatsappNumber) {
-      window.open(`https://wa.me/${matchedUser.whatsappNumber.replace(/\D/g, '')}`, '_blank')
-    }
-  }
-
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 1000,
@@ -140,16 +134,6 @@ export function MatchPopup({ matchedUser, matchId, onClose }: MatchPopupProps) {
           }}>
             <MessageCircle size={16} /> Start Chatting
           </button>
-          {matchedUser.whatsappNumber && (
-            <button onClick={handleWhatsApp} style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-              padding: '13px 24px', borderRadius: 14,
-              background: 'rgba(47,158,68,0.1)', border: '1px solid rgba(47,158,68,0.3)',
-              color: 'var(--green-strong)', fontSize: 14, cursor: 'pointer', transition: 'all 0.2s'
-            }}>
-              <span>📱</span> Open WhatsApp
-            </button>
-          )}
           <button onClick={onClose} style={{
             padding: '10px', border: 'none', background: 'none',
             color: 'var(--muted)', fontSize: 13, cursor: 'pointer'
