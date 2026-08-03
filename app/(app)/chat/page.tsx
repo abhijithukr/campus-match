@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { useAuthStore } from '@/store/useAuthStore'
 import { useAppStore } from '@/store/useAppStore'
 import { getUserMatches } from '@/firebase/swipes'
@@ -10,6 +11,7 @@ import { Send, Phone, MoreVertical, ImageIcon, Smile } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 
 export default function ChatPage() {
+  const searchParams = useSearchParams()
   const { user } = useAuthStore()
   const { matches, setMatches } = useAppStore()
   const [matchProfiles, setMatchProfiles] = useState<Record<string, UserProfile>>({})
@@ -20,6 +22,7 @@ export default function ChatPage() {
   const [onlineStatus, setOnlineStatus] = useState<Record<string, boolean>>({})
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const typingTimeout = useRef<NodeJS.Timeout | null>(null)
+  const requestedMatch = searchParams.get('match')
 
   useEffect(() => {
     if (!user) return
@@ -45,9 +48,16 @@ export default function ChatPage() {
         }
       }
       setMatchProfiles(profiles)
-      if (m.length > 0) setSelectedMatch(m[0])
+      if (m.length > 0) {
+        if (requestedMatch) {
+          const target = m.find(x => x.id === requestedMatch)
+          setSelectedMatch(target || m[0])
+        } else {
+          setSelectedMatch(m[0])
+        }
+      }
     })
-  }, [user])
+  }, [user, requestedMatch])
 
   useEffect(() => {
     if (!selectedMatch || !user) return

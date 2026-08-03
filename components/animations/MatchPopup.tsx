@@ -41,7 +41,7 @@ export function MatchPopup({ matchedUser, matchId, onClose }: MatchPopupProps) {
 
   const handleStartChat = () => {
     onClose()
-    router.push(`/chat/${matchId}`)
+    router.push(`/chat?match=${matchId}`)
   }
 
   const handleWhatsApp = () => {

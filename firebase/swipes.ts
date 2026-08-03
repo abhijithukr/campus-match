@@ -9,6 +9,8 @@ import { addDays } from 'date-fns'
 
 export async function handleSwipe(fromUser: string, toUser: string, type: 'like' | 'skip') {
   try {
+    if (fromUser === toUser) return { matched: false }
+
     const swipeId = `${fromUser}_${toUser}`
     const expiresAt = Timestamp.fromDate(addDays(new Date(), 14))
 
@@ -126,11 +128,13 @@ export async function getDiscoverFeed(userId: string, _userGender?: string) {
         }
       })
 
-    for (let i = feed.length - 1; i > 0; i--) {
+    const selfFiltered = feed.filter((u: any) => u.uid !== userId)
+
+    for (let i = selfFiltered.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
-      ;[feed[i], feed[j]] = [feed[j], feed[i]]
+      ;[selfFiltered[i], selfFiltered[j]] = [selfFiltered[j], selfFiltered[i]]
     }
-    return feed
+    return selfFiltered
   } catch { return [] }
 }
 
