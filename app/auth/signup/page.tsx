@@ -15,6 +15,18 @@ const RELATIONSHIP_GOALS = [
   { value: 'not_sure', label: '🤷 Not Sure Yet' },
 ]
 
+function Field({ label, icon: Icon, children }: any) {
+  return (
+    <div>
+      <label style={{ display: 'block', fontSize: 13, fontWeight: 500, marginBottom: 8 }}>{label}</label>
+      <div style={{ position: 'relative' }}>
+        {Icon && <Icon size={15} color="var(--muted)" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', zIndex: 1 }} />}
+        {children}
+      </div>
+    </div>
+  )
+}
+
 function SignupForm() {
   const params = useSearchParams()
   const router = useRouter()
@@ -60,16 +72,6 @@ function SignupForm() {
     } catch { }
     setLoading(false)
   }
-
-  const Field = ({ label, icon: Icon, children }: any) => (
-    <div>
-      <label style={{ display: 'block', fontSize: 13, fontWeight: 500, marginBottom: 8 }}>{label}</label>
-      <div style={{ position: 'relative' }}>
-        {Icon && <Icon size={15} color="var(--muted)" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', zIndex: 1 }} />}
-        {children}
-      </div>
-    </div>
-  )
 
   return (
     <div>
