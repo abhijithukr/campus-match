@@ -88,17 +88,61 @@ export async function decrementLike(userId: string) {
   } catch {}
 }
 
-export async function getDiscoverFeed(userId: string, userGender: string) {
+export async function getDiscoverFeed(userId: string, _userGender?: string) {
   try {
     const swipedQ = query(collection(db, 'swipes'), where('fromUser', '==', userId))
     const swipedSnap = await getDocs(swipedQ)
     const swipedIds = new Set(swipedSnap.docs.map(d => d.data().toUser))
     swipedIds.add(userId)
-    const usersSnap = await getDocs(query(collection(db, 'users'), limit(50)))
-    return usersSnap.docs
-      .map(d => d.data())
-      .filter(u => !swipedIds.has(u.uid))
-      .slice(0, 20)
+
+    const usersSnap = await getDocs(query(collection(db, 'users'), limit(500)))
+    const users = usersSnap.docs.map(d => d.data())
+
+    const regSnap = await getDocs(query(collection(db, 'student_registry'), limit(500)))
+    const regDocs = regSnap.docs.map(d => ({ id: d.id, ...d.data() }))
+
+    const userByReg: Record<string, any> = {}
+    users.forEach((u: any) => { if (u.registerNumber) userByReg[u.registerNumber] = u })
+
+    const feed = regDocs
+      .filter((r: any) => !swipedIds.has(r.userId || r.id) && r.id !== userId)
+      .map((r: any) => {
+        const user = userByReg[r.id]
+        if (user) return { ...user, online: true }
+        return {
+          uid: r.id,
+          fullName: r.name || 'Student',
+          registerNumber: r.id,
+          email: '',
+          gender: r.gender || 'other',
+          department: r.department || '',
+          year: r.year || 1,
+          bio: '',
+          profilePhoto: '',
+          coverPhoto: '',
+          hobbies: [],
+          interests: [],
+          musicTaste: [],
+          favoriteMovie: '',
+          instagram: '',
+          relationshipGoal: 'not_sure',
+          personalityTags: [],
+          whatsappNumber: '',
+          online: false,
+          lastSeen: null,
+          featuredToday: false,
+          profileCompletion: 0,
+          likesRemaining: 10,
+          lastLikeReset: null,
+          createdAt: null,
+        }
+      })
+
+    for (let i = feed.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[feed[i], feed[j]] = [feed[j], feed[i]]
+    }
+    return feed
   } catch { return [] }
 }
 

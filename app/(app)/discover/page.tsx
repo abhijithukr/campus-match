@@ -12,7 +12,6 @@ const SWIPE_THRESHOLD = 80
 const VELOCITY_THRESHOLD = 0.5
 
 function CardContent({ current, swipeDir }: { current: UserProfile; swipeDir: string | null }) {
-  const compatScore = current.compatibilityScore || 70 + Math.floor(Math.random() * 25)
   return (
     <>
       <div style={{ height: '60%', position: 'relative', overflow: 'hidden', background: 'linear-gradient(135deg, #ffc6c7, #fe019a)' }}>
@@ -40,8 +39,9 @@ function CardContent({ current, swipeDir }: { current: UserProfile; swipeDir: st
           <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 28, color: '#fff' }}>{(current.fullName || 'User').split(' ')[0]}</div>
           <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.75)' }}>{current.department || 'Campus'} · {current.year}{current.year === 1 ? 'st' : current.year === 2 ? 'nd' : current.year === 3 ? 'rd' : 'th'} Year</div>
         </div>
-        <div style={{ position: 'absolute', top: 16, right: 16, background: 'var(--purple)', backdropFilter: 'blur(12px)', padding: '5px 12px', borderRadius: 100, fontSize: 13, color: '#33272a', fontWeight: 700, border: '1px solid rgba(255,255,255,0.3)' }}>
-          {compatScore}% match
+        <div style={{ position: 'absolute', top: 16, right: 16, display: 'flex', alignItems: 'center', gap: 6, background: current.online ? 'rgba(47,158,68,0.9)' : 'rgba(51,39,42,0.55)', backdropFilter: 'blur(12px)', padding: '5px 12px', borderRadius: 100, fontSize: 12, color: '#fff', fontWeight: 700, border: '1px solid rgba(255,255,255,0.3)' }}>
+          <span style={{ width: 7, height: 7, borderRadius: '50%', background: current.online ? '#c3f0ca' : '#ff6b6b', display: 'inline-block' }} />
+          {current.online ? 'Active' : 'Not registered'}
         </div>
       </div>
       <div style={{ padding: '18px 20px' }}>
