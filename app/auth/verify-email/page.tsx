@@ -1,15 +1,15 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Mail, ShieldCheck, RefreshCw } from 'lucide-react'
+import { ShieldCheck } from 'lucide-react'
 import { useAuthStore } from '@/store/useAuthStore'
 import { getUserProfile } from '@/firebase/auth'
+import MotionOtpVerificationView from '@/components/MotionOtpVerificationView'
 import toast from 'react-hot-toast'
 
 export default function VerifyEmailPage() {
-  const [otp, setOtp] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [phase, setPhase] = useState<'idle' | 'verifying' | 'success' | 'error'>('idle')
   const [resending, setResending] = useState(false)
   const router = useRouter()
   const { user, setProfile } = useAuthStore()
@@ -31,25 +31,27 @@ export default function VerifyEmailPage() {
     if (user) sendCode().catch(() => {})
   }, [user])
 
-  const handleVerify = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!user || otp.trim().length !== 6) return
-    setLoading(true)
+  const handleVerify = async (otp: string) => {
+    if (!user) return
+    setPhase('verifying')
     try {
       const res = await fetch('/api/verify-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ uid: user.uid, otp: otp.trim() }),
+        body: JSON.stringify({ uid: user.uid, otp }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Verification failed')
+      setPhase('success')
       const profile = await getUserProfile(user.uid)
       if (profile) setProfile(profile)
       toast.success('Email verified! Welcome to Campus Match 🎉')
-      router.push('/discover')
+      setTimeout(() => router.push('/discover'), 1600)
     } catch (err: any) {
+      setPhase('error')
       toast.error(err.message || 'Verification failed.')
-    } finally { setLoading(false) }
+      setTimeout(() => setPhase('idle'), 1600)
+    }
   }
 
   const handleResend = async () => {
@@ -78,40 +80,19 @@ export default function VerifyEmailPage() {
         </p>
       </div>
 
-      <div style={{ background: 'var(--surface)', border: '1px solid var(--border2)', borderRadius: 24, padding: 32 }}>
-        <form onSubmit={handleVerify} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <div>
-            <label style={{ display: 'block', fontSize: 13, fontWeight: 500, marginBottom: 8 }}>
-              Verification Code
-            </label>
-            <div style={{ position: 'relative' }}>
-              <Mail size={15} color="var(--muted)" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)' }} />
-              <input
-                className="input-base"
-                type="text" inputMode="numeric" pattern="[0-9]*" maxLength={6} required
-                value={otp} onChange={e => setOtp(e.target.value.replace(/\D/g, ''))}
-                placeholder="••••••"
-                style={{ paddingLeft: 40, letterSpacing: 6, fontWeight: 700, fontSize: 18 }}
-              />
-            </div>
-            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6 }}>
-              Code expires in 10 minutes.
-            </p>
-          </div>
-          <button className="btn-primary" type="submit" disabled={loading || otp.length !== 6}>
-            {loading ? 'Verifying...' : 'Verify & Continue'}
-          </button>
-        </form>
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border2)', borderRadius: 24, padding: '32px 24px' }}>
+        <MotionOtpVerificationView
+          length={6}
+          isVerifying={phase === 'verifying'}
+          isSuccess={phase === 'success'}
+          isError={phase === 'error'}
+          onCompleted={handleVerify}
+          onResend={handleResend}
+        />
 
-        <div style={{ textAlign: 'center', marginTop: 16 }}>
-          <button type="button" onClick={handleResend} disabled={resending} style={{
-            background: 'none', border: 'none', cursor: 'pointer',
-            color: 'var(--purple-light)', fontSize: 13, fontWeight: 600,
-            display: 'inline-flex', alignItems: 'center', gap: 6
-          }}>
-            <RefreshCw size={14} /> {resending ? 'Sending...' : 'Resend code'}
-          </button>
-        </div>
+        <p style={{ textAlign: 'center', fontSize: 12, color: 'var(--muted)', marginTop: 20 }}>
+          Code expires in 10 minutes.
+        </p>
 
         <div style={{ textAlign: 'center', marginTop: 16, fontSize: 13, color: 'var(--muted)' }}>
           <Link href="/auth/login" style={{ color: 'var(--purple-light)', textDecoration: 'none', fontWeight: 600 }}>

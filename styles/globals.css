@@ -94,6 +94,18 @@ html, body {
 }
 .input-base::placeholder { color: var(--muted); }
 
+.otp-caret {
+  width: 2px;
+  height: 20px;
+  background: var(--purple);
+  border-radius: 2px;
+  animation: otp-caret-blink 1s ease-in-out infinite;
+}
+@keyframes otp-caret-blink {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 1; }
+}
+
 /* Button base */
 .btn-primary {
   background: var(--purple);
