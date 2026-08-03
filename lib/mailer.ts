@@ -2,7 +2,7 @@ const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email'
 
 export async function sendVerificationEmail(to: string, otp: string) {
   const apiKey = process.env.BREVO_API_KEY || ''
-  const sender = process.env.BREVO_SENDER_EMAIL || 'ac1332001@smtp-brevo.com'
+  const sender = process.env.BREVO_SENDER_EMAIL || 'projectdentalclinicayarkunnam@gmail.com'
   const html = `
     <div style="font-family:'DM Sans',Arial,sans-serif;background:#faeee7;padding:32px;border-radius:16px;max-width:480px;margin:auto">
       <div style="background:#fffffe;border:1px solid #f8e3db;border-radius:16px;padding:28px">
