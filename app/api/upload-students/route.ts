@@ -53,13 +53,17 @@ export async function POST(req: NextRequest) {
       const slice = jsonData.slice(i, i + batchSize)
 
       for (const row of slice) {
-        const regNumRaw = row['KTU ID'] || row['register_number'] || row['Register Number'] || ''
+        const get = (key: string) => {
+          const k = Object.keys(row).find(x => x.toLowerCase() === key.toLowerCase())
+          return k ? String(row[k]) : ''
+        }
+        const regNumRaw = get('KTU ID') || get('register_number') || get('Register Number')
         const regNum = String(regNumRaw).trim().toUpperCase()
         if (!regNum) { errors.push(`Row ${i + 1}: Missing KTU ID`); continue }
 
-        const name = String(row['Student Name'] || row['name'] || row['Name'] || '').trim()
-        const departmentRaw = String(row['Department'] || row['dept'] || row['Department'] || '').trim()
-        const deptMap: Record<string, string> = { CS: 'Computer Science', EL: 'Electronics', EE: 'Electrical', EC: 'Electronics & Communication', ME: 'Mechanical', CE: 'Civil', MBA: 'MBA', BBA: 'BBA', BT: 'Biotechnology' }
+        const name = get('Student Name') || get('name') || get('Name')
+        const departmentRaw = get('Department') || get('dept')
+        const deptMap: Record<string, string> = { CS: 'Computer Science', EL: 'Electronics', EE: 'Electrical', EC: 'Electronics & Communication', ME: 'Mechanical', IE: 'Industrial Engineering', CE: 'Civil', MBA: 'MBA', BBA: 'BBA', BT: 'Biotechnology' }
         const department = deptMap[departmentRaw] || departmentRaw
 
         const yearMap: Record<string, number> = { TVE22: 4, TVE23: 3, TVE24: 2, TVE25: 1 }
@@ -68,8 +72,10 @@ export async function POST(req: NextRequest) {
           if (regNum.includes(prefix)) { year = y; break }
         }
 
-        const genderMap: Record<string, string> = { CS: 'other', EL: 'other', EE: 'other' }
-        const gender = genderMap[departmentRaw] || 'other'
+        const genderRaw = (get('Gender') || get('gender')).trim().toLowerCase()
+        let gender = 'other'
+        if (genderRaw.startsWith('m')) gender = 'male'
+        else if (genderRaw.startsWith('f')) gender = 'female'
 
         const ref = doc(dbInstance, 'student_registry', regNum)
         batch.set(ref, {
