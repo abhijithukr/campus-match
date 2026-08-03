@@ -114,7 +114,6 @@ export default function DiscoverPage() {
 
   const current = feed[currentIdx]
   const next = feed[currentIdx + 1]
-  const next2 = feed[currentIdx + 2]
 
   const playSound = useCallback((type: 'like' | 'skip' | 'match') => {
     if (!soundEnabled) return
@@ -236,13 +235,8 @@ export default function DiscoverPage() {
           {featured && <FeaturedSpotlight featured={featured} />}
 
           <div ref={cardContainerRef} style={{ position: 'relative', width: '100%', maxWidth: 340, height: 460 }}>
-            {next2 && (
-              <div style={{ position: 'absolute', inset: 0, background: 'var(--surface)', borderRadius: 28, transform: 'scale(0.85) translateY(18px)', opacity: 0.35, border: '1px solid var(--border)', zIndex: 1, overflow: 'hidden' }}>
-                <CardContent current={next2} swipeDir={null} />
-              </div>
-            )}
             {next && (
-              <div style={{ position: 'absolute', inset: 0, background: 'var(--surface)', borderRadius: 28, transform: 'scale(0.93) translateY(9px)', opacity: 0.7, border: '1px solid var(--border)', zIndex: 2, overflow: 'hidden' }}>
+              <div style={{ position: 'absolute', inset: 0, background: 'var(--surface)', borderRadius: 28, transform: 'scale(0.96) translateY(6px)', opacity: 0.85, border: '1px solid var(--border)', zIndex: 1, overflow: 'hidden' }}>
                 <CardContent current={next} swipeDir={null} />
               </div>
             )}

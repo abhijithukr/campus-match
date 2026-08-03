@@ -1,7 +1,39 @@
 'use client'
+import { useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Heart, Shield, Zap, Users, Lock, RefreshCw } from 'lucide-react'
+import { Heart, Shield, Zap, Users, Lock, RefreshCw, UserCheck, Compass, MessageCircle, Sparkles } from 'lucide-react'
+
+const guideSteps = [
+  {
+    icon: Shield,
+    step: '01',
+    title: 'Verify your identity',
+    desc: 'Click "Join Now" and enter your college register number. It is checked against the official campus list uploaded by your admin, so only real students get in.',
+    tip: 'Use the register number on your ID card — e.g. CS21B047.',
+  },
+  {
+    icon: UserCheck,
+    step: '02',
+    title: 'Set up your profile',
+    desc: 'Add your photo, bio, department and interests. A complete profile makes it much more likely people swipe right on you.',
+    tip: 'Complete all sections — they show up on your discover card.',
+  },
+  {
+    icon: Compass,
+    step: '03',
+    title: 'Browse & swipe',
+    desc: 'Head to Discover and swipe on students from your campus. Tap the heart to like, or skip past. Every like is anonymous.',
+    tip: 'If the person likes you back — it\'s an instant match!',
+  },
+  {
+    icon: MessageCircle,
+    step: '04',
+    title: 'Match & chat',
+    desc: 'Mutual likes unlock a match with confetti, then a private real-time chat. You can also jump straight to WhatsApp with one tap.',
+    tip: 'Cycles reset every 14 days, so new people keep coming.',
+  },
+]
 
 const features = [
   { icon: Lock, title: 'Anonymous Likes', desc: 'Your crush never knows — unless they like you back.' },
@@ -13,6 +45,9 @@ const features = [
 ]
 
 export default function LandingPage() {
+  const [activeStep, setActiveStep] = useState(0)
+  const active = guideSteps[activeStep]
+
   return (
     <main style={{ background: 'var(--bg)', minHeight: '100vh', overflow: 'auto', fontFamily: "'DM Sans', sans-serif", color: 'var(--text)' }}>
       {/* Navbar */}
@@ -83,6 +118,102 @@ export default function LandingPage() {
             </Link>
           </div>
         </motion.div>
+      </section>
+
+      {/* How to use */}
+      <section style={{ padding: '20px 20px 80px', maxWidth: 1000, margin: '0 auto' }}>
+        <div style={{
+          background: 'var(--surface)', border: '1px solid var(--border)',
+          borderRadius: 28, padding: '40px 40px 48px', boxShadow: '0 20px 60px rgba(51,39,42,0.08)'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'center', marginBottom: 12 }}>
+            <Sparkles size={20} color="var(--purple)" />
+            <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 32, fontWeight: 800, textAlign: 'center' }}>
+              How it works
+            </h2>
+          </div>
+          <p style={{ textAlign: 'center', color: 'var(--muted)', marginBottom: 36 }}>
+            Four simple steps to find your match.
+          </p>
+
+          {/* Step tabs */}
+          <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 32 }}>
+            {guideSteps.map((s, i) => (
+              <button
+                key={i}
+                onClick={() => setActiveStep(i)}
+                onMouseEnter={() => setActiveStep(i)}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 8,
+                  padding: '10px 18px', borderRadius: 100, cursor: 'pointer',
+                  border: `1px solid ${i === activeStep ? 'var(--purple)' : 'var(--border2)'}`,
+                  background: i === activeStep ? 'rgba(254,1,154,0.12)' : 'var(--surface)',
+                  color: i === activeStep ? 'var(--purple-light)' : 'var(--muted)',
+                  fontWeight: 600, fontSize: 14, fontFamily: "'DM Sans', sans-serif",
+                  transition: 'all 0.2s'
+                }}
+              >
+                <s.icon size={16} color={i === activeStep ? 'var(--purple)' : 'var(--muted)'} />
+                {s.title}
+              </button>
+            ))}
+          </div>
+
+          {/* Active step card */}
+          <motion.div
+            key={activeStep}
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35 }}
+            style={{
+              display: 'flex', gap: 24, alignItems: 'center',
+              background: 'var(--surface2)', border: '1px solid var(--border)',
+              borderRadius: 20, padding: 28
+            }}
+          >
+            <div style={{
+              minWidth: 96, height: 96, borderRadius: 24, flexShrink: 0,
+              background: 'var(--grad)', display: 'flex', flexDirection: 'column',
+              alignItems: 'center', justifyContent: 'center', color: '#33272a'
+            }}>
+              <active.icon size={32} color="#33272a" />
+              <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 14, marginTop: 4 }}>
+                {active.step}
+              </span>
+            </div>
+            <div style={{ flex: 1 }}>
+              <h3 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 22, marginBottom: 10 }}>
+                {active.title}
+              </h3>
+              <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 14 }}>
+                {active.desc}
+              </p>
+              <div style={{
+                display: 'inline-flex', gap: 8, alignItems: 'center',
+                background: 'rgba(254,1,154,0.1)', border: '1px solid rgba(254,1,154,0.3)',
+                borderRadius: 12, padding: '8px 14px', fontSize: 13, color: 'var(--purple-light)'
+              }}>
+                <Zap size={14} />
+                <span>💡 {active.tip}</span>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Step indicator dots */}
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 24 }}>
+            {guideSteps.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setActiveStep(i)}
+                aria-label={`Go to step ${i + 1}`}
+                style={{
+                  padding: 0, background: i === activeStep ? 'var(--purple)' : 'var(--surface3)',
+                  transition: 'all 0.2s', width: i === activeStep ? 28 : 10
+                }}
+              />
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* Features */}
