@@ -68,6 +68,7 @@ export async function registerStudent(
       lastLikeReset: serverTimestamp(),
       createdAt: serverTimestamp(),
       isAdmin: isFirstUser,
+      emailVerified: false,
     })
 
     await updateDoc(doc(db, 'student_registry', regNum), { activated: true, userId: credential.user.uid })

@@ -30,6 +30,7 @@ export interface UserProfile {
   createdAt: Timestamp
   banned?: boolean
   isAdmin?: boolean
+  emailVerified?: boolean
   banReason?: string
   privacySettings?: {
     showProfile: boolean

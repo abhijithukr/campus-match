@@ -2,7 +2,7 @@
 import { useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { Flame, Heart, MessageCircle, Feather, Bell, Settings } from 'lucide-react'
+import { Flame, Heart, MessageCircle, Bell, Settings } from 'lucide-react'
 import { useAuthStore } from '@/store/useAuthStore'
 import { useAppStore } from '@/store/useAppStore'
 import { MatchPopup } from '@/components/animations/MatchPopup'
@@ -12,7 +12,6 @@ const navItems = [
   { href: '/discover', icon: Flame, label: 'Discover' },
   { href: '/matches', icon: Heart, label: 'Matches' },
   { href: '/chat', icon: MessageCircle, label: 'Chat' },
-  { href: '/confessions', icon: Feather, label: 'Confessions' },
   { href: '/notifications', icon: Bell, label: 'Notifications' },
 ]
 
@@ -25,6 +24,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!loading && !user) router.push('/auth/login')
   }, [user, loading, router])
+
+  useEffect(() => {
+    if (!loading && user && profile && profile.emailVerified === false) {
+      router.push('/auth/verify-email')
+    }
+  }, [user, loading, profile, router])
 
   useEffect(() => {
     if (!user) return

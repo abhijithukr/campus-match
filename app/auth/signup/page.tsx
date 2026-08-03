@@ -47,9 +47,13 @@ function SignupForm() {
         } catch {}
       }
       try {
-        await registerStudent(regNum, form.email, form.password, form.fullName, photoUrl)
-        toast.success('Account created! Welcome to Campus Match 🎉')
-        router.push('/discover')
+        const user = await registerStudent(regNum, form.email, form.password, form.fullName, photoUrl)
+        await fetch('/api/send-verification', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ uid: user.uid, email: form.email }),
+        })
+        router.push('/auth/verify-email')
       } catch (err: any) {
         toast.error(err.message || 'Registration failed.')
       }
