@@ -146,15 +146,14 @@ export default function DiscoverPage() {
     if (result.matched && result.matchId) {
       setTimeout(() => { playSound('match'); triggerMatchPopup(current, result.matchId!) }, 300)
     }
+    setTimeout(() => {
+      setAnimating(false)
+      setSwipeDir(null)
+      setDragX(0)
+      setDragY(0)
+      setCurrentIdx(i => i + 1)
+    }, 420)
   }, [current, user, likesLeft, playSound, triggerMatchPopup])
-
-  const handleAnimComplete = () => {
-    setAnimating(false)
-    setSwipeDir(null)
-    setDragX(0)
-    setDragY(0)
-    setCurrentIdx(i => i + 1)
-  }
 
   const onPointerDown = (e: React.PointerEvent) => {
     if (animating) return
@@ -249,7 +248,7 @@ export default function DiscoverPage() {
             )}
 
             {animating && current && (
-              <div onAnimationEnd={handleAnimComplete} style={{ position: 'absolute', inset: 0, zIndex: 10, background: 'var(--surface)', borderRadius: 28, overflow: 'hidden', border: '2px solid var(--border)', transform: `translateX(${swipeDir === 'like' ? 500 : -500}px) rotate(${swipeDir === 'like' ? 30 : -30}deg)`, transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)', opacity: 0 }}>
+              <div style={{ position: 'absolute', inset: 0, zIndex: 10, background: 'var(--surface)', borderRadius: 28, overflow: 'hidden', border: '2px solid var(--border)', transform: `translateX(${swipeDir === 'like' ? 500 : -500}px) rotate(${swipeDir === 'like' ? 30 : -30}deg)`, transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)', opacity: 0 }}>
                 <CardContent current={current} swipeDir={swipeDir} />
               </div>
             )}
