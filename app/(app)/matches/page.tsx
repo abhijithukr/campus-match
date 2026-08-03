@@ -57,7 +57,7 @@ export default function MatchesPage() {
           <h1 style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 700 }}>Your Matches</h1>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{matches.length} mutual match{matches.length !== 1 ? 'es' : ''} this cycle</p>
         </div>
-        <div style={{ padding: '8px 14px', borderRadius: 12, background: 'rgba(254,1,154,0.12)', border: '1px solid rgba(254,1,154,0.25)', display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div className="match-reset-chip" style={{ padding: '8px 14px', borderRadius: 12, background: 'rgba(254,1,154,0.12)', border: '1px solid rgba(254,1,154,0.25)', display: 'flex', alignItems: 'center', gap: 8 }}>
           <RefreshCw size={13} color="var(--purple)" />
           <span style={{ fontSize: 12, color: 'var(--muted)' }}>Resets in <strong style={{ color: 'var(--purple-light)' }}>{formatDistanceToNow(cycleEnd)}</strong></span>
         </div>

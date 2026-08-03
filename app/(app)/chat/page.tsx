@@ -79,9 +79,9 @@ export default function ChatPage() {
   const currentProfile = selectedMatch ? matchProfiles[selectedMatch.id] : null
 
   return (
-    <div style={{ display: 'flex', height: '100%', overflow: 'hidden' }}>
+    <div className="chat-container" style={{ display: 'flex', height: '100%', overflow: 'hidden' }}>
       {/* Sidebar */}
-      <div style={{ width: 260, borderRight: '1px solid var(--border)', background: 'var(--surface)', flexShrink: 0, display: 'flex', flexDirection: 'column' }}>
+      <div className={`chat-sidebar${selectedMatch ? ' chat-sidebar-hidden' : ''}`} style={{ width: 260, borderRight: '1px solid var(--border)', background: 'var(--surface)', flexShrink: 0, flexDirection: 'column' }}>
         <div style={{ padding: '16px 16px 12px', borderBottom: '1px solid var(--border)' }}>
           <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700 }}>Messages</h2>
         </div>
@@ -127,9 +127,15 @@ export default function ChatPage() {
 
       {/* Chat window */}
       {selectedMatch && currentProfile ? (
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        <div className="chat-window chat-window-active" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
           {/* Header */}
           <div style={{ padding: '12px 20px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 12, background: 'var(--surface)', flexShrink: 0 }}>
+            <button onClick={() => setSelectedMatch(null)} className="chat-back-btn" style={{
+              width: 34, height: 34, borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surface2)',
+              color: 'var(--muted)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'
+            }}>
+              ←
+            </button>
             <div style={{
               width: 40, height: 40, borderRadius: '50%', background: 'var(--purple)',
               display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, flexShrink: 0, color: '#33272a'
@@ -218,7 +224,7 @@ export default function ChatPage() {
           </div>
         </div>
       ) : (
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--muted)' }}>
+        <div className="chat-window-empty" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--muted)' }}>
           <div style={{ textAlign: 'center' }}>
             <div style={{ fontSize: 48, marginBottom: 12 }}>💬</div>
             <p style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 16 }}>Select a conversation</p>

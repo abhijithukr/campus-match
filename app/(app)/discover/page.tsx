@@ -140,18 +140,20 @@ export default function DiscoverPage() {
     setAnimating(true)
     setSwipeDir(type)
     playSound(type)
-    if (type === 'like') { await decrementLike(user.uid); setLikesLeft(l => l - 1) }
-    const result = await handleSwipe(user.uid, current.uid, type)
-    if (result.matched && result.matchId) {
-      setTimeout(() => { playSound('match'); triggerMatchPopup(current, result.matchId!) }, 300)
-    }
+    const swiped = current
+    if (type === 'like') { decrementLike(user.uid).catch(() => {}); setLikesLeft(l => l - 1) }
+    handleSwipe(user.uid, swiped.uid, type).then(result => {
+      if (result.matched && result.matchId) {
+        setTimeout(() => { playSound('match'); triggerMatchPopup(swiped, result.matchId!) }, 300)
+      }
+    }).catch(() => {})
     setTimeout(() => {
       setAnimating(false)
       setSwipeDir(null)
       setDragX(0)
       setDragY(0)
       setCurrentIdx(i => i + 1)
-    }, 420)
+    }, 380)
   }, [current, user, likesLeft, playSound, triggerMatchPopup])
 
   const onPointerDown = (e: React.PointerEvent) => {

@@ -188,4 +188,16 @@ html, body {
   }
   .app-main { padding-bottom: 96px; }
   .app-shell { height: 100dvh; }
+  .chat-container { position: relative; }
+  .chat-sidebar { position: absolute; inset: 0; width: 100% !important; z-index: 5; background: var(--bg); display: flex; }
+  .chat-sidebar.chat-sidebar-hidden { display: none; }
+  .chat-window { display: none; }
+  .chat-window.chat-window-active { display: flex; }
+  .chat-window-empty { display: none; }
+  .chat-back-btn { display: flex !important; }
+  .match-reset-chip { display: none; }
 }
+
+/* Chat: mobile list visible when no conversation open */
+.chat-sidebar { display: flex; }
+.chat-back-btn { display: none; }
