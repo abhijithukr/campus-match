@@ -1,52 +1,55 @@
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Love Pic brand palette — sampled from the heart-and-mountain mark:
+   coral (heart), mauve/burgundy (mountains), soft cream (sun/background),
+   deep charcoal (wordmark), lavender-gray (tagline). */
 :root {
-  --bg: #fdf1ec;
+  --bg: #fdf3ee;
   --surface: #ffffff;
-  --surface2: #EDDCD9;
-  --surface3: #e6cabb;
-  --border: rgba(38, 65, 67, 0.10);
-  --border2: rgba(38, 65, 67, 0.18);
-  --purple: #DE5499;
-  --purple-light: #c03f7f;
-  --pink: #DE5499;
-  --pink-light: #f8d8e7;
-  --accent: #E99F4C;
-  --accent-strong: #c9821f;
-  --accent-soft: #fdecd6;
-  --text: #264143;
-  --muted: #5c7377;
+  --surface2: #f6e3e1;
+  --surface3: #ecd0d3;
+  --border: rgba(54, 42, 52, 0.10);
+  --border2: rgba(54, 42, 52, 0.18);
+  --purple: #eb6b78;
+  --purple-light: #d2495a;
+  --pink: #eb6b78;
+  --pink-light: #fbdfe2;
+  --accent: #8b3f58;
+  --accent-strong: #6b2f44;
+  --accent-soft: #f5e2e7;
+  --text: #362a34;
+  --muted: #6e6570;
   --green: #e2f5ea;
   --green-strong: #2f9e6b;
-  --grad: linear-gradient(135deg, #DE5499, #E99F4C);
-  /* fixed regardless of theme — text/icons sitting on the bright purple/accent
+  --grad: linear-gradient(135deg, #f0808c, #8b3f58);
+  /* fixed regardless of theme — text/icons sitting on the bright coral/mauve
      swatches, which stay light-to-medium in both themes */
-  --on-bright: #241a1d;
+  --on-bright: #2a1d22;
 }
 
 [data-theme="dark"] {
-  --bg: #171013;
-  --surface: #241a1e;
-  --surface2: #2b2123;
-  --surface3: #33272a;
+  --bg: #1c1418;
+  --surface: #251b20;
+  --surface2: #2d2126;
+  --surface3: #392a30;
   --border: rgba(255, 255, 255, 0.08);
   --border2: rgba(255, 255, 255, 0.16);
-  --purple: #ef6aa4;
-  --purple-light: #ff8fbe;
-  --pink: #ef6aa4;
-  --pink-light: #3a1e2a;
-  --accent: #f0ac5c;
-  --accent-strong: #ffc266;
-  --accent-soft: #3a2a15;
-  --text: #f4ece6;
-  --muted: #b9a8a0;
+  --purple: #f4808c;
+  --purple-light: #ff9ea8;
+  --pink: #f4808c;
+  --pink-light: #3d232a;
+  --accent: #c67991;
+  --accent-strong: #e69bb0;
+  --accent-soft: #3a2530;
+  --text: #f6ece9;
+  --muted: #ab9ba3;
   --green: #173626;
   --green-strong: #57c98d;
-  --grad: linear-gradient(135deg, #ef6aa4, #f0ac5c);
+  --grad: linear-gradient(135deg, #f4808c, #c67991);
 }
 
 * {
@@ -77,7 +80,7 @@ h1, h2, h3, h4 { text-wrap: balance; }
 ::selection { background: color-mix(in srgb, var(--purple) 45%, transparent); color: var(--text); }
 
 /* Utilities */
-.font-display { font-family: 'Bricolage Grotesque', sans-serif; }
+.font-display { font-family: 'Nunito', sans-serif; }
 
 /* Aurora hero glow — a soft drifting two-tone blob behind hero content */
 .aurora-blob {

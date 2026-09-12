@@ -251,7 +251,7 @@ function SignupForm() {
                     <ArrowLeft size={15} /> Back
                   </motion.button>
                   <motion.button whileHover={{ scale: loading ? 1 : 1.015 }} whileTap={{ scale: loading ? 1 : 0.985 }} className="btn-primary" type="submit" disabled={loading} style={{ flex: 2 }}>
-                    {loading ? 'Creating account…' : 'Join Campus Match'}
+                    {loading ? 'Creating account…' : 'Join Love Pic'}
                   </motion.button>
                 </div>
               </motion.div>

@@ -1,4 +1,4 @@
-import { Heart, Shield, Users, Sparkles } from 'lucide-react'
+import { Shield, Users, Sparkles } from 'lucide-react'
 
 const bullets = [
   { icon: Shield, text: 'Every student verified with their college register number' },
@@ -12,7 +12,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       {/* Brand panel */}
       <div className="auth-brand-panel" style={{
         position: 'relative', overflow: 'hidden',
-        background: 'var(--text)', color: '#fdf1ec',
+        background: 'var(--text)', color: '#fdf3ee',
         display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
         padding: '48px 44px',
       }}>
@@ -23,17 +23,17 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           filter: 'blur(70px)', opacity: 0.55, pointerEvents: 'none',
         }} />
 
-        <a href="/" className="font-display" style={{
-          position: 'relative', display: 'inline-flex', alignItems: 'center', gap: 10,
-          fontSize: 19, fontWeight: 700, color: '#fdf1ec', textDecoration: 'none',
+        <a href="/" style={{
+          position: 'relative', display: 'inline-flex', flexDirection: 'column', gap: 2,
+          textDecoration: 'none',
         }}>
-          <span style={{
-            width: 34, height: 34, borderRadius: 10, background: 'var(--grad)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}>
-            <Heart size={16} color="var(--on-bright)" fill="var(--on-bright)" />
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}>
+            <img src="/brand/love-pic-icon.png" alt="" style={{ width: 30, height: 30, objectFit: 'contain' }} />
+            <span className="font-display" style={{ fontSize: 19, fontWeight: 800, color: '#fdf3ee' }}>Love Pic</span>
           </span>
-          Campus Match
+          <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(253,243,238,0.5)', marginLeft: 40 }}>
+            Higher Together
+          </span>
         </a>
 
         <div style={{ position: 'relative', maxWidth: 380 }}>
@@ -45,19 +45,19 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
               <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
                 <span style={{
                   width: 30, height: 30, borderRadius: 9, flexShrink: 0, marginTop: 1,
-                  background: 'rgba(253,241,236,0.12)', border: '1px solid rgba(253,241,236,0.18)',
+                  background: 'rgba(253,243,238,0.12)', border: '1px solid rgba(253,243,238,0.18)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
-                  <b.icon size={14} color="#fdf1ec" />
+                  <b.icon size={14} color="#fdf3ee" />
                 </span>
-                <span style={{ fontSize: 14.5, lineHeight: 1.6, color: 'rgba(253,241,236,0.85)' }}>{b.text}</span>
+                <span style={{ fontSize: 14.5, lineHeight: 1.6, color: 'rgba(253,243,238,0.85)' }}>{b.text}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <p style={{ position: 'relative', fontSize: 12.5, color: 'rgba(253,241,236,0.5)' }}>
-          © Campus Match · Built for your campus, not the whole internet.
+        <p style={{ position: 'relative', fontSize: 12.5, color: 'rgba(253,243,238,0.5)' }}>
+          © Love Pic · Built for your campus, not the whole internet.
         </p>
       </div>
 

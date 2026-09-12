@@ -46,7 +46,7 @@ export default function VerifyEmailPage() {
       setPhase('success')
       const profile = await getUserProfile(user.uid)
       if (profile) setProfile(profile)
-      toast.success('Email verified! Welcome to Campus Match 🎉')
+      toast.success('Email verified! Welcome to Love Pic')
       setTimeout(() => router.push('/discover'), 1600)
     } catch (err: any) {
       setPhase('error')

@@ -17,7 +17,7 @@ export default function AdminDashboard() {
         <div style={{ width: 64, height: 64, borderRadius: 16, background: 'rgba(255,107,107,0.1)', border: '1px solid rgba(255,107,107,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
           <Shield size={28} color="#ff6b6b" />
         </div>
-        <h1 style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: 24, fontWeight: 800, marginBottom: 12 }}>Access Denied</h1>
+        <h1 style={{ fontFamily: "'Nunito', sans-serif", fontSize: 24, fontWeight: 800, marginBottom: 12 }}>Access Denied</h1>
         <p style={{ color: 'var(--muted)', fontSize: 14, maxWidth: 300, lineHeight: 1.7 }}>You don't have admin access. The first user to register becomes the admin automatically.</p>
       </div>
     )
@@ -84,7 +84,7 @@ export default function AdminDashboard() {
       </div>
       <div>
         <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 4 }}>{label}</div>
-        <div style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: 28, fontWeight: 800 }}>{value.toLocaleString()}</div>
+        <div style={{ fontFamily: "'Nunito', sans-serif", fontSize: 28, fontWeight: 800 }}>{value.toLocaleString()}</div>
       </div>
     </div>
   )
@@ -97,8 +97,8 @@ export default function AdminDashboard() {
           <Shield size={16} color="var(--on-bright)" />
         </div>
         <div>
-          <h1 style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: 17, fontWeight: 700 }}>Admin Dashboard</h1>
-          <p style={{ fontSize: 11, color: 'var(--muted)' }}>Campus Match · Internal Tools</p>
+          <h1 style={{ fontFamily: "'Nunito', sans-serif", fontSize: 17, fontWeight: 700 }}>Admin Dashboard</h1>
+          <p style={{ fontSize: 11, color: 'var(--muted)' }}>Love Pic · Internal Tools</p>
         </div>
       </div>
 
@@ -131,7 +131,7 @@ export default function AdminDashboard() {
 
             {/* Simple bar chart visual */}
             <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 20, padding: 24, marginBottom: 20 }}>
-              <h3 style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: 15, fontWeight: 700, marginBottom: 20 }}>Weekly Activity (Demo)</h3>
+              <h3 style={{ fontFamily: "'Nunito', sans-serif", fontSize: 15, fontWeight: 700, marginBottom: 20 }}>Weekly Activity (Demo)</h3>
               <div style={{ display: 'flex', alignItems: 'flex-end', gap: 10, height: 140 }}>
                 {[40, 65, 50, 80, 95, 70, 85].map((h, i) => (
                   <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
@@ -144,7 +144,7 @@ export default function AdminDashboard() {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
               <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 20, padding: 20 }}>
-                <h3 style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: 14, fontWeight: 700, marginBottom: 16 }}>Gender Distribution</h3>
+                <h3 style={{ fontFamily: "'Nunito', sans-serif", fontSize: 14, fontWeight: 700, marginBottom: 16 }}>Gender Distribution</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   {[{ label: 'Female', pct: 52, color: 'var(--pink)' }, { label: 'Male', pct: 44, color: 'var(--purple)' }, { label: 'Other', pct: 4, color: '#22c55e' }].map(g => (
                     <div key={g.label}>
@@ -160,7 +160,7 @@ export default function AdminDashboard() {
                 </div>
               </div>
               <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 20, padding: 20 }}>
-                <h3 style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: 14, fontWeight: 700, marginBottom: 16 }}>Top Departments</h3>
+                <h3 style={{ fontFamily: "'Nunito', sans-serif", fontSize: 14, fontWeight: 700, marginBottom: 16 }}>Top Departments</h3>
                 {[{ dept: 'Computer Science', count: 34 }, { dept: 'Electronics', count: 22 }, { dept: 'Commerce', count: 18 }, { dept: 'MBA', count: 14 }].map(d => (
                   <div key={d.dept} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid var(--border)', fontSize: 13 }}>
                     <span>{d.dept}</span>
@@ -177,7 +177,7 @@ export default function AdminDashboard() {
           <div>
             <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 20, overflow: 'hidden' }}>
               <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h3 style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: 14, fontWeight: 700 }}>All Students ({users.length})</h3>
+                <h3 style={{ fontFamily: "'Nunito', sans-serif", fontSize: 14, fontWeight: 700 }}>All Students ({users.length})</h3>
               </div>
               {users.slice(0, 20).map((u: any) => (
                 <div key={u.uid} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 20px', borderBottom: '1px solid var(--border)' }}>
@@ -201,7 +201,7 @@ export default function AdminDashboard() {
         {/* CONFESSIONS */}
         {tab === 'confessions' && (
           <div>
-            <h2 style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: 15, fontWeight: 700, marginBottom: 16 }}>Pending Approval ({confessions.length})</h2>
+            <h2 style={{ fontFamily: "'Nunito', sans-serif", fontSize: 15, fontWeight: 700, marginBottom: 16 }}>Pending Approval ({confessions.length})</h2>
             {confessions.length === 0 ? (
               <div style={{ textAlign: 'center', color: 'var(--muted)', paddingTop: 60 }}>
                 <CheckCircle size={40} color="var(--muted)" style={{ margin: '0 auto 12px' }} />
@@ -227,7 +227,7 @@ export default function AdminDashboard() {
         {/* REGISTRY UPLOAD */}
         {tab === 'registry' && (
           <div style={{ maxWidth: 560 }}>
-            <h2 style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontSize: 15, fontWeight: 700, marginBottom: 8 }}>Upload Student Registry</h2>
+            <h2 style={{ fontFamily: "'Nunito', sans-serif", fontSize: 15, fontWeight: 700, marginBottom: 8 }}>Upload Student Registry</h2>
             <p style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 24, lineHeight: 1.7 }}>
               Upload a CSV or Excel file with student KTU IDs. Students can only register after their KTU ID/register number is in this database.
             </p>
@@ -237,7 +237,7 @@ export default function AdminDashboard() {
               onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--purple)')}
               onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--border)')}>
               <UploadCloud size={40} color="var(--purple)" style={{ margin: '0 auto 12px' }} />
-              <h3 style={{ fontFamily: "'Bricolage Grotesque', sans-serif", fontWeight: 700, marginBottom: 8 }}>{uploading ? 'Uploading...' : 'Drop CSV or XLSX here or click to upload'}</h3>
+              <h3 style={{ fontFamily: "'Nunito', sans-serif", fontWeight: 700, marginBottom: 8 }}>{uploading ? 'Uploading...' : 'Drop CSV or XLSX here or click to upload'}</h3>
               <p style={{ fontSize: 13, color: 'var(--muted)' }}>Supports .csv, .xlsx, .xls files up to 10MB</p>
               <input ref={fileRef} type="file" accept=".csv,.xlsx,.xls" style={{ display: 'none' }} onChange={handleCSVUpload} />
             </div>

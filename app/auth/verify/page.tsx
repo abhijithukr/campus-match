@@ -23,7 +23,7 @@ export default function VerifyPage() {
         else toast.error('Register number not found. Contact admin.')
         return
       }
-      toast.success('Register number verified! ✅')
+      toast.success('Register number verified!')
       router.push(`/auth/signup?reg=${encodeURIComponent(regNum.trim().toUpperCase())}&name=${encodeURIComponent(result.data?.name || '')}`)
     } catch (err: any) {
       console.error('Verify error:', err)

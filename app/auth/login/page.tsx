@@ -47,7 +47,7 @@ export default function LoginPage() {
           <Heart size={26} color="var(--on-bright)" fill="var(--on-bright)" />
         </motion.div>
         <h1 className="font-display" style={{ fontSize: 30, fontWeight: 700 }}>Welcome back</h1>
-        <p style={{ color: 'var(--muted)', marginTop: 8, fontSize: 14.5 }}>Sign in to your Campus Match account</p>
+        <p style={{ color: 'var(--muted)', marginTop: 8, fontSize: 14.5 }}>Sign in to your Love Pic account</p>
       </div>
 
       <motion.form

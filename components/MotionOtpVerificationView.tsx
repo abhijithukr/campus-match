@@ -102,7 +102,7 @@ function DigitBox({ char, error, focused, onClick }: { char: string; error: bool
       style={{
         width: 44, height: 56, borderRadius: 14,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: 22, fontWeight: 800, fontFamily: "'Bricolage Grotesque', sans-serif",
+        fontSize: 22, fontWeight: 800, fontFamily: "'Nunito', sans-serif",
         background: 'var(--surface)',
         border: error ? '2px solid #c9433f' : focused ? '2px solid var(--purple)' : '1px solid var(--border2)',
         boxShadow: focused && !error ? '0 6px 20px color-mix(in srgb, var(--purple) 30%, transparent)' : 'none',

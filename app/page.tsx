@@ -168,8 +168,11 @@ export default function LandingPage() {
         background: 'color-mix(in srgb, var(--bg) 82%, transparent)', backdropFilter: 'blur(20px)',
         position: 'sticky', top: 0, zIndex: 100
       }}>
-        <div className="font-display" style={{ fontWeight: 700, fontSize: 20, background: 'var(--grad)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          Campus Match
+        <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
+          <img src="/brand/love-pic-icon.png" alt="" style={{ width: 28, height: 28, objectFit: 'contain' }} />
+          <span className="font-display" style={{ fontWeight: 800, fontSize: 20, background: 'var(--grad)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+            Love Pic
+          </span>
         </div>
         <div style={{ display: 'flex', gap: 12 }}>
           <Link href="/auth/login" style={{ padding: '9px 20px', borderRadius: 10, border: '1px solid var(--border2)', background: 'var(--surface)', color: 'var(--text)', textDecoration: 'none', fontSize: 14, fontWeight: 600, transition: 'border-color 0.2s' }}>
@@ -206,10 +209,13 @@ export default function LandingPage() {
             }}>
               Find your{' '}
               <span style={{ background: 'var(--grad)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-                campus match
+                person
               </span>
-              , not a stranger.
+              , someone worth the climb.
             </h1>
+            <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 18 }}>
+              Higher Together
+            </div>
             <p style={{ fontSize: 17, color: 'var(--muted)', maxWidth: 460, marginBottom: 34, lineHeight: 1.7 }}>
               The private matchmaking platform built only for verified students at your college. Anonymous likes, mutual matches, real conversations.
             </p>
@@ -359,7 +365,7 @@ export default function LandingPage() {
       <section style={{ padding: '20px 40px 96px', maxWidth: 1180, margin: '0 auto' }}>
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 44, flexWrap: 'wrap', gap: 16 }}>
           <div>
-            <span style={{ fontSize: 12.5, fontWeight: 800, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--purple-light)' }}>Why Campus Match</span>
+            <span style={{ fontSize: 12.5, fontWeight: 800, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--purple-light)' }}>Why Love Pic</span>
             <h2 className="font-display" style={{ fontSize: 36, fontWeight: 700, marginTop: 10 }}>
               Built for real campus life
             </h2>
@@ -433,14 +439,14 @@ export default function LandingPage() {
               background: 'var(--on-bright)', color: '#fff', textDecoration: 'none',
               fontSize: 16, fontWeight: 700, boxShadow: '0 14px 30px -10px rgba(0,0,0,.35)'
             }}>
-              Join Campus Match <ArrowRight size={17} />
+              Join Love Pic <ArrowRight size={17} />
             </Link>
           </motion.div>
         </motion.div>
       </section>
 
       <footer style={{ padding: '32px 24px', textAlign: 'center', fontSize: 13, color: 'var(--muted)', borderTop: '1px solid var(--border)' }}>
-        © Campus Match · Built for your campus, not the whole internet.
+        © Love Pic · Built for your campus, not the whole internet.
       </footer>
     </main>
   )

@@ -97,12 +97,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         padding: '16px 0', gap: 4, flexShrink: 0, zIndex: 10, height: '100vh', overflowY: 'auto'
       }}>
         {/* Logo */}
-        <Link href="/discover" className="font-display" style={{
-          width: 40, height: 40, borderRadius: 12, background: 'var(--grad)',
+        <Link href="/discover" style={{
+          width: 40, height: 40, borderRadius: 12,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          marginBottom: 16, textDecoration: 'none',
-          fontWeight: 700, color: 'var(--on-bright)', fontSize: 14
-        }}>CM</Link>
+          marginBottom: 16, textDecoration: 'none', padding: 4,
+        }}>
+          <img src="/brand/love-pic-icon.png" alt="Love Pic" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+        </Link>
 
         {navItems.map(({ href, icon, label }) => (
           <NavIcon key={href} href={href} icon={icon} label={label}
@@ -143,7 +144,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
               const current = navItems.find(n => pathname.startsWith(n.href))
               const isProfile = pathname.startsWith('/profile')
               const Icon = current?.icon || (isProfile ? Settings : Flame)
-              const label = current?.label || (isProfile ? 'Profile & Settings' : 'Campus Match')
+              const label = current?.label || (isProfile ? 'Profile & Settings' : 'Love Pic')
               return (
                 <>
                   <span style={{
