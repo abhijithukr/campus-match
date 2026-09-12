@@ -357,8 +357,8 @@ export default function Deskmate({ profile }: { profile?: UserProfile | null }) 
                 <circle cx={176} cy={168} r={6.5} fill="var(--text)" />
                 <circle cx={168} cy={206} r={8} fill="var(--text)" />
               </g>
-              <clipPath id="dm-head-clip"><circle cx={150} cy={80} r={72} /></clipPath>
-              <image href={currentChar.head} x={78} y={8} width={144} height={158} clipPath="url(#dm-head-clip)" preserveAspectRatio="xMidYMid slice" />
+              <clipPath id="dm-head-clip"><circle cx={150} cy={70} r={68} /></clipPath>
+              <image href={currentChar.head} x={82} y={2} width={136} height={149} clipPath="url(#dm-head-clip)" preserveAspectRatio="xMidYMid slice" />
             </g>
           </svg>
         </div>
