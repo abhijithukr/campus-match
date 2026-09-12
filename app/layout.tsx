@@ -5,13 +5,13 @@ import { Toaster } from 'react-hot-toast'
 import ErrorBoundary from '@/components/ErrorBoundary'
 
 export const metadata: Metadata = {
-  title: 'Campus Match — College Matchmaking',
+  title: 'Love Pic — Higher Together',
   description: 'Exclusive college matchmaking platform. Anonymous likes, mutual matches, real connections.',
   manifest: '/manifest.json',
   icons: { icon: '/favicon.ico', apple: '/apple-touch-icon.png' },
   openGraph: {
-    title: 'Campus Match',
-    description: 'Your campus. Your match.',
+    title: 'Love Pic',
+    description: 'Find your person. Higher together.',
     type: 'website',
   }
 }
@@ -20,7 +20,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
-  themeColor: '#fe019a',
+  themeColor: '#EB6B78',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -29,7 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('cm-theme')||'light';document.documentElement.setAttribute('data-theme',t)}catch(e){}})()` }} />
         <style>{`html { transition: background 0.3s; }`}</style>
       </head>
@@ -41,12 +41,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               position="top-right"
               toastOptions={{
                 style: {
-                  background: '#fffffe',
-                  color: '#33272a',
-                  border: '1px solid rgba(51,39,42,0.1)',
+                  background: 'var(--surface)',
+                  color: 'var(--text)',
+                  border: '1px solid var(--border2)',
                   borderRadius: '12px',
-                  fontFamily: "'DM Sans', sans-serif",
-                }
+                  fontFamily: "'Plus Jakarta Sans', sans-serif",
+                },
+                success: { iconTheme: { primary: '#2f9e6b', secondary: '#fff' } },
+                error: { iconTheme: { primary: '#c9433f', secondary: '#fff' } },
               }}
             />
           </Providers>

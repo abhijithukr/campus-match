@@ -43,14 +43,14 @@ export async function handleSwipe(fromUser: string, toUser: string, type: 'like'
 
       if (fromPrefs?.matches !== false) {
         await addDoc(collection(db, 'notifications'), {
-          userId: fromUser, type: 'match', title: "It's a Match! 💜",
+          userId: fromUser, type: 'match', title: "It's a Match!",
           body: 'You have a new mutual match!', matchId, read: false,
           createdAt: serverTimestamp(),
         })
       }
       if (toPrefs?.matches !== false) {
         await addDoc(collection(db, 'notifications'), {
-          userId: toUser, type: 'match', title: "It's a Match! 💜",
+          userId: toUser, type: 'match', title: "It's a Match!",
           body: 'You have a new mutual match!', matchId, read: false,
           createdAt: serverTimestamp(),
         })

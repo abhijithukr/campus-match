@@ -1,7 +1,9 @@
 'use client'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { X, MessageCircle } from 'lucide-react'
+import { motion } from 'framer-motion'
+import confetti from 'canvas-confetti'
+import { X, MessageCircle, Heart } from 'lucide-react'
 import { UserProfile } from '@/types'
 
 interface MatchPopupProps {
@@ -12,32 +14,16 @@ interface MatchPopupProps {
 
 export function MatchPopup({ matchedUser, matchId, onClose }: MatchPopupProps) {
   const router = useRouter()
-  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    spawnConfetti()
+    const colors = ['#DE5499', '#E99F4C', '#f8d8e7', '#57c98d']
+    const fire = (opts: confetti.Options) =>
+      confetti({ colors, disableForReducedMotion: true, ...opts })
+    fire({ particleCount: 70, spread: 70, origin: { x: 0.5, y: 0.55 }, startVelocity: 45 })
+    const t1 = setTimeout(() => fire({ particleCount: 40, angle: 60, spread: 55, origin: { x: 0, y: 0.6 } }), 150)
+    const t2 = setTimeout(() => fire({ particleCount: 40, angle: 120, spread: 55, origin: { x: 1, y: 0.6 } }), 150)
+    return () => { clearTimeout(t1); clearTimeout(t2) }
   }, [])
-
-  function spawnConfetti() {
-    const container = containerRef.current
-    if (!container) return
-    const colors = ['#fe019a', '#ffc6c7', '#ffd200', '#c3f0ca', '#60a5fa', '#f97316']
-    for (let i = 0; i < 50; i++) {
-      const piece = document.createElement('div')
-      const size = 4 + Math.random() * 8
-      piece.style.cssText = `
-        position:absolute;
-        width:${size}px; height:${size}px;
-        background:${colors[Math.floor(Math.random() * colors.length)]};
-        border-radius:${Math.random() > 0.5 ? '50%' : '2px'};
-        left:${Math.random() * 100}%;
-        top:-10px;
-        animation: confettiFall ${1.5 + Math.random() * 1.5}s ease-in ${Math.random() * 0.8}s forwards;
-        pointer-events:none;
-      `
-      container.appendChild(piece)
-    }
-  }
 
   const handleStartChat = () => {
     onClose()
@@ -45,54 +31,47 @@ export function MatchPopup({ matchedUser, matchId, onClose }: MatchPopupProps) {
   }
 
   return (
-    <div style={{
-      position: 'fixed', inset: 0, zIndex: 1000,
-      background: 'rgba(51,39,42,0.6)', backdropFilter: 'blur(16px)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      animation: 'fadeIn 0.3s ease'
-    }} onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <style>{`
-        @keyframes confettiFall {
-          0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-          100% { transform: translateY(500px) rotate(720deg); opacity: 0; }
-        }
-        @keyframes popIn {
-          0% { transform: scale(0.6); opacity: 0; }
-          70% { transform: scale(1.05); }
-          100% { transform: scale(1); opacity: 1; }
-        }
-        @keyframes heartPulse {
-          0%,100% { transform: scale(1); }
-          50% { transform: scale(1.4); }
-        }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-      `}</style>
+    <motion.div
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 1000,
+        background: 'rgba(20,15,16,0.6)', backdropFilter: 'blur(16px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }} onClick={(e) => e.target === e.currentTarget && onClose()}>
 
-      <div style={{
-        background: 'linear-gradient(145deg, #fffffe, #fdf1eb)',
-        border: '1px solid rgba(254,1,154,0.5)',
-        borderRadius: 32, padding: '48px 36px 36px',
-        textAlign: 'center', maxWidth: 380, width: '90%',
-        boxShadow: '0 0 80px rgba(254,1,154,0.35), 0 32px 64px rgba(51,39,42,0.25)',
-        position: 'relative', overflow: 'hidden',
-        animation: 'popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards'
-      }} ref={containerRef}>
+      <motion.div
+        initial={{ scale: 0.6, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+        style={{
+          background: 'linear-gradient(145deg, var(--surface), var(--surface2))',
+          border: '1px solid color-mix(in srgb, var(--purple) 45%, transparent)',
+          borderRadius: 32, padding: '48px 36px 36px',
+          textAlign: 'center', maxWidth: 380, width: '90%',
+          boxShadow: '0 0 80px color-mix(in srgb, var(--purple) 32%, transparent), 0 32px 64px rgba(20,15,16,0.25)',
+          position: 'relative', overflow: 'hidden',
+        }}>
 
         {/* Close button */}
         <button onClick={onClose} style={{
           position: 'absolute', top: 16, right: 16,
-          background: 'rgba(254,1,154,0.1)', border: '1px solid var(--border2)',
+          background: 'color-mix(in srgb, var(--purple) 10%, transparent)', border: '1px solid var(--border2)',
           borderRadius: 8, width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center',
-          cursor: 'pointer', color: 'var(--muted)', transition: 'all 0.2s'
+          cursor: 'pointer', color: 'var(--muted)',
         }}>
           <X size={15} />
         </button>
 
         {/* Header */}
-        <div style={{ fontSize: 42, marginBottom: 8 }}>💜</div>
-        <h2 style={{
-          fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 36, marginBottom: 6,
-          background: 'linear-gradient(135deg, #fe019a, #e0557e)',
+        <motion.div
+          initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.15, type: 'spring', stiffness: 260 }}
+          style={{ display: 'inline-flex', marginBottom: 10 }}
+        >
+          <Heart size={40} color="var(--purple)" fill="var(--purple)" />
+        </motion.div>
+        <h2 className="font-display" style={{
+          fontWeight: 700, fontSize: 36, marginBottom: 6,
+          background: 'var(--grad)',
           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
         }}>It's a Match!</h2>
         <p style={{ color: 'var(--muted)', fontSize: 14, marginBottom: 28 }}>
@@ -101,20 +80,26 @@ export function MatchPopup({ matchedUser, matchId, onClose }: MatchPopupProps) {
 
         {/* Avatars */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 0, marginBottom: 12 }}>
-          <div style={{
+          <div className="font-display" style={{
             width: 80, height: 80, borderRadius: '50%',
-            background: 'linear-gradient(135deg, #fe019a, #ffc6c7)',
+            background: 'var(--grad)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 30, border: '3px solid #fffffe', marginRight: -16, zIndex: 1, color: '#33272a'
+            fontSize: 30, fontWeight: 700, border: '3px solid var(--surface)', marginRight: -16, zIndex: 1, color: 'var(--on-bright)'
           }}>
-            {matchedUser.profilePhoto ? <img src={matchedUser.profilePhoto} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} alt="" /> : '💜'}
+            {matchedUser.profilePhoto ? <img src={matchedUser.profilePhoto} style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} alt="" /> : <Heart size={26} fill="currentColor" />}
           </div>
-          <div style={{ fontSize: 28, animation: 'heartPulse 1s infinite', zIndex: 2, position: 'relative' }}>💜</div>
-          <div style={{
+          <motion.div
+            animate={{ scale: [1, 1.35, 1] }}
+            transition={{ duration: 1, repeat: Infinity }}
+            style={{ zIndex: 2, position: 'relative', color: 'var(--purple)' }}
+          >
+            <Heart size={26} fill="currentColor" />
+          </motion.div>
+          <div className="font-display" style={{
             width: 80, height: 80, borderRadius: '50%',
-            background: 'linear-gradient(135deg, #ffc6c7, #fe019a)',
+            background: 'linear-gradient(135deg, var(--accent), var(--purple))',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 30, border: '3px solid #fffffe', marginLeft: -16, color: '#33272a'
+            fontSize: 30, fontWeight: 700, border: '3px solid var(--surface)', marginLeft: -16, color: 'var(--on-bright)'
           }}>
             {matchedUser.fullName[0]}
           </div>
@@ -126,22 +111,17 @@ export function MatchPopup({ matchedUser, matchId, onClose }: MatchPopupProps) {
 
         {/* Buttons */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <button onClick={handleStartChat} style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-            padding: '13px 24px', borderRadius: 14, background: 'var(--purple)',
-            border: 'none', color: '#33272a', fontSize: 14, fontWeight: 600,
-            cursor: 'pointer', transition: 'opacity 0.2s'
-          }}>
+          <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }} onClick={handleStartChat} className="btn-primary">
             <MessageCircle size={16} /> Start Chatting
-          </button>
+          </motion.button>
           <button onClick={onClose} style={{
             padding: '10px', border: 'none', background: 'none',
-            color: 'var(--muted)', fontSize: 13, cursor: 'pointer'
+            color: 'var(--muted)', fontSize: 13, fontWeight: 600, cursor: 'pointer'
           }}>
             Maybe later
           </button>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }

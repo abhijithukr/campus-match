@@ -8,9 +8,9 @@ export async function sendVerificationEmail(to: string, otp: string) {
       <div style="background:#fffffe;border:1px solid #f8e3db;border-radius:16px;padding:28px">
         <div style="width:48px;height:48px;border-radius:12px;background:#fe019a;display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-weight:800;color:#fff">CM</div>
         <h1 style="color:#33272a;font-size:20px;margin:0 0 8px">Verify your email</h1>
-        <p style="color:#594a4e;font-size:14px;line-height:1.6;margin:0 0 20px">Welcome to Campus Match! Use the code below to verify your email address. It expires in 10 minutes.</p>
+        <p style="color:#594a4e;font-size:14px;line-height:1.6;margin:0 0 20px">Welcome to Love Pic! Use the code below to verify your email address. It expires in 10 minutes.</p>
         <div style="background:#ffc6c7;border-radius:12px;padding:20px;text-align:center;font-size:32px;letter-spacing:8px;font-weight:800;color:#33272a">${otp}</div>
-        <p style="color:#594a4e;font-size:12px;line-height:1.6;margin:20px 0 0">If you didn't sign up for Campus Match, you can safely ignore this email.</p>
+        <p style="color:#594a4e;font-size:12px;line-height:1.6;margin:20px 0 0">If you didn't sign up for Love Pic, you can safely ignore this email.</p>
       </div>
     </div>
   `
@@ -23,11 +23,11 @@ export async function sendVerificationEmail(to: string, otp: string) {
       Accept: 'application/json',
     },
     body: JSON.stringify({
-      sender: { email: sender, name: 'Campus Match' },
+      sender: { email: sender, name: 'Love Pic' },
       to: [{ email: to }],
-      subject: 'Your Campus Match verification code',
+      subject: 'Your Love Pic verification code',
       htmlContent: html,
-      textContent: `Your Campus Match verification code is ${otp}. It expires in 10 minutes.`,
+      textContent: `Your Love Pic verification code is ${otp}. It expires in 10 minutes.`,
     }),
     signal: AbortSignal.timeout(15000),
   })
