@@ -58,8 +58,9 @@ export default function Deskmate({ profile }: { profile?: UserProfile | null }) 
   // ---------------- movement engine ----------------
   useEffect(() => {
     if (!mounted) return
-    const dm = dmRef.current
-    if (!dm) return
+    const dmMaybeNull = dmRef.current
+    if (!dmMaybeNull) return
+    const dm: HTMLDivElement = dmMaybeNull
 
     const groundY = () => Math.max(GROUND_GAP, window.innerHeight - H - GROUND_GAP)
     const randX = () => {
