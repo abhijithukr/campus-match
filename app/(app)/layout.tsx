@@ -8,6 +8,7 @@ import { useAuthStore } from '@/store/useAuthStore'
 import { useAppStore } from '@/store/useAppStore'
 import { MatchPopup } from '@/components/animations/MatchPopup'
 import { subscribeToNotifications } from '@/firebase/notifications'
+import Deskmate from '@/components/deskmate/Deskmate'
 
 const navItems = [
   { href: '/discover', icon: Flame, label: 'Discover' },
@@ -131,9 +132,45 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       </nav>
 
       {/* Content */}
-      <main className="app-main">
-        {children}
-      </main>
+      <div className="app-content-col">
+        <header className="app-topbar" style={{
+          alignItems: 'center', justifyContent: 'space-between', gap: 16,
+          padding: '16px 28px', borderBottom: '1px solid var(--border)', flexShrink: 0,
+          background: 'color-mix(in srgb, var(--bg) 88%, transparent)', backdropFilter: 'blur(16px)',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            {(() => {
+              const current = navItems.find(n => pathname.startsWith(n.href))
+              const isProfile = pathname.startsWith('/profile')
+              const Icon = current?.icon || (isProfile ? Settings : Flame)
+              const label = current?.label || (isProfile ? 'Profile & Settings' : 'Campus Match')
+              return (
+                <>
+                  <span style={{
+                    width: 34, height: 34, borderRadius: 10, flexShrink: 0,
+                    background: 'color-mix(in srgb, var(--purple) 14%, transparent)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <Icon size={16} color="var(--purple)" />
+                  </span>
+                  <span className="font-display" style={{ fontSize: 16, fontWeight: 700 }}>
+                    {label}
+                  </span>
+                </>
+              )
+            })()}
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <span style={{ fontSize: 13.5, color: 'var(--muted)' }}>
+              Hey, <strong style={{ color: 'var(--text)' }}>{profile?.fullName?.split(' ')[0] || 'there'}</strong>
+            </span>
+            <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#2f9e6b', flexShrink: 0 }} title="Online" />
+          </div>
+        </header>
+        <main className="app-main">
+          {children}
+        </main>
+      </div>
 
       {/* Bottom nav (mobile) */}
       <nav className="mobile-bottom-nav">
@@ -162,6 +199,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           onClose={closeMatchPopup}
         />
       )}
+
+      {/* Deskmate companion */}
+      <Deskmate profile={profile} />
     </div>
   )
 }
