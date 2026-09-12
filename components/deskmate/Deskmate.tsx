@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { X, Send, Square, Users, Check } from 'lucide-react'
+import { X, Send, Square, Users, Check, Volume2, VolumeX } from 'lucide-react'
 import '@/styles/deskmate.css'
 import { UserProfile } from '@/types'
 
@@ -18,6 +18,8 @@ const WALK_SPEED = 46
 const FLY_SPEED = 95
 const FLY_CHANCE = 0.35
 const GROUND_GAP = 12
+const MOBILE_NAV_BREAKPOINT = 700
+const MOBILE_NAV_CLEARANCE = 92
 const FLY_TOP_GAP = 30
 const FLY_CEILING_GAP = 60
 
@@ -43,6 +45,9 @@ export default function Deskmate({ profile }: { profile?: UserProfile | null }) 
   const [paused, setPaused] = useState(false)
   const [chatOpen, setChatOpen] = useState(false)
   const [charPanelOpen, setCharPanelOpen] = useState(false)
+  const [muted, setMuted] = useState(false)
+  const mutedRef = useRef(false)
+  useEffect(() => { mutedRef.current = muted }, [muted])
   const [turns, setTurns] = useState<Turn[]>([])
   const turnsRef = useRef<Turn[]>([])
   useEffect(() => { turnsRef.current = turns }, [turns])
@@ -62,7 +67,10 @@ export default function Deskmate({ profile }: { profile?: UserProfile | null }) 
     if (!dmMaybeNull) return
     const dm: HTMLDivElement = dmMaybeNull
 
-    const groundY = () => Math.max(GROUND_GAP, window.innerHeight - H - GROUND_GAP)
+    const groundY = () => {
+      const gap = window.innerWidth <= MOBILE_NAV_BREAKPOINT ? GROUND_GAP + MOBILE_NAV_CLEARANCE : GROUND_GAP
+      return Math.max(gap, window.innerHeight - H - gap)
+    }
     const randX = () => {
       const margin = 12
       const maxX = Math.max(margin, window.innerWidth - W - margin)
@@ -89,6 +97,7 @@ export default function Deskmate({ profile }: { profile?: UserProfile | null }) 
     }
 
     function playFlySound() {
+      if (mutedRef.current) return
       const char = CHARACTERS.find(c => c.id === charIdRef.current)
       const el = char && audioRefs.current[char.id]
       if (!el) return
@@ -209,7 +218,8 @@ export default function Deskmate({ profile }: { profile?: UserProfile | null }) 
     setPaused(false)
     setFlying(false)
     if (dm) {
-      const groundY = Math.max(GROUND_GAP, window.innerHeight - H - GROUND_GAP)
+      const gap = window.innerWidth <= MOBILE_NAV_BREAKPOINT ? GROUND_GAP + MOBILE_NAV_CLEARANCE : GROUND_GAP
+      const groundY = Math.max(gap, window.innerHeight - H - gap)
       posRef.current.y = groundY
       dm.style.top = groundY + 'px'
       ;(dm as any)._walkLoop?.()
@@ -292,6 +302,14 @@ export default function Deskmate({ profile }: { profile?: UserProfile | null }) 
     setInput('')
     const next = [...turnsRef.current, { role: 'user' as const, content: text }]
     requestReply(next)
+  }
+
+  function toggleMute() {
+    setMuted(m => {
+      const next = !m
+      if (next) (dmRef.current as any)?._stopFlySound?.()
+      return next
+    })
   }
 
   function selectCharacter(id: string) {
@@ -394,24 +412,34 @@ export default function Deskmate({ profile }: { profile?: UserProfile | null }) 
         </form>
       </div>
 
-      <button id="dm-char-toggle" aria-label="Switch character" title="Switch character" onClick={() => setCharPanelOpen(v => !v)}>
-        <Users size={19} />
-      </button>
-      <div id="dm-char-panel" className={charPanelOpen ? 'dm-open' : ''}>
-        <div className="dm-char-head">
-          <b>Choose a character</b>
-          <button type="button" onClick={() => setCharPanelOpen(false)} aria-label="Close"><X size={13} /></button>
-        </div>
-        <div className="dm-char-list">
-          {CHARACTERS.map(c => (
-            <button key={c.id} type="button" className={`dm-char-row${c.id === charId ? ' dm-active' : ''}`} onClick={() => selectCharacter(c.id)}>
-              <span className="dm-av"><img src={c.head} alt="" /></span>
-              <span className="dm-nm">{c.name}</span>
-              <Check className="dm-ck" size={16} />
-            </button>
-          ))}
-        </div>
-      </div>
+      {!chatOpen && (
+        <>
+          <label id="dm-mute-toggle" className={muted ? 'dm-muted' : ''} aria-label={muted ? 'Unmute Deskmate' : 'Mute Deskmate'} title={muted ? 'Unmute' : 'Mute'}>
+            <input type="checkbox" checked={muted} onChange={toggleMute} />
+            <span className="dm-mute-icon dm-mute-icon-on"><Volume2 size={18} /></span>
+            <span className="dm-mute-icon dm-mute-icon-off"><VolumeX size={18} /></span>
+          </label>
+
+          <button id="dm-char-toggle" aria-label="Switch character" title="Switch character" onClick={() => setCharPanelOpen(v => !v)}>
+            <Users size={19} />
+          </button>
+          <div id="dm-char-panel" className={charPanelOpen ? 'dm-open' : ''}>
+            <div className="dm-char-head">
+              <b>Choose a character</b>
+              <button type="button" onClick={() => setCharPanelOpen(false)} aria-label="Close"><X size={13} /></button>
+            </div>
+            <div className="dm-char-list">
+              {CHARACTERS.map(c => (
+                <button key={c.id} type="button" className={`dm-char-row${c.id === charId ? ' dm-active' : ''}`} onClick={() => selectCharacter(c.id)}>
+                  <span className="dm-av"><img src={c.head} alt="" /></span>
+                  <span className="dm-nm">{c.name}</span>
+                  <Check className="dm-ck" size={16} />
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </>,
     document.body
   )
