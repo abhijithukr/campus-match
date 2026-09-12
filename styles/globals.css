@@ -1,43 +1,52 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --bg: #faeee7;
-  --surface: #fffffe;
-  --surface2: #fdf1eb;
-  --surface3: #f8e3db;
-  --border: rgba(51, 39, 42, 0.08);
-  --border2: rgba(51, 39, 42, 0.16);
-  --purple: #fe019a;
-  --purple-light: #e0557e;
-  --pink: #fe019a;
-  --pink-light: #ffc6c7;
-  --text: #33272a;
-  --muted: #594a4e;
-  --green: #c3f0ca;
-  --green-strong: #2f9e44;
-  --grad: linear-gradient(135deg, #fe019a, #ffc6c7);
+  --bg: #fdf1ec;
+  --surface: #ffffff;
+  --surface2: #EDDCD9;
+  --surface3: #e6cabb;
+  --border: rgba(38, 65, 67, 0.10);
+  --border2: rgba(38, 65, 67, 0.18);
+  --purple: #DE5499;
+  --purple-light: #c03f7f;
+  --pink: #DE5499;
+  --pink-light: #f8d8e7;
+  --accent: #E99F4C;
+  --accent-strong: #c9821f;
+  --accent-soft: #fdecd6;
+  --text: #264143;
+  --muted: #5c7377;
+  --green: #e2f5ea;
+  --green-strong: #2f9e6b;
+  --grad: linear-gradient(135deg, #DE5499, #E99F4C);
+  /* fixed regardless of theme — text/icons sitting on the bright purple/accent
+     swatches, which stay light-to-medium in both themes */
+  --on-bright: #241a1d;
 }
 
 [data-theme="dark"] {
-  --bg: #16121d;
-  --surface: #1f1a2b;
-  --surface2: #251e33;
-  --surface3: #2c2440;
+  --bg: #171013;
+  --surface: #241a1e;
+  --surface2: #2b2123;
+  --surface3: #33272a;
   --border: rgba(255, 255, 255, 0.08);
   --border2: rgba(255, 255, 255, 0.16);
-  --purple: #fe019a;
-  --purple-light: #f5628d;
-  --pink: #fe019a;
-  --pink-light: #ffc6c7;
-  --text: #f6eef2;
-  --muted: #b9a8b6;
-  --green: #1f6b3a;
-  --green-strong: #40c057;
-  --grad: linear-gradient(135deg, #fe019a, #ff9ec0);
+  --purple: #ef6aa4;
+  --purple-light: #ff8fbe;
+  --pink: #ef6aa4;
+  --pink-light: #3a1e2a;
+  --accent: #f0ac5c;
+  --accent-strong: #ffc266;
+  --accent-soft: #3a2a15;
+  --text: #f4ece6;
+  --muted: #b9a8a0;
+  --green: #173626;
+  --green-strong: #57c98d;
+  --grad: linear-gradient(135deg, #ef6aa4, #f0ac5c);
 }
 
 * {
@@ -49,12 +58,14 @@
 html, body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   min-height: 100%;
   min-height: 100dvh;
   overflow-x: hidden;
   overflow-y: auto;
 }
+
+h1, h2, h3, h4 { text-wrap: balance; }
 
 /* Custom scrollbars */
 ::-webkit-scrollbar { width: 4px; height: 4px; }
@@ -63,10 +74,49 @@ html, body {
 ::-webkit-scrollbar-thumb:hover { background: var(--purple); }
 
 /* Selection */
-::selection { background: rgba(255, 139, 167, 0.35); color: var(--text); }
+::selection { background: color-mix(in srgb, var(--purple) 45%, transparent); color: var(--text); }
 
 /* Utilities */
-.font-display { font-family: 'Syne', sans-serif; }
+.font-display { font-family: 'Bricolage Grotesque', sans-serif; }
+
+/* Aurora hero glow — a soft drifting two-tone blob behind hero content */
+.aurora-blob {
+  position: absolute;
+  inset: -20% -10% auto -10%;
+  height: 640px;
+  background:
+    radial-gradient(closest-side, color-mix(in srgb, var(--purple) 55%, transparent), transparent),
+    radial-gradient(closest-side, color-mix(in srgb, var(--accent) 45%, transparent), transparent);
+  background-position: 20% 30%, 80% 20%;
+  background-repeat: no-repeat;
+  background-size: 60% 60%, 55% 55%;
+  filter: blur(60px);
+  opacity: 0.55;
+  animation: auroraShift 16s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+/* Spotlight card — set --mx/--my via onMouseMove for a mouse-tracked glow */
+.spotlight { position: relative; overflow: hidden; }
+.spotlight::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--purple) 16%, transparent), transparent 70%);
+}
+.spotlight:hover::before { opacity: 1; }
+
+/* Marquee — duplicate the track's children to loop seamlessly */
+.marquee-wrap { overflow: hidden; }
+.marquee-track { display: flex; gap: 14px; width: max-content; animation: marquee 26s linear infinite; }
+.marquee-wrap:hover .marquee-track { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora-blob, .marquee-track { animation: none; }
+}
 
 .gradient-text {
   background: var(--grad);
@@ -82,15 +132,15 @@ html, body {
   border: 1px solid var(--border);
 }
 
-.glow-purple { box-shadow: 0 0 30px rgba(255, 139, 167, 0.3); }
-.glow-pink { box-shadow: 0 0 30px rgba(255, 139, 167, 0.3); }
+.glow-purple { box-shadow: 0 0 30px color-mix(in srgb, var(--purple) 45%, transparent); }
+.glow-pink { box-shadow: 0 0 30px color-mix(in srgb, var(--purple) 45%, transparent); }
 
 .card-hover {
   transition: transform 0.2s, box-shadow 0.2s;
 }
 .card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(255, 139, 167, 0.2);
+  box-shadow: 0 8px 32px color-mix(in srgb, var(--purple) 45%, transparent);
 }
 
 /* Input base */
@@ -99,7 +149,7 @@ html, body {
   border: 1px solid var(--border2);
   border-radius: 12px;
   color: var(--text);
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
   width: 100%;
@@ -108,7 +158,7 @@ html, body {
 }
 .input-base:focus {
   border-color: var(--purple);
-  box-shadow: 0 0 0 3px rgba(255, 139, 167, 0.15);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--purple) 45%, transparent);
 }
 .input-base::placeholder { color: var(--muted); }
 
@@ -129,18 +179,19 @@ html, body {
   background: var(--purple);
   border: none;
   border-radius: 12px;
-  color: #33272a;
+  color: var(--on-bright);
   cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   padding: 12px 24px;
-  transition: opacity 0.2s, transform 0.2s;
+  transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   width: 100%;
+  box-shadow: 0 8px 24px -8px color-mix(in srgb, var(--purple) 55%, transparent);
 }
 .btn-primary:hover { opacity: 0.9; transform: scale(1.01); }
 .btn-primary:active { transform: scale(0.99); }
@@ -152,7 +203,7 @@ html, body {
   border-radius: 12px;
   color: var(--text);
   cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 14px;
   padding: 12px 24px;
   transition: background 0.2s, border-color 0.2s;
@@ -166,8 +217,8 @@ html, body {
 
 /* Tag pill */
 .tag-pill {
-  background: rgba(255, 139, 167, 0.15);
-  border: 1px solid rgba(255, 139, 167, 0.3);
+  background: color-mix(in srgb, var(--purple) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--purple) 30%, transparent);
   border-radius: 100px;
   color: var(--purple-light);
   font-size: 11px;
@@ -643,8 +694,8 @@ html, body {
   position: relative;
   width: 52px;
   height: 28px;
-  --light: #f6eef2;
-  --dark: #33272a;
+  --light: #fdf1ec;
+  --dark: #264143;
   flex-shrink: 0;
 }
 .theme-switch .switch-label {

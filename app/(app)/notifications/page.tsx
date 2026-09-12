@@ -1,26 +1,36 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import { collection, query, where, onSnapshot, updateDoc, doc, getDocs } from 'firebase/firestore'
 import { db } from '@/firebase/config'
 import { useAuthStore } from '@/store/useAuthStore'
 import { NotificationDoc } from '@/types'
 import { useRouter } from 'next/navigation'
 import { formatDistanceToNow } from 'date-fns'
+import { Heart, Eye, MessageCircle, RefreshCw, Star, Bell, BellRing } from 'lucide-react'
 
-const ICONS: Record<string, string> = {
-  match: '💜',
-  anonymous_like: '👀',
-  message: '💬',
-  cycle_reset: '🔄',
-  featured: '⭐',
+const ICONS: Record<string, any> = {
+  match: Heart,
+  anonymous_like: Eye,
+  message: MessageCircle,
+  cycle_reset: RefreshCw,
+  featured: Star,
+}
+
+const ICON_COLOR: Record<string, string> = {
+  match: 'var(--purple)',
+  anonymous_like: 'var(--purple)',
+  message: '#2f9e6b',
+  cycle_reset: '#5b9bd5',
+  featured: 'var(--accent-strong)',
 }
 
 const BG: Record<string, string> = {
-  match: 'rgba(254,1,154,0.16)',
-  anonymous_like: 'rgba(254,1,154,0.16)',
-  message: 'rgba(47,158,68,0.14)',
-  cycle_reset: 'rgba(96,165,250,0.16)',
-  featured: 'rgba(255,210,0,0.18)',
+  match: 'color-mix(in srgb, var(--purple) 16%, transparent)',
+  anonymous_like: 'color-mix(in srgb, var(--purple) 16%, transparent)',
+  message: 'color-mix(in srgb, #2f9e6b 14%, transparent)',
+  cycle_reset: 'color-mix(in srgb, #5b9bd5 16%, transparent)',
+  featured: 'color-mix(in srgb, var(--accent) 22%, transparent)',
 }
 
 export default function NotificationsPage() {
@@ -69,7 +79,7 @@ export default function NotificationsPage() {
 
   if (loading) return (
     <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <p style={{ color: 'var(--muted)' }}>Loading...</p>
+      <p style={{ color: 'var(--muted)' }}>Loading…</p>
     </div>
   )
 
@@ -77,11 +87,11 @@ export default function NotificationsPage() {
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
       <div style={{ padding: '14px 24px', borderBottom: '1px solid var(--border)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div>
-          <h1 style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 700 }}>Notifications</h1>
+          <h1 className="font-display" style={{ fontSize: 18, fontWeight: 700 }}>Notifications</h1>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{unread} unread</p>
         </div>
         {unread > 0 && (
-          <button onClick={markAllRead} style={{ padding: '7px 14px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surface2)', color: 'var(--muted)', cursor: 'pointer', fontSize: 12 }}>
+          <button onClick={markAllRead} style={{ padding: '7px 14px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surface2)', color: 'var(--muted)', cursor: 'pointer', fontSize: 12, fontWeight: 600 }}>
             Mark all read
           </button>
         )}
@@ -90,36 +100,44 @@ export default function NotificationsPage() {
       <div style={{ flex: 1, overflowY: 'auto', padding: '16px 24px' }}>
         {notifs.length === 0 ? (
           <div style={{ textAlign: 'center', color: 'var(--muted)', paddingTop: 80 }}>
-            <div style={{ fontSize: 48, marginBottom: 12 }}>🔔</div>
-            <p style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 16, color: 'var(--text)', marginBottom: 6 }}>All caught up!</p>
+            <BellRing size={44} color="var(--muted)" style={{ margin: '0 auto 12px' }} />
+            <p className="font-display" style={{ fontWeight: 700, fontSize: 16, color: 'var(--text)', marginBottom: 6 }}>All caught up!</p>
             <p style={{ fontSize: 13 }}>Notifications will appear here.</p>
           </div>
-        ) : notifs.map(n => (
-          <div key={n.id} onClick={() => handleClick(n)}
-            style={{
-              display: 'flex', gap: 14, padding: '14px 16px', borderRadius: 16,
-              marginBottom: 8, cursor: 'pointer', transition: 'background 0.15s',
-              background: n.read ? 'var(--surface)' : 'rgba(254,1,154,0.1)',
-              border: `1px solid ${n.read ? 'var(--border)' : 'rgba(254,1,154,0.3)'}`,
-            }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'var(--surface2)')}
-            onMouseLeave={e => (e.currentTarget.style.background = n.read ? 'var(--surface)' : 'rgba(254,1,154,0.1)')}>
-            <div style={{
-              width: 44, height: 44, borderRadius: 14, flexShrink: 0,
-              background: BG[n.type] || 'var(--surface2)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20
-            }}>
-              {ICONS[n.type] || '🔔'}
-            </div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 13, fontWeight: n.read ? 400 : 600 }}>{n.title}</div>
-              <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 3 }}>{n.body}</div>
-            </div>
-            <div style={{ fontSize: 11, color: 'var(--muted)', flexShrink: 0 }}>
-              {n.createdAt ? formatDistanceToNow(n.createdAt.toDate(), { addSuffix: true }) : 'just now'}
-            </div>
-          </div>
-        ))}
+        ) : notifs.map((n, i) => {
+          const Icon = ICONS[n.type] || Bell
+          return (
+            <motion.div
+              key={n.id}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: Math.min(i * 0.03, 0.3) }}
+              whileHover={{ backgroundColor: 'var(--surface2)' }}
+              onClick={() => handleClick(n)}
+              style={{
+                display: 'flex', gap: 14, padding: '14px 16px', borderRadius: 16,
+                marginBottom: 8, cursor: 'pointer',
+                background: n.read ? 'var(--surface)' : 'color-mix(in srgb, var(--purple) 10%, transparent)',
+                border: `1px solid ${n.read ? 'var(--border)' : 'color-mix(in srgb, var(--purple) 30%, transparent)'}`,
+              }}
+            >
+              <div style={{
+                width: 44, height: 44, borderRadius: 14, flexShrink: 0,
+                background: BG[n.type] || 'var(--surface2)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <Icon size={19} color={ICON_COLOR[n.type] || 'var(--muted)'} />
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 13, fontWeight: n.read ? 500 : 700 }}>{n.title}</div>
+                <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 3 }}>{n.body}</div>
+              </div>
+              <div style={{ fontSize: 11, color: 'var(--muted)', flexShrink: 0 }}>
+                {n.createdAt ? formatDistanceToNow(n.createdAt.toDate(), { addSuffix: true }) : 'just now'}
+              </div>
+            </motion.div>
+          )
+        })}
       </div>
     </div>
   )

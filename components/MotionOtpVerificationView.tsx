@@ -74,7 +74,7 @@ export default function MotionOtpVerificationView({
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ type: 'spring', stiffness: 400, damping: 22 }}
-          style={{ color: '#e3342f', fontSize: 13, fontWeight: 600, letterSpacing: 0.3 }}
+          style={{ color: '#c9433f', fontSize: 13, fontWeight: 600, letterSpacing: 0.3 }}
         >
           Incorrect code. Please try again.
         </motion.div>
@@ -102,10 +102,10 @@ function DigitBox({ char, error, focused, onClick }: { char: string; error: bool
       style={{
         width: 44, height: 56, borderRadius: 14,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: 22, fontWeight: 800, fontFamily: "'Syne', sans-serif",
+        fontSize: 22, fontWeight: 800, fontFamily: "'Bricolage Grotesque', sans-serif",
         background: 'var(--surface)',
-        border: error ? '2px solid #e3342f' : focused ? '2px solid var(--purple)' : '1px solid var(--border2)',
-        boxShadow: focused && !error ? '0 6px 20px rgba(254,1,154,0.22)' : 'none',
+        border: error ? '2px solid #c9433f' : focused ? '2px solid var(--purple)' : '1px solid var(--border2)',
+        boxShadow: focused && !error ? '0 6px 20px color-mix(in srgb, var(--purple) 30%, transparent)' : 'none',
         color: 'var(--text)',
         cursor: 'text',
       }}
@@ -137,7 +137,7 @@ function Orbit({ chars }: { chars: string[] }) {
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               background: 'var(--surface)', border: '2px solid var(--purple)',
               color: 'var(--purple)', fontSize: 18, fontWeight: 800,
-              boxShadow: '0 8px 24px rgba(254,1,154,0.25)',
+              boxShadow: '0 8px 24px color-mix(in srgb, var(--purple) 32%, transparent)',
             }}
             initial={{ x: 0, y: 0, opacity: 0 }}
             animate={{

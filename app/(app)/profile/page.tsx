@@ -1,10 +1,11 @@
 'use client'
 import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useAuthStore } from '@/store/useAuthStore'
 import { updateUserProfile } from '@/firebase/auth'
 import { logoutUser } from '@/firebase/auth'
 import { useRouter } from 'next/navigation'
-import { Camera, Edit2, LogOut, Shield, Bell, Instagram, Phone, X, Eye, EyeOff, Lock, BellOff } from 'lucide-react'
+import { Camera, Edit2, LogOut, Shield, Bell, Instagram, Phone, X, Eye } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 const INTERESTS_OPTIONS = ['Music', 'Movies', 'Anime', 'Gaming', 'Coding', 'Reading', 'Travel', 'Coffee', 'Art', 'Sports', 'Cooking', 'Photography', 'Dance', 'Fitness', 'Nature']
@@ -12,28 +13,30 @@ const TAGS = ['Night Owl', 'Early Bird', 'Introvert', 'Extrovert', 'Creative', '
 
 function Modal({ title, children, onClose }: { title: string; children: React.ReactNode; onClose: () => void }) {
   return (
-    <div style={{
-      position: 'fixed', inset: 0, zIndex: 200,
-      background: 'rgba(51,39,42,0.5)', backdropFilter: 'blur(8px)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      animation: 'fadeIn 0.2s'
-    }} onClick={e => e.target === e.currentTarget && onClose()}>
-      <style>{`@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }`}</style>
-      <div style={{
-        background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 24,
-        padding: 28, width: '90%', maxWidth: 440, maxHeight: '80vh', overflowY: 'auto',
-        animation: 'popIn 0.3s'
-      }}>
-        <style>{`@keyframes popIn { from { transform: scale(0.9); opacity: 0 } to { transform: scale(1); opacity: 1 } }`}</style>
+    <motion.div
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 200,
+        background: 'rgba(20,15,16,0.5)', backdropFilter: 'blur(8px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }} onClick={e => e.target === e.currentTarget && onClose()}>
+      <motion.div
+        initial={{ scale: 0.92, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.92, opacity: 0 }}
+        transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+        style={{
+          background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 24,
+          padding: 28, width: '90%', maxWidth: 440, maxHeight: '80vh', overflowY: 'auto',
+        }}
+      >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
-          <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 700 }}>{title}</h2>
+          <h2 className="font-display" style={{ fontSize: 18, fontWeight: 700 }}>{title}</h2>
           <button onClick={onClose} style={{ background: 'var(--surface2)', border: '1px solid var(--border)', borderRadius: 8, width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--muted)' }}>
             <X size={14} />
           </button>
         </div>
         {children}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }
 
@@ -41,7 +44,7 @@ function Toggle({ label, description, checked, onChange }: { label: string; desc
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 0', borderBottom: '1px solid var(--border)' }}>
       <div>
-        <div style={{ fontSize: 14, fontWeight: 500 }}>{label}</div>
+        <div style={{ fontSize: 14, fontWeight: 600 }}>{label}</div>
         <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{description}</div>
       </div>
       <button
@@ -50,10 +53,10 @@ function Toggle({ label, description, checked, onChange }: { label: string; desc
           width: 44, height: 24, borderRadius: 12, border: 'none', cursor: 'pointer',
           background: checked ? 'var(--purple)' : 'var(--surface3)',
           display: 'flex', alignItems: 'center', justifyContent: checked ? 'flex-end' : 'flex-start',
-          padding: 2, transition: 'all 0.2s'
+          padding: 2, transition: 'background 0.2s', flexShrink: 0,
         }}
       >
-        <div style={{ width: 20, height: 20, borderRadius: '50%', background: '#fff', transition: 'all 0.2s' }} />
+        <motion.div layout transition={{ duration: 0.2 }} style={{ width: 20, height: 20, borderRadius: '50%', background: '#fff' }} />
       </button>
     </div>
   )
@@ -109,7 +112,7 @@ export default function ProfilePage() {
       await updateUserProfile(profile.uid, { ...form, profileCompletion: pct })
       setProfile({ ...profile, ...form, profileCompletion: pct })
       setEditing(false)
-      toast.success('Profile updated! ✨')
+      toast.success('Profile updated!')
     } catch { toast.error('Save failed.') }
     finally { setSaving(false) }
   }
@@ -148,7 +151,7 @@ export default function ProfilePage() {
       const url = await uploadImage(file, 'campus-match/profiles')
       await updateUserProfile(profile.uid, type === 'avatar' ? { profilePhoto: url } : { coverPhoto: url })
       setProfile({ ...profile, ...(type === 'avatar' ? { profilePhoto: url } : { coverPhoto: url }) })
-      toast.success('Photo updated! ✨')
+      toast.success('Photo updated!')
     } catch { toast.error('Upload failed.') }
   }
 
@@ -170,34 +173,34 @@ export default function ProfilePage() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
       <div style={{ padding: '14px 24px', borderBottom: '1px solid var(--border)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <h1 style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 700 }}>My Profile</h1>
-        <button onClick={editing ? save : () => setEditing(true)} disabled={saving} style={{
+        <h1 className="font-display" style={{ fontSize: 18, fontWeight: 700 }}>My Profile</h1>
+        <motion.button whileTap={{ scale: 0.96 }} onClick={editing ? save : () => setEditing(true)} disabled={saving} style={{
           padding: '8px 20px', borderRadius: 10,
           background: editing ? 'var(--purple)' : 'var(--surface)',
           border: editing ? 'none' : '1px solid var(--border2)',
-          color: editing ? '#33272a' : 'var(--text)', fontSize: 13, fontWeight: 600, cursor: 'pointer',
+          color: editing ? 'var(--on-bright)' : 'var(--text)', fontSize: 13, fontWeight: 700, cursor: 'pointer',
           display: 'flex', alignItems: 'center', gap: 6
         }}>
-          <Edit2 size={13} /> {saving ? 'Saving...' : editing ? 'Save Changes' : 'Edit Profile'}
-        </button>
+          <Edit2 size={13} /> {saving ? 'Saving…' : editing ? 'Save Changes' : 'Edit Profile'}
+        </motion.button>
       </div>
 
       <div style={{ flex: 1, overflowY: 'auto' }}>
         {/* Cover */}
         <div style={{ height: 160, background: profile.coverPhoto ? `url(${profile.coverPhoto}) center/cover no-repeat` : 'var(--grad)', position: 'relative' }}>
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent, rgba(51,39,42,0.3))' }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent, rgba(20,15,16,0.3))' }} />
           {editing && (
             <button onClick={openCoverUpload} style={{ position: 'absolute', top: 12, right: 12, background: 'rgba(0,0,0,0.5)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 8, padding: '6px 12px', color: '#fff', cursor: 'pointer', fontSize: 12, display: 'flex', alignItems: 'center', gap: 5 }}>
               <Camera size={12} /> Change Cover
             </button>
           )}
           <input id="cover-upload" type="file" accept="image/*" style={{ display: 'none' }} onChange={e => handlePhotoUpload(e, 'cover')} />
-          <div style={{
+          <div className="font-display" style={{
             position: 'absolute', bottom: -36, left: 28,
             width: 76, height: 76, borderRadius: '50%',
             background: 'var(--surface2)', border: '3px solid var(--bg)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontFamily: "'Syne', sans-serif", fontSize: 28, fontWeight: 800, overflow: 'hidden',
+            fontSize: 28, fontWeight: 700, overflow: 'hidden',
             cursor: editing ? 'pointer' : 'default'
           }} onClick={editing ? openAvatarUpload : undefined}>
             {profile.profilePhoto ? <img src={profile.profilePhoto} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" /> : profile.fullName[0]}
@@ -211,15 +214,15 @@ export default function ProfilePage() {
         </div>
 
         <div style={{ padding: '48px 28px 20px' }}>
-          <h2 style={{ fontFamily: "'Syne', sans-serif", fontSize: 22, fontWeight: 800 }}>{profile.fullName}</h2>
+          <h2 className="font-display" style={{ fontSize: 22, fontWeight: 700 }}>{profile.fullName}</h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 4 }}>{profile.department} · {profile.year}{profile.year===1?'st':profile.year===2?'nd':profile.year===3?'rd':'th'} Year · {profile.registerNumber}</p>
           <div style={{ marginTop: 16, marginBottom: 8 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, marginBottom: 6 }}>
               <span style={{ color: 'var(--muted)' }}>Profile completion</span>
-              <span style={{ color: 'var(--purple-light)', fontWeight: 600 }}>{completion}%</span>
+              <span style={{ color: 'var(--purple-light)', fontWeight: 700 }}>{completion}%</span>
             </div>
             <div style={{ height: 6, background: 'var(--surface2)', borderRadius: 3, overflow: 'hidden' }}>
-              <div style={{ height: '100%', background: 'var(--grad)', width: `${completion}%`, borderRadius: 3, transition: 'width 0.6s' }} />
+              <motion.div animate={{ width: `${completion}%` }} transition={{ duration: 0.6 }} style={{ height: '100%', background: 'var(--grad)', borderRadius: 3 }} />
             </div>
           </div>
         </div>
@@ -229,12 +232,12 @@ export default function ProfilePage() {
           {[
             { label: 'Likes Sent Today', val: `${10 - (profile.likesRemaining || 0)} / 10`, color: 'var(--pink)' },
             { label: 'Total Matches', val: '—', color: 'var(--purple-light)' },
-            { label: 'Anonymous Likes', val: '👀', color: 'var(--text)' },
+            { label: 'Anonymous Likes', val: <Eye size={16} />, color: 'var(--text)' },
             { label: 'Cycle Resets', val: '—', color: 'var(--text)' },
           ].map(s => (
             <div key={s.label} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, padding: 14 }}>
               <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 6 }}>{s.label}</div>
-              <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 700, color: s.color }}>{s.val}</div>
+              <div className="font-display" style={{ fontSize: 18, fontWeight: 700, color: s.color as string }}>{s.val}</div>
             </div>
           ))}
         </div>
@@ -243,9 +246,9 @@ export default function ProfilePage() {
         <div style={{ padding: '0 28px 20px' }}>
           <h3 style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: 10 }}>Bio</h3>
           {editing ? (
-            <textarea className="input-base" rows={3} value={form.bio} onChange={e => setForm(f => ({ ...f, bio: e.target.value }))} placeholder="Write something about yourself..." style={{ resize: 'none' }} maxLength={160} />
+            <textarea id="profile-bio" className="input-base" rows={3} value={form.bio} onChange={e => setForm(f => ({ ...f, bio: e.target.value }))} placeholder="Write something about yourself…" style={{ resize: 'none' }} maxLength={160} />
           ) : (
-            <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{profile.bio || <span style={{ color: 'var(--muted)', fontStyle: 'italic' }}>No bio yet. Add one!</span>}</p>
+            <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7 }}>{profile.bio || <span style={{ fontStyle: 'italic' }}>No bio yet. Add one!</span>}</p>
           )}
         </div>
 
@@ -255,11 +258,11 @@ export default function ProfilePage() {
             <h3 style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Social Links</h3>
             <div style={{ position: 'relative' }}>
               <Instagram size={14} color="var(--muted)" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)' }} />
-              <input className="input-base" value={form.instagram} onChange={e => setForm(f => ({ ...f, instagram: e.target.value }))} placeholder="Instagram username" style={{ paddingLeft: 40 }} />
+              <input id="profile-instagram" className="input-base" value={form.instagram} onChange={e => setForm(f => ({ ...f, instagram: e.target.value }))} placeholder="Instagram username" style={{ paddingLeft: 40 }} />
             </div>
             <div style={{ position: 'relative' }}>
               <Phone size={14} color="var(--muted)" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)' }} />
-              <input className="input-base" value={form.whatsappNumber} onChange={e => setForm(f => ({ ...f, whatsappNumber: e.target.value }))} placeholder="WhatsApp number" style={{ paddingLeft: 40 }} />
+              <input id="profile-whatsapp" className="input-base" value={form.whatsappNumber} onChange={e => setForm(f => ({ ...f, whatsappNumber: e.target.value }))} placeholder="WhatsApp number" style={{ paddingLeft: 40 }} />
             </div>
           </div>
         )}
@@ -269,7 +272,7 @@ export default function ProfilePage() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
             <h3 style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Interests</h3>
             {!editing && !profile.interests?.length && (
-              <button onClick={() => setEditing(true)} style={{ fontSize: 11, color: 'var(--purple-light)', background: 'none', border: 'none', cursor: 'pointer' }}>Add →</button>
+              <button onClick={() => setEditing(true)} style={{ fontSize: 11, color: 'var(--purple-light)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 700 }}>Add →</button>
             )}
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
@@ -278,16 +281,16 @@ export default function ProfilePage() {
               return (
                 <button key={i} onClick={editing ? () => toggleInterest(i) : undefined} style={{
                   padding: '5px 14px', borderRadius: 100,
-                  background: selected ? 'rgba(254,1,154,0.25)' : 'rgba(254,1,154,0.1)',
-                  border: `1px solid ${selected ? 'var(--purple)' : 'rgba(254,1,154,0.25)'}`,
+                  background: selected ? 'color-mix(in srgb, var(--purple) 22%, transparent)' : 'color-mix(in srgb, var(--purple) 8%, transparent)',
+                  border: `1px solid ${selected ? 'var(--purple)' : 'color-mix(in srgb, var(--purple) 22%, transparent)'}`,
                   color: selected ? 'var(--purple-light)' : 'var(--muted)',
-                  fontSize: 12, cursor: editing ? 'pointer' : 'default',
+                  fontSize: 12, fontWeight: 600, cursor: editing ? 'pointer' : 'default',
                   transition: 'all 0.2s'
                 }}>{i}</button>
               )
             })}
             {!editing && !profile.interests?.length && (
-              <button onClick={() => setEditing(true)} style={{ padding: '5px 14px', borderRadius: 100, background: 'rgba(254,1,154,0.1)', border: '1px solid rgba(254,1,154,0.25)', color: 'var(--muted)', fontSize: 12, cursor: 'pointer' }}>Add interests →</button>
+              <button onClick={() => setEditing(true)} style={{ padding: '5px 14px', borderRadius: 100, background: 'color-mix(in srgb, var(--purple) 8%, transparent)', border: '1px solid color-mix(in srgb, var(--purple) 22%, transparent)', color: 'var(--muted)', fontSize: 12, cursor: 'pointer' }}>Add interests →</button>
             )}
           </div>
         </div>
@@ -297,7 +300,7 @@ export default function ProfilePage() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
             <h3 style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Personality</h3>
             {!editing && !profile.personalityTags?.length && (
-              <button onClick={() => setEditing(true)} style={{ fontSize: 11, color: 'var(--pink-light)', background: 'none', border: 'none', cursor: 'pointer' }}>Add →</button>
+              <button onClick={() => setEditing(true)} style={{ fontSize: 11, color: 'var(--accent-strong)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 700 }}>Add →</button>
             )}
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
@@ -306,15 +309,15 @@ export default function ProfilePage() {
               return (
                 <button key={t} onClick={editing ? () => toggleTag(t) : undefined} style={{
                   padding: '5px 14px', borderRadius: 100,
-                  background: selected ? 'rgba(255,198,199,0.5)' : 'rgba(255,198,199,0.25)',
-                  border: `1px solid ${selected ? 'var(--pink)' : 'rgba(254,1,154,0.25)'}`,
-                  color: selected ? 'var(--purple-light)' : 'var(--muted)',
-                  fontSize: 12, cursor: editing ? 'pointer' : 'default', transition: 'all 0.2s'
+                  background: selected ? 'color-mix(in srgb, var(--accent) 30%, transparent)' : 'color-mix(in srgb, var(--accent) 16%, transparent)',
+                  border: `1px solid ${selected ? 'var(--accent)' : 'color-mix(in srgb, var(--accent) 30%, transparent)'}`,
+                  color: selected ? 'var(--accent-strong)' : 'var(--muted)',
+                  fontSize: 12, fontWeight: 600, cursor: editing ? 'pointer' : 'default', transition: 'all 0.2s'
                 }}>{t}</button>
               )
             })}
             {!editing && !profile.personalityTags?.length && (
-              <button onClick={() => setEditing(true)} style={{ padding: '5px 14px', borderRadius: 100, background: 'rgba(255,198,199,0.25)', border: '1px solid rgba(254,1,154,0.25)', color: 'var(--muted)', fontSize: 12, cursor: 'pointer' }}>Add tags →</button>
+              <button onClick={() => setEditing(true)} style={{ padding: '5px 14px', borderRadius: 100, background: 'color-mix(in srgb, var(--accent) 16%, transparent)', border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)', color: 'var(--muted)', fontSize: 12, cursor: 'pointer' }}>Add tags →</button>
             )}
           </div>
         </div>
@@ -323,7 +326,7 @@ export default function ProfilePage() {
         <div style={{ padding: '0 28px 20px' }}>
           <h3 style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: 10 }}>Favorite Movie</h3>
           {editing ? (
-            <input className="input-base" value={form.favoriteMovie} onChange={e => setForm(f => ({ ...f, favoriteMovie: e.target.value }))} placeholder="Your favorite movie..." />
+            <input id="profile-movie" className="input-base" value={form.favoriteMovie} onChange={e => setForm(f => ({ ...f, favoriteMovie: e.target.value }))} placeholder="Your favorite movie…" />
           ) : (
             <p style={{ fontSize: 13, color: profile.favoriteMovie ? 'var(--text)' : 'var(--muted)' }}>{profile.favoriteMovie || 'Not set'}</p>
           )}
@@ -332,54 +335,52 @@ export default function ProfilePage() {
         {/* Account */}
         <div style={{ padding: '0 28px 40px', display: 'flex', flexDirection: 'column', gap: 8 }}>
           <h3 style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: 6 }}>Account</h3>
-          <button onClick={() => setModal('privacy')} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px', borderRadius: 12, background: 'var(--surface)', border: '1px solid var(--border)', cursor: 'pointer', color: 'var(--text)', fontSize: 14, transition: 'background 0.15s', textAlign: 'left' }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'var(--surface2)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'var(--surface)')}>
+          <motion.button whileHover={{ backgroundColor: 'var(--surface2)' }} onClick={() => setModal('privacy')} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px', borderRadius: 12, background: 'var(--surface)', border: '1px solid var(--border)', cursor: 'pointer', color: 'var(--text)', fontSize: 14, fontWeight: 600, textAlign: 'left' }}>
             <Shield size={15} color="var(--purple)" /> Privacy Settings
-          </button>
-          <button onClick={() => setModal('notifications')} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px', borderRadius: 12, background: 'var(--surface)', border: '1px solid var(--border)', cursor: 'pointer', color: 'var(--text)', fontSize: 14, transition: 'background 0.15s', textAlign: 'left' }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'var(--surface2)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'var(--surface)')}>
+          </motion.button>
+          <motion.button whileHover={{ backgroundColor: 'var(--surface2)' }} onClick={() => setModal('notifications')} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px', borderRadius: 12, background: 'var(--surface)', border: '1px solid var(--border)', cursor: 'pointer', color: 'var(--text)', fontSize: 14, fontWeight: 600, textAlign: 'left' }}>
             <Bell size={15} color="var(--purple)" /> Notification Preferences
-          </button>
-          <button onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px', borderRadius: 12, background: 'rgba(255,107,107,0.06)', border: '1px solid rgba(255,107,107,0.2)', cursor: 'pointer', color: '#ff6b6b', fontSize: 14, transition: 'all 0.15s', textAlign: 'left' }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,107,107,0.12)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,107,107,0.06)')}>
+          </motion.button>
+          <motion.button whileHover={{ backgroundColor: 'rgba(201,67,63,0.12)' }} onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px', borderRadius: 12, background: 'rgba(201,67,63,0.06)', border: '1px solid rgba(201,67,63,0.2)', cursor: 'pointer', color: '#c9433f', fontSize: 14, fontWeight: 600, textAlign: 'left' }}>
             <LogOut size={15} /> Sign Out
-          </button>
+          </motion.button>
         </div>
       </div>
 
       {/* Privacy Modal */}
-      {modal === 'privacy' && (
-        <Modal title="Privacy Settings" onClose={() => setModal(null)}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <Toggle label="Show Profile to Others" description="Allow others to see your profile in the discover feed" checked={privacySettings.showProfile} onChange={v => setPrivacySettings(p => ({ ...p, showProfile: v }))} />
-            <Toggle label="Anonymous Likes" description="Hide your identity when you like someone" checked={privacySettings.anonymousLikes} onChange={v => setPrivacySettings(p => ({ ...p, anonymousLikes: v }))} />
-            <Toggle label="Online Status" description="Show when you're online to matches" checked={privacySettings.onlineStatus} onChange={v => setPrivacySettings(p => ({ ...p, onlineStatus: v }))} />
-            <Toggle label="Show Department" description="Display your department on your profile" checked={privacySettings.departmentVisible} onChange={v => setPrivacySettings(p => ({ ...p, departmentVisible: v }))} />
-            <div style={{ marginTop: 16 }}>
-              <button onClick={saveSettings} className="btn-primary">Save Privacy Settings</button>
+      <AnimatePresence>
+        {modal === 'privacy' && (
+          <Modal title="Privacy Settings" onClose={() => setModal(null)}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <Toggle label="Show Profile to Others" description="Allow others to see your profile in the discover feed" checked={privacySettings.showProfile} onChange={v => setPrivacySettings(p => ({ ...p, showProfile: v }))} />
+              <Toggle label="Anonymous Likes" description="Hide your identity when you like someone" checked={privacySettings.anonymousLikes} onChange={v => setPrivacySettings(p => ({ ...p, anonymousLikes: v }))} />
+              <Toggle label="Online Status" description="Show when you're online to matches" checked={privacySettings.onlineStatus} onChange={v => setPrivacySettings(p => ({ ...p, onlineStatus: v }))} />
+              <Toggle label="Show Department" description="Display your department on your profile" checked={privacySettings.departmentVisible} onChange={v => setPrivacySettings(p => ({ ...p, departmentVisible: v }))} />
+              <div style={{ marginTop: 16 }}>
+                <button onClick={saveSettings} className="btn-primary">Save Privacy Settings</button>
+              </div>
             </div>
-          </div>
-        </Modal>
-      )}
+          </Modal>
+        )}
+      </AnimatePresence>
 
       {/* Notifications Modal */}
-      {modal === 'notifications' && (
-        <Modal title="Notification Preferences" onClose={() => setModal(null)}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <Toggle label="Match Notifications" description="Get notified when you have a new match" checked={notifSettings.matches} onChange={v => setNotifSettings(p => ({ ...p, matches: v }))} />
-            <Toggle label="Anonymous Like Hints" description="Know when someone (you don't know who) liked you" checked={notifSettings.anonymousLikes} onChange={v => setNotifSettings(p => ({ ...p, anonymousLikes: v }))} />
-            <Toggle label="New Messages" description="Get notified for new chat messages" checked={notifSettings.messages} onChange={v => setNotifSettings(p => ({ ...p, messages: v }))} />
-            <Toggle label="Confession Activity" description="Notifications on your confession likes/comments" checked={notifSettings.confessions} onChange={v => setNotifSettings(p => ({ ...p, confessions: v }))} />
-            <Toggle label="Cycle Reset Reminder" description="Get reminded when your 14-day cycle resets" checked={notifSettings.cycleReset} onChange={v => setNotifSettings(p => ({ ...p, cycleReset: v }))} />
-            <div style={{ marginTop: 16 }}>
-              <button onClick={saveSettings} className="btn-primary">Save Notification Settings</button>
+      <AnimatePresence>
+        {modal === 'notifications' && (
+          <Modal title="Notification Preferences" onClose={() => setModal(null)}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <Toggle label="Match Notifications" description="Get notified when you have a new match" checked={notifSettings.matches} onChange={v => setNotifSettings(p => ({ ...p, matches: v }))} />
+              <Toggle label="Anonymous Like Hints" description="Know when someone (you don't know who) liked you" checked={notifSettings.anonymousLikes} onChange={v => setNotifSettings(p => ({ ...p, anonymousLikes: v }))} />
+              <Toggle label="New Messages" description="Get notified for new chat messages" checked={notifSettings.messages} onChange={v => setNotifSettings(p => ({ ...p, messages: v }))} />
+              <Toggle label="Confession Activity" description="Notifications on your confession likes/comments" checked={notifSettings.confessions} onChange={v => setNotifSettings(p => ({ ...p, confessions: v }))} />
+              <Toggle label="Cycle Reset Reminder" description="Get reminded when your 14-day cycle resets" checked={notifSettings.cycleReset} onChange={v => setNotifSettings(p => ({ ...p, cycleReset: v }))} />
+              <div style={{ marginTop: 16 }}>
+                <button onClick={saveSettings} className="btn-primary">Save Notification Settings</button>
+              </div>
             </div>
-          </div>
-        </Modal>
-      )}
+          </Modal>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

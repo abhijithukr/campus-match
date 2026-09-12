@@ -2,7 +2,8 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Eye, EyeOff, Mail, Lock, Heart } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Eye, EyeOff, Mail, Lock, Heart, Lock as LockIcon } from 'lucide-react'
 import { loginUser } from '@/firebase/auth'
 import toast from 'react-hot-toast'
 
@@ -26,71 +27,98 @@ export default function LoginPage() {
   }
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+    >
       {/* Logo */}
-      <div style={{ textAlign: 'center', marginBottom: 40 }}>
-        <div style={{
-          display: 'inline-flex', width: 56, height: 56, borderRadius: 16,
-          background: 'var(--purple)', alignItems: 'center', justifyContent: 'center', marginBottom: 16
-        }}>
-          <Heart size={24} color="#33272a" fill="#33272a" />
-        </div>
-        <h1 style={{ fontFamily: "'Syne', sans-serif", fontSize: 28, fontWeight: 800 }}>Welcome back</h1>
-        <p style={{ color: 'var(--muted)', marginTop: 6, fontSize: 14 }}>Sign in to your Campus Match account</p>
+      <div style={{ textAlign: 'center', marginBottom: 36 }}>
+        <motion.div
+          initial={{ scale: 0.6, rotate: -8, opacity: 0 }}
+          animate={{ scale: 1, rotate: 0, opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          style={{
+            display: 'inline-flex', width: 60, height: 60, borderRadius: 18,
+            background: 'var(--grad)', alignItems: 'center', justifyContent: 'center', marginBottom: 18,
+            boxShadow: '0 14px 28px -10px color-mix(in srgb, var(--purple) 60%, transparent)',
+          }}
+        >
+          <Heart size={26} color="var(--on-bright)" fill="var(--on-bright)" />
+        </motion.div>
+        <h1 className="font-display" style={{ fontSize: 30, fontWeight: 700 }}>Welcome back</h1>
+        <p style={{ color: 'var(--muted)', marginTop: 8, fontSize: 14.5 }}>Sign in to your Campus Match account</p>
       </div>
 
-        <div style={{
+      <motion.form
+        onSubmit={handleSubmit}
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.15 }}
+        style={{
           background: 'var(--surface)', border: '1px solid var(--border2)',
-          borderRadius: 24, padding: 32
-        }}>
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <div>
-            <label style={{ display: 'block', fontSize: 13, fontWeight: 500, marginBottom: 8 }}>Email</label>
-            <div style={{ position: 'relative' }}>
-              <Mail size={15} color="var(--muted)" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)' }} />
-              <input
-                className="input-base" type="email" required
-                value={email} onChange={e => setEmail(e.target.value)}
-                placeholder="your@college.edu"
-                style={{ paddingLeft: 40 }}
-              />
-            </div>
+          borderRadius: 26, padding: 30,
+          boxShadow: '0 24px 48px -16px rgba(38,65,67,0.14)',
+          display: 'flex', flexDirection: 'column', gap: 18,
+        }}
+      >
+        <div>
+          <label style={{ display: 'block', fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.05em', color: 'var(--muted)', marginBottom: 8 }}>Email</label>
+          <div style={{ position: 'relative' }}>
+            <Mail size={16} color="var(--muted)" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)' }} />
+            <input
+              id="login-email"
+              className="input-base" type="email" required
+              value={email} onChange={e => setEmail(e.target.value)}
+              placeholder="your@college.edu"
+              style={{ paddingLeft: 40 }}
+            />
           </div>
-          <div>
-            <label style={{ display: 'block', fontSize: 13, fontWeight: 500, marginBottom: 8 }}>Password</label>
-            <div style={{ position: 'relative' }}>
-              <Lock size={15} color="var(--muted)" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)' }} />
-              <input
-                className="input-base" type={showPass ? 'text' : 'password'} required
-                value={password} onChange={e => setPassword(e.target.value)}
-                placeholder="Enter password"
-                style={{ paddingLeft: 40, paddingRight: 44 }}
-              />
-              <button type="button" onClick={() => setShowPass(!showPass)} style={{
-                position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
-                background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)'
-              }}>
-                {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
-              </button>
-            </div>
+        </div>
+        <div>
+          <label style={{ display: 'block', fontSize: 12, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.05em', color: 'var(--muted)', marginBottom: 8 }}>Password</label>
+          <div style={{ position: 'relative' }}>
+            <Lock size={16} color="var(--muted)" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)' }} />
+            <input
+              id="login-password"
+              className="input-base" type={showPass ? 'text' : 'password'} required
+              value={password} onChange={e => setPassword(e.target.value)}
+              placeholder="Enter password"
+              style={{ paddingLeft: 40, paddingRight: 44 }}
+            />
+            <button type="button" onClick={() => setShowPass(!showPass)} aria-label={showPass ? 'Hide password' : 'Show password'} style={{
+              position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
+              background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)', display: 'flex'
+            }}>
+              {showPass ? <EyeOff size={17} /> : <Eye size={17} />}
+            </button>
           </div>
-          <button className="btn-primary" type="submit" disabled={loading} style={{ marginTop: 8 }}>
-            {loading ? 'Signing in...' : 'Sign In'}
-          </button>
-        </form>
+        </div>
+        <motion.button
+          whileHover={{ scale: loading ? 1 : 1.015 }}
+          whileTap={{ scale: loading ? 1 : 0.985 }}
+          className="btn-primary" type="submit" disabled={loading}
+        >
+          {loading ? 'Signing in…' : 'Sign In'}
+        </motion.button>
 
-        <div style={{ textAlign: 'center', marginTop: 20, fontSize: 13, color: 'var(--muted)' }}>
+        <div style={{ textAlign: 'center', fontSize: 13.5, color: 'var(--muted)' }}>
           Don't have an account?{' '}
-          <Link href="/auth/verify" style={{ color: 'var(--purple-light)', textDecoration: 'none', fontWeight: 600 }}>
+          <Link href="/auth/verify" style={{ color: 'var(--purple-light)', textDecoration: 'underline', textUnderlineOffset: 2, fontWeight: 700 }}>
             Register with your college ID
           </Link>
         </div>
-      </div>
+      </motion.form>
 
-      {/* Demo hint */}
-      <div style={{ textAlign: 'center', marginTop: 20, fontSize: 12, color: 'var(--muted)', opacity: 0.7 }}>
-        🔒 Exclusively for verified students
-      </div>
-    </div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, marginTop: 22, fontSize: 12.5, color: 'var(--muted)' }}
+      >
+        <LockIcon size={13} />
+        <span>Exclusively for verified students</span>
+      </motion.div>
+    </motion.div>
   )
 }
